@@ -8,7 +8,7 @@ npm run check
 npm run dev -- --port 8787
 ```
 
-本機入口為 `http://127.0.0.1:8787`，`npm run check` 執行型別檢查、Workers runtime 測試、通話頁 Node 事件測試與 Wrangler dry-run 建置
+本機入口為 `http://127.0.0.1:8787`，`npm run check` 執行型別檢查、Workers runtime 測試、通話頁 Node 事件測試、原生 Workers 服務連線測試與 Wrangler dry-run 建置
 
 正式入口為 `https://call.thinkwithblack.com`，Wrangler 已設定 custom domain、APP_ORIGIN 與 ECCAL_ORIGIN。正式部署、資料庫 migration 及各階段讀回見 [正式環境驗證](release-validation-2026-11-05.md)
 
@@ -16,11 +16,11 @@ npm run dev -- --port 8787
 
 將 `.dev.vars.example` 複製為 `.dev.vars` 後，在本機填入設定
 
-| 設定 | 用途 | 目前需取得的資料 |
+| 設定 | 用途 | 設定值或取得方式 |
 |---|---|---|
-| `OPENAI_API_KEY` | 申請短效憑證、建立及掛斷通話、產生成果 | 專用測試專案金鑰 |
-| `REALTIME_MODEL` | 語音模型 | 測試專案可用的 Realtime 模型名稱 |
-| `TEXT_MODEL` | 摘要、報告、文案及改善計畫模型 | 測試專案可用的文字模型名稱 |
+| `OPENAI_API_KEY` | 申請短效憑證、建立及掛斷通話、產生成果 | 專用專案 `call.thinkwithblack.com` 的受限金鑰，存於 Worker secret |
+| `REALTIME_MODEL` | 語音模型 | `gpt-realtime-2.1` |
+| `TEXT_MODEL` | 摘要、報告、文案及改善計畫模型 | `gpt-6.1-sol` |
 | `APP_ORIGIN` | 核對瀏覽器開始及結束請求的來源 | 本機為 `http://127.0.0.1:8787` |
 | `ECCAL_ORIGIN` | ECCAL 語音額度 HTTP 來源 | `https://eccal.thinkwithblack.com`，本機測試可用 loopback HTTP |
 | `ECCAL_SERVICE_TOKEN` | 語音額度專用後端憑證 | 與 ECCAL 的 `THINKWITHBLACK_VOICE_SERVICE_TOKEN` 相同 |
@@ -30,6 +30,8 @@ npm run dev -- --port 8787
 | `DELIVERY` service binding | 收件人與營運權限核對、Email／LINE 送出證據 | D4、D5 核定後的交付 adapter |
 
 `wrangler.jsonc` 已設定會員、通話截止與 AuthVault 三個 Durable Object，AuthVault 使用 v2 migration。`src/eccal-http.ts` 實作 `eccal-voice-v1`，在沒有 service binding 時使用 ECCAL HTTP 身分與額度介面，個別會員 MCP grant 由自己的 AuthVault 提供
+
+OpenAI 金鑰名稱為 `call.thinkwithblack.com-production`，有效期限依使用者核定為永不自動到期，權限限制為模型清單讀取、Realtime 請求及 Responses 生成。正式 API 已驗證 Realtime 十秒短效憑證與 `store:false` 結構化文字回應，部署與請求紀錄見 [OpenAI 正式設定證據](examples/production-openai-2026-11-05.json)
 
 ECCAL 另設定 `VOICE_APP_ORIGIN` 與本站 `APP_ORIGIN` 相同，套用 `0005_voice_login.sql` 後支援一次性登入交換與會話驗證。首頁提供 ECCAL 登入、個人方法庫授權、解除與登出入口。跨站流程與測試見 [登入與授權驗證](auth-validation-2026-11-04.md)
 
@@ -82,6 +84,8 @@ LINE 原碼只在建立時回傳給該會員，儲存端保存 SHA-256 雜湊。
 ## 官方實作依據
 
 - [OpenAI Realtime WebRTC](https://developers.openai.com/api/docs/guides/voice-webrtc?voice-api=realtime)
+- [GPT-Realtime-2.1 模型](https://developers.openai.com/api/docs/models/gpt-realtime-2.1)
+- [GPT-6.1 Sol 模型](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
 - [OpenAI 短效憑證](https://developers.openai.com/api/reference/resources/realtime/subresources/client_secrets/methods/create)
 - [OpenAI sideband 控制](https://developers.openai.com/api/docs/guides/voice-server-controls?voice-api=realtime)
 - [OpenAI 後端掛斷](https://developers.openai.com/api/reference/resources/realtime/subresources/calls/methods/hangup)

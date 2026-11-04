@@ -1,0 +1,169 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "credential": {
+    "project": "call.thinkwithblack.com",
+    "name": "call.thinkwithblack.com-production",
+    "status": "Active",
+    "expires": "Never",
+    "permissions": "Restricted",
+    "endpoints": {
+      "models": "Read",
+      "realtime": "Request",
+      "responses": "Write"
+    }
+  },
+  "models": {
+    "realtime": "gpt-realtime-2.1",
+    "text": "gpt-6.1-sol",
+    "transcription": "gpt-4o-transcribe"
+  },
+  "apiSmoke": {
+    "observedAt": "2026-11-04T18:26:56.026Z",
+    "tests": [
+      {
+        "test": "realtime-client-secret",
+        "status": 200,
+        "model": "gpt-realtime-2.1",
+        "credentialPresent": true,
+        "expiresInSeconds": 10,
+        "errorCode": null,
+        "errorType": null,
+        "errorParam": null
+      },
+      {
+        "test": "responses-structured-output",
+        "status": 200,
+        "model": "gpt-6.1-sol",
+        "completed": true,
+        "structuredOutputVerified": true,
+        "errorCode": null,
+        "errorType": null,
+        "errorParam": null
+      }
+    ]
+  },
+  "officialSources": [
+    "https://developers.openai.com/api/docs/guides/voice-webrtc",
+    "https://developers.openai.com/api/docs/models/gpt-realtime-2.1",
+    "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+  ],
+  "deployment": {
+    "commit": "c1a4e152c6e49771a27613da1d33e6425b5f3ea4",
+    "versionId": "bebd423b-2afa-4448-bb46-959974cecaea",
+    "deploymentId": "c1b6407e-0d7e-43b8-b957-bd8b473e1169",
+    "createdOn": "2026-11-04T18:31:55.498763Z",
+    "versions": [
+      {
+        "version_id": "bebd423b-2afa-4448-bb46-959974cecaea",
+        "percentage": 100
+      }
+    ],
+    "tag": "c1a4e15",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text",
+        "value": "https://call.thinkwithblack.com"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "AUTH_VAULT_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text",
+        "value": "https://eccal.thinkwithblack.com"
+      },
+      {
+        "name": "ECCAL_SERVICE_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text",
+        "value": "gpt-realtime-2.1"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text",
+        "value": "gpt-6.1-sol"
+      }
+    ]
+  },
+  "browserCall": "PENDING_MICROPHONE_PERMISSION",
+  "publicHttp": {
+    "observedAt": "2026-11-04T18:37:30.247Z",
+    "requests": [
+      {
+        "path": "/",
+        "status": 200,
+        "cacheControl": "no-store",
+        "permanentKeyAbsent": true
+      },
+      {
+        "path": "/app.js",
+        "status": 200,
+        "cacheControl": "no-store",
+        "permanentKeyAbsent": true
+      },
+      {
+        "path": "/oauth/client-metadata.json",
+        "status": 200,
+        "cacheControl": "no-store",
+        "permanentKeyAbsent": true
+      },
+      {
+        "path": "/.dev.vars.example",
+        "status": 404,
+        "cacheControl": "no-store",
+        "permanentKeyAbsent": true
+      },
+      {
+        "path": "/auth/status",
+        "status": 200,
+        "cacheControl": "no-store",
+        "permanentKeyAbsent": true,
+        "body": {
+          "authenticated": false,
+          "mcpAuthorized": false
+        }
+      }
+    ]
+  },
+  "memberRegression": {
+    "authenticated": true,
+    "mcpAuthorized": true,
+    "eligible": true,
+    "remainingSeconds": 300,
+    "source": "Browser GET /auth/status and /api/me after deployment"
+  },
+  "localValidation": {
+    "typecheck": "PASSED",
+    "workers": 133,
+    "frontend": 8,
+    "nativeRuntime": 1,
+    "dryRunBuild": "PASSED",
+    "review": "DEPLOYMENT_STAGE_PASS"
+  }
+}

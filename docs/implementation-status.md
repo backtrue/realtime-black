@@ -19,7 +19,7 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 | Issue | 任務 | 已有實作 | 待完成的驗收或串接 |
 |---|---|---|---|
 | #1 | M0-01 | ECCAL 語音 v1 HTTP 契約、PostgreSQL 帳本、一次性跨站登入與本站會話；跨 repo 對帳；ECCAL 已發布、目前正式 migration 與服務憑證／origin 核對、兩位會員真實 Google 跨站登入通過 | 正式語音扣秒與帳目核對 |
-| #2 | M0-02 | call.thinkwithblack.com 已部署，三個 DO、後端 secret、正式 origin／cookie／metadata／來源拒絕均已讀回 | OpenAI 專用憑證與正式發證路徑驗證 |
+| #2 | M0-02 | call.thinkwithblack.com 已部署，三個 DO、正式 origin／cookie／metadata／來源拒絕讀回；OpenAI 專用受限金鑰與兩項模型已部署，十秒短效憑證及結構化成果 API 均回 200 | 瀏覽器正式發證與通話回應邊界驗證 |
 | #3 | M0-03 | 本站 HttpOnly 會話、到期與登出撤銷、身分與餘額拒絕、操作重放拒絕 | D1 正式測試會員登入與發證案例 |
 | #4 | M0-04 | WebRTC、麥克風權限、播放與掛斷清理 | Realtime 實際聽測、插話與追問 |
 | #5 | M0-05 | 核定規則跨通話扣秒、工具等待排除、取整；HTTP → PostgreSQL 實際對帳 | 正式 ECCAL 環境會員帳目核對 |

@@ -141,9 +141,28 @@ ECCAL 正式設定已讀回 `VOICE_APP_ORIGIN` 與 `THINKWITHBLACK_VOICE_SERVICE
 
 兩輪臨時 preview、broker、連接埠與驗證憑證均已清理。正式 Worker 仍為 `c50b4264`，MCP 仍為 `dd26e166`，皆為 100% 流量。甲維持已撤銷，乙保留自己的有效授權
 
-後續語音實測需要設定 OPENAI_API_KEY、REALTIME_MODEL 與 TEXT_MODEL；目前正式 Worker 的 binding 名稱讀回未包含這三項。逐字稿與成果連結跨會員轉傳另依 Issue #21 驗證
+逐字稿與成果連結跨會員轉傳另依 Issue #21 驗證
 
 ## Issue #10 驗收紀錄
 
 - [x] 已附版本、正式環境、實際結果與去識別證據
 - [x] 2026-11-05 由 fresh spec_evaluator 核對兩位會員各自授權／工具呼叫、失效 grant、跨會員識別與後端授權邊界，符合 [Issue #10 通過條件](https://github.com/backtrue/realtime-black/issues/10)
+
+Issue #10 已更新驗收勾選、日期與 `831a8d9` 的固定版本證據連結，GitHub 狀態讀回為 closed／completed
+
+## OpenAI 專案、金鑰與正式模型
+
+依使用者指示在既有 API Platform 建立 `call.thinkwithblack.com` 專用專案，並經當下確認建立 `call.thinkwithblack.com-production` 受限金鑰，有效期永不自動到期。權限開放模型清單 Read、Realtime Request 與 Responses Write，其餘保持 None；金鑰存於正式 Worker secret
+
+實際 API 檢查：模型清單 200，Realtime `gpt-realtime-2.1` 十秒 client secret 200，文字 `gpt-6.1-sol` 的 `store:false`／structured output 200、completed
+
+設定提交 `c1a4e152c6e49771a27613da1d33e6425b5f3ea4` 已推送 main，型別、133 Workers、8 frontend、1 native runtime 與 dry-run 建置通過，fresh spec_evaluator 已核對部署候選通過
+
+- Deployment：`c1b6407e-0d7e-43b8-b957-bd8b473e1169`
+- Version：`bebd423b-2afa-4448-bb46-959974cecaea`，100% 流量，tag `c1a4e15`
+- 模型：REALTIME_MODEL=`gpt-realtime-2.1`、TEXT_MODEL=`gpt-6.1-sol`
+- Secret 名稱：OPENAI_API_KEY、ECCAL_SERVICE_TOKEN、AUTH_VAULT_KEY，皆為 secret_text
+
+首頁、前端 JavaScript、OAuth metadata 與匿名登入狀態均正常，回應未包含永久 OpenAI 金鑰，私密設定範例路徑回 404。第二位會員部署後讀回 authenticated=true、mcpAuthorized=true、eligible=true、remainingSeconds=300
+
+完整去識別 API、binding 與入口讀回見 [OpenAI 正式設定證據](examples/production-openai-2026-11-05.json)。實際瀏覽器通話正等待麥克風許可

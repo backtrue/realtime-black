@@ -976,7 +976,8 @@
       "memberBRemainingSeconds": 300
     }
   },
-  "voiceRuntime": {
+  "scope": "Production Google login and individual MCP authorization verification",
+  "voiceRuntimeAtAuthorizationVerification": {
     "verification": "PENDING_OPENAI_CONFIGURATION",
     "missingBindingNames": [
       "OPENAI_API_KEY",
@@ -984,5 +985,6 @@
       "TEXT_MODEL"
     ],
     "sourceWorkerVersion": "c50b4264-c5f7-44c6-a0bc-f19d94436c2c"
-  }
+  },
+  "followingOpenAIDeploymentEvidence": "production-openai-2026-11-05.json"
 }
