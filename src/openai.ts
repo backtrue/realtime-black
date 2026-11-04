@@ -2,7 +2,7 @@ import { AppError, type RealtimePort, type Tool, type DocumentPort, type Documen
 import { CONSULTANT_INSTRUCTIONS } from "./consultant";
 
 export class OpenAiRealtime implements RealtimePort {
-  constructor(private key: string, private model: string, private fetcher: typeof fetch = fetch) {}
+  constructor(private key: string, private model: string, private fetcher: typeof fetch = fetch.bind(globalThis)) {}
   async create(sdp: string, tools: Tool[]) {
     if (!this.key || !this.model) throw new AppError("REALTIME_NOT_CONFIGURED");
     const config = {
@@ -43,7 +43,7 @@ export class OpenAiRealtime implements RealtimePort {
 }
 
 export class OpenAiDocuments implements DocumentPort {
-  constructor(private key: string, private model: string, private fetcher: typeof fetch = fetch) {}
+  constructor(private key: string, private model: string, private fetcher: typeof fetch = fetch.bind(globalThis)) {}
   async generate(kind: DocumentKind, record: CallRecord): Promise<Omit<Document, "id" | "createdAt">> {
     if (!this.key || !this.model) throw new AppError("DOCUMENTS_NOT_CONFIGURED");
     const response = await this.fetcher("https://api.openai.com/v1/responses", {

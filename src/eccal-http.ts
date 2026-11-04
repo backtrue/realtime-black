@@ -6,7 +6,7 @@ const seconds = (value: unknown): value is number => Number.isSafeInteger(value)
 
 export class HttpEccalQuota implements Omit<EccalPort, 'mcpGrant'> {
   private origin: string;
-  constructor(origin: string, private serviceToken: string, private fetcher: typeof fetch = fetch) {
+  constructor(origin: string, private serviceToken: string, private fetcher: typeof fetch = fetch.bind(globalThis)) {
     try {
       const url = new URL(origin);
       if (url.origin !== origin || url.username || url.password || (url.protocol !== 'https:' && !(url.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname)))) throw new Error();

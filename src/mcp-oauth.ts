@@ -9,7 +9,7 @@ const sameScopes = (value: unknown) => typeof value === 'string' && value.trim()
 export const READ_ONLY_TOOLS = ['thinkwithblack_entry_catalog', 'thinkwithblack_entry_read', 'thinkwithblack_marketing_skill_search', 'thinkwithblack_marketing_skill_read', 'thinkwithblack_list_modules'];
 export type OAuthCredential = { accessToken: string; refreshToken?: string; expiresAt: number; refreshExpiresAt: number; clientId: string };
 export class McpOAuth {
-  constructor(private origin: string, private configuredClientId?: string, private fetcher: typeof fetch = fetch) {}
+  constructor(private origin: string, private configuredClientId?: string, private fetcher: typeof fetch = fetch.bind(globalThis)) {}
   get clientId() {
     appOrigin(this.origin);
     const value = this.configuredClientId || (this.origin.startsWith('https:') ? `${this.origin}/oauth/client-metadata.json` : '');

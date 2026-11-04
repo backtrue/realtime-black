@@ -4,7 +4,7 @@ import { AppError, type McpGrant, type McpPort, type Tool } from "./contracts";
 
 const MCP_URL = "https://mcp.thinkwithblack.com/mcp";
 export class ThinkWithBlackMcp implements McpPort {
-  constructor(private fetcher: typeof fetch = fetch) {}
+  constructor(private fetcher: typeof fetch = fetch.bind(globalThis)) {}
   private async withClient<T>(grant: McpGrant, action: (client: Client, signal: AbortSignal) => Promise<T>): Promise<T> {
     if (!Number.isSafeInteger(grant.expiresAt) || grant.expiresAt <= Date.now() || !grant.accessToken || !grant.memberId) throw new AppError("MCP_AUTH_EXPIRED", 403);
     const signal = AbortSignal.timeout(10000);
