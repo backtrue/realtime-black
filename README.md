@@ -23,6 +23,10 @@
 
 詳見 [產品規格](docs/product-spec.md) 與 [架構及整合邊界](docs/architecture.md)。
 
+## 開發任務與驗收
+
+[完整開發任務與驗收清單](docs/development-plan.md) 收錄 38 項任務、各項驗收條件及 10 個待確認事項。可從任務編號開啟對應的 [GitHub Issue](https://github.com/backtrue/realtime-black/issues)，查進度、登記實測結果及驗收證據。
+
 ## 目前狀態
 
 已建立規格與整合設計；尚未完成實際通話、ECCAL 串接、聲音複製或 Cloudflare 部署。
