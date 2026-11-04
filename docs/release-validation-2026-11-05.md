@@ -183,3 +183,32 @@ fresh spec_evaluator 核對修正候選通過，提交 `2bef275e34ebc280c9a1f1fd
 - Version：`77253751-6d2e-4f4e-9999-fc897beb3b00`，100% 流量，tag `2bef275`
 - 首頁、前端 JavaScript、OAuth metadata 與匿名登入狀態回 200，私密設定範例路徑回 404，回應皆未包含三項後端 secret
 - 瀏覽器部署後讀回 authenticated=true、mcpAuthorized=true、eligible=true、remainingSeconds=297
+
+## 真實語音回覆、插話與追問
+
+使用者在五秒斷線修正版完成實際通話，回報「有回覆，插話及追問也正常」。服務端保存 5 筆逐字項目，包含 3 筆會員及 2 筆助理，待轉寫與辨識失敗均為 0；同通有 5 次成功的方法搜尋
+
+該通未成功讀取方法全文。已在 Realtime 指示加入入口目錄、入口分支、適用方法全文及語音應用的順序；搜尋只提供候選，未取得全文時須明確說明。修改只套用於具工具的 Realtime 會話
+
+方法指示提交 `29f57f47c78d0b272bd12eec20daaa4a6d3122fd` 已推送 main。型別、134 Workers、9 frontend、2 native runtime、dry-run 建置、指定檔案 secretlint 通過，fresh spec_evaluator 驗收 PASS
+
+- Deployment：`2e1db52a-3946-4816-9f2b-8b73e31dc7ca`
+- Version：`ccec0aad-0e81-445c-adc6-b612d6afa65c`，100% 流量，tag `29f57f4`
+- 三項後端 secret binding、兩項正式 origin 與原模型設定均保留
+- 首頁、app.js、OAuth metadata、匿名 auth/status 回 200／no-store，私密設定範例回 404，匿名通話紀錄回 401；回應未包含三項後端 secret
+
+同一通方法全文、實際回傳及語音應用對照接續 Issue #11 實測
+
+## 掛斷順序與舊通話結算
+
+原通話掛斷時，瀏覽器先關閉 peer transport，後端再向提供者掛斷時取得 404，通話停在 ending。已改為立即停止麥克風與播放，保留 transport 到後端 end 請求完成，再於 finally 清理連線
+
+修正提交 `84ff107dd35ec24910d215a0bc15dbc5d2977120` 已推送及正式發布，Worker version `9f213250-065d-41fa-ad88-09ec5916273a`。新增前端回歸在修改前失敗、修改後通過；新增後端證據 RPC 限制 owner，公開回應仍不含提供者或占用識別。fresh spec_evaluator 驗收 PASS
+
+舊通話透過一次性 operator 流程恢復：提供者掛斷回 404，並以已記錄的首段音訊時間、[OpenAI 官方會話最長 60 分鐘](https://developers.openai.com/api/docs/guides/realtime-conversations#session-lifecycle-events)與一分鐘檢查餘裕確認提供者會話期限已過，服務端以當下時間確認結束
+
+正常 MemberRoom alarm 與 ECCAL 結算完成，operator 的 PostgreSQL 查詢只有 SELECT。六段工具等待聯集為 16,213ms，扣除後仍超過本通占用的 297 秒，因此扣 297 秒；先前已扣 3 秒，會員累計扣 300 秒、剩餘 0 秒。結束時間 `2026-11-04T20:40:47.093Z`，保存期限 `2026-12-04T20:40:47.093Z`
+
+結算、ECCAL 本通扣秒、剩餘額度、事件摘要、30 天期限、確認時間、累計扣秒及原始授予額度八項讀回全數一致。瀏覽器已顯示通話結束與摘要，保留 5 筆逐字項目。臨時 broker／preview 已停止，兩個連接埠及臨時憑證已清理
+
+新通話的正常掛斷與拒絕麥克風驗收接續 Issue #4；斷線及掛斷 404 的一般服務恢復接續 Issue #8、#9。去識別工具事件、雜湊、帳目及實際版本見 [正式語音證據](examples/production-voice-2026-11-05.json)

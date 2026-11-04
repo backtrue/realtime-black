@@ -1,0 +1,394 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "docs/product-spec.md V0.3",
+  "realVoice": {
+    "sourceCommit": "2bef275e34ebc280c9a1f1fda9bc3e46c8a13937",
+    "workerVersionId": "77253751-6d2e-4f4e-9999-fc897beb3b00",
+    "browser": "Codex in-app browser",
+    "userReport": {
+      "heardReply": true,
+      "interruptionNormal": true,
+      "followUpNormal": true
+    },
+    "transcript": {
+      "items": 5,
+      "userItems": 3,
+      "assistantItems": 2,
+      "pending": 0,
+      "failures": 0,
+      "sha256": "2c68e09b9ab7926475ff29bff9c55f24d47964bcb03923beabb6f3fb7a6a2d96"
+    },
+    "tools": [
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 1242,
+        "resultSha256": "a80f2c1c6698f594120e837af25be5d67853c6a3cdd25841318bbbedbfaef4a5"
+      }
+    ],
+    "successfulMethodFullTextRead": false,
+    "summary": {
+      "present": true,
+      "sourceRevision": 5
+    },
+    "scenarioCategory": "Website conversion diagnosis"
+  },
+  "manualHangupRepair": {
+    "commit": "84ff107dd35ec24910d215a0bc15dbc5d2977120",
+    "versionId": "9f213250-065d-41fa-ad88-09ec5916273a",
+    "change": "Stop microphone and playback immediately; keep peer transport until backend end request completes",
+    "frontendRegression": {
+      "before": "FAILED",
+      "after": "PASSED"
+    },
+    "generalNewCallEndVerification": "PENDING"
+  },
+  "operatorRecovery": {
+    "observedAt": "2026-11-04T20:40:48.177Z",
+    "identityVerified": true,
+    "operatorAssisted": true,
+    "providerProof": {
+      "via": "documented_session_limit",
+      "status": 404,
+      "at": 1793824846901,
+      "maxDurationMs": 3600000,
+      "source": "https://developers.openai.com/api/docs/guides/realtime-conversations",
+      "confirmedAt": 1793824847093
+    },
+    "source": "Production MemberRoom, OpenAI provider, ECCAL PostgreSQL SELECT",
+    "before": {
+      "status": "ending",
+      "endedAt": null,
+      "ledger": {
+        "reserved_seconds": 297,
+        "settled_at": null,
+        "billed_seconds": null,
+        "remaining_seconds": null,
+        "events_digest": null,
+        "granted_seconds": 300,
+        "lifetime_billed": 3
+      }
+    },
+    "after": {
+      "status": "ended",
+      "endedAt": 1793824847093,
+      "expiresAt": 1796416847093,
+      "settlement": {
+        "billedSeconds": 297,
+        "remainingSeconds": 0
+      },
+      "ledger": {
+        "reserved_seconds": 297,
+        "settled_at": "2026-11-04T20:40:47.801Z",
+        "billed_seconds": 297,
+        "remaining_seconds": 0,
+        "events_digest": "faa43ceb3ab7747c0b898493c3801de118ca54a695b7399a2d0563ce35691bcc",
+        "granted_seconds": 300,
+        "lifetime_billed": 300
+      }
+    },
+    "events": [
+      {
+        "type": "reserved",
+        "at": 1793820065498
+      },
+      {
+        "type": "connected",
+        "at": 1793820072109
+      },
+      {
+        "type": "tool_started",
+        "at": 1793820091151,
+        "toolRef": "tool-1"
+      },
+      {
+        "type": "tool_finished",
+        "at": 1793820093907,
+        "toolRef": "tool-1"
+      },
+      {
+        "type": "tool_started",
+        "at": 1793820098196,
+        "toolRef": "tool-2"
+      },
+      {
+        "type": "tool_finished",
+        "at": 1793820100995,
+        "toolRef": "tool-2"
+      },
+      {
+        "type": "tool_started",
+        "at": 1793820102110,
+        "toolRef": "tool-3"
+      },
+      {
+        "type": "tool_finished",
+        "at": 1793820104989,
+        "toolRef": "tool-3"
+      },
+      {
+        "type": "tool_started",
+        "at": 1793820109065,
+        "toolRef": "tool-4"
+      },
+      {
+        "type": "tool_finished",
+        "at": 1793820111867,
+        "toolRef": "tool-4"
+      },
+      {
+        "type": "tool_started",
+        "at": 1793820118882,
+        "toolRef": "tool-5"
+      },
+      {
+        "type": "tool_finished",
+        "at": 1793820121632,
+        "toolRef": "tool-5"
+      },
+      {
+        "type": "tool_started",
+        "at": 1793820125727,
+        "toolRef": "tool-6"
+      },
+      {
+        "type": "tool_finished",
+        "at": 1793820127954,
+        "toolRef": "tool-6"
+      },
+      {
+        "type": "ended",
+        "at": 1793824847093
+      }
+    ],
+    "tools": [
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 876,
+        "resultSha256": "0a9e49338fed8da3611aafd7a14c36d898fee807aa861f741bcd1042ae17215f"
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "isError": false,
+        "entryId": null,
+        "resultBytes": 1242,
+        "resultSha256": "a80f2c1c6698f594120e837af25be5d67853c6a3cdd25841318bbbedbfaef4a5"
+      }
+    ],
+    "math": {
+      "elapsedMs": 4774984,
+      "toolWaitMs": 16213,
+      "billableMs": 4758771,
+      "expectedBilledSeconds": 297
+    },
+    "checks": {
+      "settlementMatchesExpected": true,
+      "eccalBilledMatches": true,
+      "eccalRemainingMatches": true,
+      "eventDigestMatches": true,
+      "retentionFromConfirmedEnd": true,
+      "confirmationTimePreserved": true,
+      "lifetimeTotalMatches": true,
+      "lifetimeGrantUnchanged": true
+    },
+    "ok": true
+  },
+  "cleanup": {
+    "ports8795And8796Closed": true,
+    "temporarySecretFilesRemoved": true,
+    "databaseWrites": "Normal MemberRoom alarm and ECCAL settlement only; operator SQL was SELECT only"
+  },
+  "methodReadRepair": {
+    "change": "Realtime selects entry, reads applicable method full text, then explains its application",
+    "localValidation": {
+      "typecheck": "PASSED",
+      "workers": 134,
+      "frontend": 9,
+      "nativeRuntime": 2,
+      "totalTests": 145,
+      "dryRunBuild": "PASSED",
+      "secretlint": "PASSED",
+      "freshReview": "PASS"
+    },
+    "deployment": {
+      "commit": "29f57f47c78d0b272bd12eec20daaa4a6d3122fd",
+      "versionId": "ccec0aad-0e81-445c-adc6-b612d6afa65c",
+      "deploymentId": "2e1db52a-3946-4816-9f2b-8b73e31dc7ca",
+      "createdOn": "2026-11-04T20:41:40.361704Z",
+      "versions": [
+        {
+          "version_id": "ccec0aad-0e81-445c-adc6-b612d6afa65c",
+          "percentage": 100
+        }
+      ],
+      "tag": "29f57f4",
+      "bindings": [
+        {
+          "name": "APP_ORIGIN",
+          "type": "plain_text",
+          "value": "https://call.thinkwithblack.com"
+        },
+        {
+          "name": "ASSETS",
+          "type": "assets"
+        },
+        {
+          "name": "AUTH",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "AUTH_VAULT_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "CUTOFFS",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "ECCAL_ORIGIN",
+          "type": "plain_text",
+          "value": "https://eccal.thinkwithblack.com"
+        },
+        {
+          "name": "ECCAL_SERVICE_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "MEMBERS",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "REALTIME_MODEL",
+          "type": "plain_text",
+          "value": "gpt-realtime-2.1"
+        },
+        {
+          "name": "TEXT_MODEL",
+          "type": "plain_text",
+          "value": "gpt-6.1-sol"
+        }
+      ]
+    },
+    "publicHttp": {
+      "observedAt": "2026-11-04T20:42:32.142Z",
+      "requests": [
+        {
+          "path": "/",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/app.js",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/oauth/client-metadata.json",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/auth/status",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/.dev.vars.example",
+          "status": 404,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/api/calls",
+          "status": 401,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        }
+      ]
+    },
+    "realVoiceVerification": "PENDING"
+  },
+  "publicRecords": {
+    "fields": [
+      "id",
+      "status",
+      "createdAt",
+      "endedAt",
+      "expiresAt",
+      "transcript",
+      "documents",
+      "deliveries",
+      "settlement",
+      "pendingTranscripts",
+      "transcriptionFailures"
+    ],
+    "providerIdentifiersAbsent": true
+  },
+  "pending": [
+    "New-call normal hangup with provider confirmation",
+    "Actual microphone denial",
+    "Same-call method full-text read and spoken application"
+  ],
+  "operatorRecoveryReview": "PASS"
+}
