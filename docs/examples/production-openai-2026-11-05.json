@@ -147,21 +147,147 @@
   "sidebandRepair": {
     "cause": "Handshake AbortSignal.timeout remained active after WebSocket upgrade",
     "nativeProviderReproduction": {
-      "withTimeout": {"status": 101, "elapsedMs": 5019, "signalAborted": true, "closed": true, "closeCode": 1006},
-      "withoutTimeout": {"status": 101, "elapsedMs": 8747, "closed": false}
+      "withTimeout": {
+        "status": 101,
+        "elapsedMs": 5019,
+        "signalAborted": true,
+        "closed": true,
+        "closeCode": 1006
+      },
+      "withoutTimeout": {
+        "status": 101,
+        "elapsedMs": 8747,
+        "closed": false
+      }
     },
     "nativeRegression": {
-      "before": {"openAfterHandshakeTimeout": false, "receivedProbe": false, "test": "FAILED"},
-      "after": {"openAfterHandshakeTimeout": true, "receivedProbe": true, "test": "PASSED"}
+      "before": {
+        "openAfterHandshakeTimeout": false,
+        "receivedProbe": false,
+        "test": "FAILED"
+      },
+      "after": {
+        "openAfterHandshakeTimeout": true,
+        "receivedProbe": true,
+        "test": "PASSED"
+      }
     },
     "change": "Clear the five-second handshake timer after fetch completes",
-    "review": "CANDIDATE_PASS",
+    "review": "DEPLOYMENT_STAGE_PASS",
     "localValidation": {
       "typecheck": "PASSED",
       "workers": 133,
       "frontend": 8,
       "nativeRuntime": 2,
       "dryRunBuild": "PASSED"
+    },
+    "deployment": {
+      "commit": "2bef275e34ebc280c9a1f1fda9bc3e46c8a13937",
+      "versionId": "77253751-6d2e-4f4e-9999-fc897beb3b00",
+      "deploymentId": "cb5b87e1-4c63-4676-8cf2-d19950e228d6",
+      "createdOn": "2026-11-04T18:56:01.023929Z",
+      "versions": [
+        {
+          "version_id": "77253751-6d2e-4f4e-9999-fc897beb3b00",
+          "percentage": 100
+        }
+      ],
+      "tag": "2bef275",
+      "bindings": [
+        {
+          "name": "APP_ORIGIN",
+          "type": "plain_text",
+          "value": "https://call.thinkwithblack.com"
+        },
+        {
+          "name": "ASSETS",
+          "type": "assets"
+        },
+        {
+          "name": "AUTH",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "AUTH_VAULT_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "CUTOFFS",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "ECCAL_ORIGIN",
+          "type": "plain_text",
+          "value": "https://eccal.thinkwithblack.com"
+        },
+        {
+          "name": "ECCAL_SERVICE_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "MEMBERS",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "REALTIME_MODEL",
+          "type": "plain_text",
+          "value": "gpt-realtime-2.1"
+        },
+        {
+          "name": "TEXT_MODEL",
+          "type": "plain_text",
+          "value": "gpt-6.1-sol"
+        }
+      ]
+    },
+    "publicHttp": {
+      "observedAt": "2026-11-04T18:56:31.526Z",
+      "requests": [
+        {
+          "path": "/",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/app.js",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/oauth/client-metadata.json",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/.dev.vars.example",
+          "status": 404,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/auth/status",
+          "status": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true,
+          "body": {
+            "authenticated": false,
+            "mcpAuthorized": false
+          }
+        }
+      ]
+    },
+    "memberRegressionBeforeRetest": {
+      "authenticated": true,
+      "mcpAuthorized": true,
+      "eligible": true,
+      "remainingSeconds": 297
     }
   },
   "publicHttp": {

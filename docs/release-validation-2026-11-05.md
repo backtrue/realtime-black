@@ -176,3 +176,10 @@ Issue #10 已更新驗收勾選、日期與 `831a8d9` 的固定版本證據連�
 原生 Workers 實測發現，sideband 使用的五秒 AbortSignal 在 101 upgrade 後仍會中斷 WebSocket：有此計時器時於 5019ms 關閉、代碼 1006；無此計時器時 8747ms 仍維持連線
 
 修正為只在建立連線期間執行五秒計時器，fetch 完成後清除。新增原生 Workers 測試直接執行 MemberRoom.attach，驗證超過五秒仍可接收提供者事件；修改前失敗，修改後通過。型別、133 Workers、8 frontend、2 native runtime 與 dry-run 建置通過
+
+fresh spec_evaluator 核對修正候選通過，提交 `2bef275e34ebc280c9a1f1fda9bc3e46c8a13937` 已推送 main 並發布
+
+- Deployment：`cb5b87e1-4c63-4676-8cf2-d19950e228d6`
+- Version：`77253751-6d2e-4f4e-9999-fc897beb3b00`，100% 流量，tag `2bef275`
+- 首頁、前端 JavaScript、OAuth metadata 與匿名登入狀態回 200，私密設定範例路徑回 404，回應皆未包含三項後端 secret
+- 瀏覽器部署後讀回 authenticated=true、mcpAuthorized=true、eligible=true、remainingSeconds=297
