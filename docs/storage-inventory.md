@@ -1,0 +1,46 @@
+# M2-12 通話資料儲存清冊
+
+對應 [Issue #26](https://github.com/backtrue/realtime-black/issues/26)，設定依據為 `wrangler.jsonc`，本機抽查使用 Cloudflare Workers runtime 與 SQLite Durable Object
+
+## 持久儲存
+
+| 位置 | 欄位及內容 | 歸屬與清除 |
+|---|---|---|
+| MEMBERS 的 `call:{recordId}` | memberId、逐字稿、item 順序、待辨識及失敗識別值、工具結果與續答快取、四類文件、交付地址與狀態、LINE 領取碼雜湊、計時事件、結算結果 | 會員 ID 雜湊決定 DO，讀取再核對 memberId；服務端確認結束後 30 天清除此整筆資料 |
+| MEMBERS 的 `operation:{operationId}` | 會員識別值 | 留作重放拒絕，不含通話正文或權杖 |
+| MEMBERS 的 `pending-reservation` | 會員、操作與通話識別值、建立時間、占用前餘額 | 原操作完成對帳後刪除 |
+| MEMBERS 的 `active` | 通話識別值 | 結算完成後刪除 |
+| MEMBERS 的 `settlement:{recordId}` | 會員、通話及占用識別值、占用秒數、計時事件 | 結算完成後刪除；正文到期時可獨立留存對帳，不含逐字稿、工具內容、文件或交付地址 |
+| MEMBERS 的 `provider-end:{recordId}` | 會員、通話識別值、提供者確認結束時間 | MemberRoom 消化事件後刪除 |
+| CUTOFFS 的 `call` | 會員、通話與提供者會話識別值、截止及確認結束時間、關閉狀態、計時版本 | 掛斷已確認且會員物件收到通知後清除 |
+| AUTH 的 `owner` | 會員識別值 | 每位會員各自的 AuthVault，作歸屬核對 |
+| AUTH 的 `pending:{state}` | AES-GCM 密文：PKCE verifier、會話指紋與瀏覽器指紋；到期時間 | 最多 10 分鐘，callback 單次消耗或到期清除 |
+| AUTH 的 `grant` | AES-GCM 密文：個人 access／refresh token、client ID、授權識別值與期限 | access 到期換發，refresh 最長依既有提供者 30 天期限；解除、失效或到期清除 |
+| AUTH 的 `revoke:{id}` | AES-GCM 密文：待提供者確認撤銷的憑證 | 確認撤銷或憑證到期清除 |
+| ECCAL 的 `voice_login_codes` | 登入碼、state 雜湊、會員、audience、登入與會話期限、使用時間 | 登入碼最多 2 分鐘，交換只能成功一次，到期分批清除 |
+| ECCAL 的 `voice_sessions` | 本站會話 token 雜湊、會員與期限 | 最晚與原 ECCAL JWT 同時到期，登出刪除、到期分批清除 |
+
+`MemberEngine.get`、`list`、`alarm` 都檢查到期時間，清除 `call:` 即涵蓋逐字稿、摘要、成果、工具副本與交付資訊。程式位置為 `src/member-engine.ts`、`src/worker.ts`；型別位於 `src/contracts.ts`
+
+## 記憶體與對外傳遞
+
+| 位置 | 實際資料流 |
+|---|---|
+| 瀏覽器 | 麥克風直接經 WebRTC 傳至提供者；掛斷關閉音軌，程式沒有 MediaRecorder、音檔下載或 localStorage 寫入 |
+| MemberRoom 記憶體 | sideband socket、尚未確認播放完成的回答及轉寫等待狀態；結束後清理 |
+| 服務呼叫記憶體 | 登入 Cookie、Authorization、OpenAI 金鑰與短效憑證供當次後端請求使用；個人 MCP bearer 只在 AuthVault 解密及呼叫，其他模組使用授權識別值 |
+| OpenAI | Realtime 音訊及設定；文件請求包含逐字稿、工具內容及缺失識別值，設定 `store: false` |
+| MCP | 個別會員 Bearer 與允許工具的參數 |
+| 交付 adapter | 該筆工作、核對證據、會員驗證後才能開啟的成果連結；資料範圍見 `src/contracts.ts` |
+
+登入與授權資料不包含通話正文，OAuth 密文使用獨立金鑰與會員／用途驗證資料。外部服務的保存與刪除設定於正式環境及 D4、D5 契約確認時核對
+
+## 紀錄與測試產物抽查
+
+- `wrangler.jsonc` 的 observability 關閉，`src/` 與 `public/` 沒有 console 紀錄通話或權杖
+- `.gitignore` 排除 `.wrangler/`、`dist/`、`test-results/`、`.dev.vars*` 與 `.env*`，只保留空白設定範例
+- `docs/examples/handoff-consultation.json` 與測試 fixture 使用合成會員及合成對話，可由 `npm run example:handoff` 重建
+- `test/storage.test.ts` 於真實 SQLite DO 跑完整文字、工具、四類文件、Email 與 LINE 待交付工作；全程檢查 Store 寫入未包含測試 SDP、音訊欄位、權杖或 LINE 原碼
+- 同一測試在到期前 1 毫秒確認四類文件可讀，到期後執行 alarm，檢查清單與直接讀取拒絕，SQLite 中正文、工具副本、交付地址與碼雜湊均已移除，只留下操作重放識別值
+
+目前正式 Cloudflare 儲存與外部服務副本尚待指定測試環境抽查

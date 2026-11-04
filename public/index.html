@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>打電話給小黑</title><link rel="stylesheet" href="/style.css"><script type="module" src="/app.js"></script></head>
+<body>
+  <main>
+    <header><span class="tag">ECCAL 會員專用</span><h1>打電話給小黑</h1><p>和 AI 小黑聊聊你的行銷問題，從現況一起找出下一步</p></header>
+    <section aria-labelledby="call-title" class="card">
+      <h2 id="call-title">AI 小黑語音顧問</h2><p>你正在與 AI 對話</p>
+      <p id="membership" role="status">正在確認會員資格</p>
+      <div class="actions"><a id="login" href="/auth/login" hidden>登入 ECCAL 會員</a><a id="mcp-connect" href="/auth/mcp/connect" hidden>授權使用我的方法庫</a><button id="mcp-revoke" class="secondary" hidden>解除方法庫授權</button><button id="logout" class="secondary" hidden>登出</button></div>
+      <p id="call-status" role="status" aria-live="polite">尚未通話</p>
+      <div class="actions"><button id="start" disabled>開始通話</button><button id="stop" class="secondary" disabled>結束通話</button></div>
+      <p id="notice" role="alert"></p><audio id="speaker" autoplay></audio>
+    </section>
+    <section aria-labelledby="records-title" class="card"><div class="section-title"><h2 id="records-title">我的通話紀錄</h2><button id="refresh" class="secondary">重新整理</button></div><p>逐字稿與摘要保存 30 天</p><div id="records"></div></section>
+  </main>
+</body>
+</html>

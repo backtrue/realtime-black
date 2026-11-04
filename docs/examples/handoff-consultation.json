@@ -1,0 +1,328 @@
+{
+  "caseType": "synthetic",
+  "sourceRecord": {
+    "id": "fixture-handoff-call",
+    "memberId": "fixture-member-a",
+    "operationId": "fixture-handoff-operation",
+    "reservation": {
+      "id": "fixture-handoff-reservation",
+      "memberId": "fixture-member-a",
+      "seconds": 300,
+      "deadline": 1793765100000
+    },
+    "callId": "rtc_fixture_handoff",
+    "status": "ended",
+    "createdAt": 1793764800000,
+    "endedAt": 1793764925000,
+    "expiresAt": 1796356925000,
+    "events": [
+      {
+        "id": "fixture-meter-1",
+        "type": "reserved",
+        "at": 1793764800000
+      },
+      {
+        "id": "fixture-meter-2",
+        "type": "connected",
+        "at": 1793764805000
+      },
+      {
+        "id": "fixture-meter-3",
+        "type": "ended",
+        "at": 1793764925000
+      }
+    ],
+    "settlement": {
+      "billedSeconds": 120,
+      "remainingSeconds": 180
+    },
+    "transcript": [
+      {
+        "itemId": "fixture-user-1",
+        "role": "user",
+        "text": "測試商品 A 是單口 65W USB-C 桌面充電座，售價 1500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，我想知道要先改善哪裡",
+        "at": 1793764805000
+      },
+      {
+        "itemId": "fixture-assistant-1",
+        "role": "assistant",
+        "text": "我先核對漏斗各階段，還需要知道你能投入的時間，以及運費和結帳流程的情況",
+        "at": 1793764835000
+      },
+      {
+        "itemId": "fixture-user-2",
+        "role": "user",
+        "text": "目前只有我執行，每週能投入 4 小時，運費呈現方式與放棄結帳原因還不知道",
+        "at": 1793764865000
+      }
+    ],
+    "itemOrder": [
+      {
+        "id": "fixture-user-1",
+        "previousId": null
+      },
+      {
+        "id": "fixture-assistant-1",
+        "previousId": "fixture-user-1"
+      },
+      {
+        "id": "fixture-user-2",
+        "previousId": "fixture-assistant-1"
+      }
+    ],
+    "transcriptRevision": 3,
+    "pendingTranscripts": [],
+    "transcriptionFailures": [],
+    "tools": [
+      {
+        "id": "fixture-tool-1",
+        "name": "fixture_read_funnel_method",
+        "result": {
+          "source": "受控測試回應",
+          "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口"
+        }
+      }
+    ],
+    "toolResults": {},
+    "deliveries": [],
+    "documents": [
+      {
+        "id": "fixture-summary",
+        "kind": "summary",
+        "title": "測試商品 A 的購物車到訂單流失，應在每週 4 小時內優先改善什麼",
+        "findings": [
+          {
+            "kind": "member",
+            "text": "測試商品 A 為單口 65W USB-C 桌面充電座，售價 1500 元；測試期間有 100 次到站、10 次加入購物車及 1 筆訂單",
+            "sourceIds": [
+              "fixture-user-1"
+            ]
+          },
+          {
+            "kind": "tool",
+            "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口",
+            "sourceIds": [
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "inference",
+            "text": "這組測試資料的購物車到訂單比例為 10%，可先檢查結帳階段；目前沒有資料能確認流失原因",
+            "sourceIds": [
+              "fixture-user-1",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "recommendation",
+            "text": "先在每週 4 小時的限制內檢查運費、付款與結帳事件，再依查核結果安排下一步",
+            "sourceIds": [
+              "fixture-user-2",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "unknown",
+            "text": "運費呈現方式與使用者放棄結帳的原因尚未確認",
+            "sourceIds": [
+              "fixture-user-2"
+            ]
+          }
+        ],
+        "createdAt": 1793764925000,
+        "sourceRevision": 3
+      },
+      {
+        "id": "fixture-report",
+        "kind": "report",
+        "title": "測試漏斗現況與優先查核項目",
+        "findings": [
+          {
+            "kind": "member",
+            "text": "測試商品 A 為單口 65W USB-C 桌面充電座，售價 1500 元；測試期間有 100 次到站、10 次加入購物車及 1 筆訂單",
+            "sourceIds": [
+              "fixture-user-1"
+            ]
+          },
+          {
+            "kind": "inference",
+            "text": "這組測試資料的購物車到訂單比例為 10%，可先檢查結帳階段；目前沒有資料能確認流失原因",
+            "sourceIds": [
+              "fixture-user-1",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "unknown",
+            "text": "運費呈現方式與使用者放棄結帳的原因尚未確認",
+            "sourceIds": [
+              "fixture-user-2"
+            ]
+          }
+        ],
+        "createdAt": 1793764925000,
+        "sourceRevision": 3
+      },
+      {
+        "id": "fixture-copy",
+        "kind": "copy",
+        "title": "測試商品 A 廣告文案",
+        "findings": [
+          {
+            "kind": "recommendation",
+            "text": "桌面補電，先看清楚規格。測試商品 A：單口 65W USB-C 桌面充電座，售價 NT$1,500，查看商品規格與購買資訊",
+            "sourceIds": [
+              "fixture-user-1"
+            ]
+          }
+        ],
+        "createdAt": 1793764925000,
+        "sourceRevision": 3
+      },
+      {
+        "id": "fixture-plan",
+        "kind": "plan",
+        "title": "每週 4 小時的結帳改善查核",
+        "findings": [
+          {
+            "kind": "recommendation",
+            "text": "先在每週 4 小時的限制內檢查運費、付款與結帳事件，再依查核結果安排下一步",
+            "sourceIds": [
+              "fixture-user-2",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "unknown",
+            "text": "運費呈現方式與使用者放棄結帳的原因尚未確認",
+            "sourceIds": [
+              "fixture-user-2"
+            ]
+          }
+        ],
+        "createdAt": 1793764925000,
+        "sourceRevision": 3
+      }
+    ]
+  },
+  "handoff": {
+    "memberId": "fixture-member-a",
+    "problemSummary": "測試商品 A 的購物車到訂單流失，應在每週 4 小時內優先改善什麼",
+    "confirmedFacts": [
+      {
+        "kind": "member",
+        "text": "測試商品 A 為單口 65W USB-C 桌面充電座，售價 1500 元；測試期間有 100 次到站、10 次加入購物車及 1 筆訂單",
+        "sourceIds": [
+          "fixture-user-1"
+        ]
+      },
+      {
+        "kind": "tool",
+        "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口",
+        "sourceIds": [
+          "fixture-tool-1"
+        ]
+      }
+    ],
+    "aiDiagnosis": [
+      {
+        "kind": "inference",
+        "text": "這組測試資料的購物車到訂單比例為 10%，可先檢查結帳階段；目前沒有資料能確認流失原因",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "先在每週 4 小時的限制內檢查運費、付款與結帳事件，再依查核結果安排下一步",
+        "sourceIds": [
+          "fixture-user-2",
+          "fixture-tool-1"
+        ]
+      }
+    ],
+    "documents": [
+      {
+        "id": "fixture-report",
+        "kind": "report",
+        "title": "測試漏斗現況與優先查核項目",
+        "findings": [
+          {
+            "kind": "member",
+            "text": "測試商品 A 為單口 65W USB-C 桌面充電座，售價 1500 元；測試期間有 100 次到站、10 次加入購物車及 1 筆訂單",
+            "sourceIds": [
+              "fixture-user-1"
+            ]
+          },
+          {
+            "kind": "inference",
+            "text": "這組測試資料的購物車到訂單比例為 10%，可先檢查結帳階段；目前沒有資料能確認流失原因",
+            "sourceIds": [
+              "fixture-user-1",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "unknown",
+            "text": "運費呈現方式與使用者放棄結帳的原因尚未確認",
+            "sourceIds": [
+              "fixture-user-2"
+            ]
+          }
+        ],
+        "createdAt": 1793764925000,
+        "sourceRevision": 3
+      },
+      {
+        "id": "fixture-copy",
+        "kind": "copy",
+        "title": "測試商品 A 廣告文案",
+        "findings": [
+          {
+            "kind": "recommendation",
+            "text": "桌面補電，先看清楚規格。測試商品 A：單口 65W USB-C 桌面充電座，售價 NT$1,500，查看商品規格與購買資訊",
+            "sourceIds": [
+              "fixture-user-1"
+            ]
+          }
+        ],
+        "createdAt": 1793764925000,
+        "sourceRevision": 3
+      },
+      {
+        "id": "fixture-plan",
+        "kind": "plan",
+        "title": "每週 4 小時的結帳改善查核",
+        "findings": [
+          {
+            "kind": "recommendation",
+            "text": "先在每週 4 小時的限制內檢查運費、付款與結帳事件，再依查核結果安排下一步",
+            "sourceIds": [
+              "fixture-user-2",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "unknown",
+            "text": "運費呈現方式與使用者放棄結帳的原因尚未確認",
+            "sourceIds": [
+              "fixture-user-2"
+            ]
+          }
+        ],
+        "createdAt": 1793764925000,
+        "sourceRevision": 3
+      }
+    ],
+    "pendingQuestions": [
+      {
+        "kind": "unknown",
+        "text": "運費呈現方式與使用者放棄結帳的原因尚未確認",
+        "sourceIds": [
+          "fixture-user-2"
+        ]
+      }
+    ]
+  }
+}

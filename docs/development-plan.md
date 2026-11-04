@@ -34,7 +34,7 @@ M0、M1、M2 與 G1 是這份清單拆出的第一期工程順序。V 為平行�
 | 編號 | 待確認事項與影響 | 可以結案的條件 | 建議確認者 | 直接依賴此決策的任務 |
 |---|---|---|---|---|
 | <a name="d1"></a>D1 | **ECCAL 會員與額度介面**。M0 的登入、資格判定、額度發放與結算。 | ECCAL 維護者提供可測的身分、權限、可用秒數、占用與結算契約，以及有效、失效、無資格的測試身分。選定可避免兩端帳目分歧的做法。 | ECCAL 維護者＋開發 | [M0-01](https://github.com/backtrue/realtime-black/issues/1) |
-| <a name="d2"></a>D2 | **五分鐘怎麼起算、暫停與結算**。M0 的扣秒與斷線，亦影響第二期購時。 | 小黑確認接通前、接通後、等待工具、斷線與重連各怎麼算，以及秒數取整與結束時點。每種事件附一個時間軸和預期扣秒。 | 小黑確認，工程提供事件時間軸 | [M0-05](https://github.com/backtrue/realtime-black/issues/5)、[M0-08](https://github.com/backtrue/realtime-black/issues/8)、[M0-09](https://github.com/backtrue/realtime-black/issues/9) |
+| <a name="d2"></a>D2 | **五分鐘計時已核定（2026-11-04）**。第一段實際音訊至服務端確認結束，扣除工具等待，未接通不扣，每通合計後向上取整 | 依已核定規則核對事件時間軸與 ECCAL 帳目 | 小黑確認，工程提供事件時間軸 | [M0-05](https://github.com/backtrue/realtime-black/issues/5)、[M0-08](https://github.com/backtrue/realtime-black/issues/8)、[M0-09](https://github.com/backtrue/realtime-black/issues/9) |
 | <a name="d3"></a>D3 | **MCP 如何代表個別會員取得授權**。M1 的真實工具呼叫、權限隔離及負向測試。 | 以專用測試會員核對 OAuth 取得路徑、同意範圍、到期或撤銷行為、一期可呼叫的工具清單。保留服務端事件，隱去權杖。 | MCP／ECCAL 維護者 | [M1-01](https://github.com/backtrue/realtime-black/issues/10) |
 | <a name="d4"></a>D4 | **Email 寄件服務與收件人核對**。M2 的實際寄送與狀態判定。 | 確認寄件方式、測試信箱、如何核對會員指定的收件地址，以及依什麼證據登記已送出或失敗。 | 營運＋開發 | [M2-09](https://github.com/backtrue/realtime-black/issues/23) |
 | <a name="d5"></a>D5 | **LINE 網頁後台的權限與實際操作**。M2 的真人監督、聊天室核對與一次性領取碼。 | 營運核對官方平台規則、帳號權限、測試聊天室、可接受的監督方式與發送證據。由有權限者跑通一次指定流程。 | 報數據 LINE 管理者＋開發 | [M2-10](https://github.com/backtrue/realtime-black/issues/24) |
@@ -42,7 +42,7 @@ M0、M1、M2 與 G1 是這份清單拆出的第一期工程順序。V 為平行�
 | <a name="d7"></a>D7 | **購買分鐘與付費匯出的商品規則**。B2 的價格、付款入帳、下載內容及權限。 | 分別核定分鐘方案、定價、付款及額度抵用規則，和匯出價格、檔案內容、可下載時點及個資權利處理界線。 | 小黑＋ECCAL 營運 | [B2-01](https://github.com/backtrue/realtime-black/issues/32)、[B2-03](https://github.com/backtrue/realtime-black/issues/34) |
 | <a name="d8"></a>D8 | **真人案件的 ECCAL 後台流程**。第一期可先定交接格式。B2 的建案與後台作業須有契約。 | 確認六類交接資料的實際欄位、哪些人可經手、通知方式與案件處理流程。取得可測的後台環境。 | 小黑＋ECCAL 維護者 | [B2-04](https://github.com/backtrue/realtime-black/issues/35) |
 | <a name="d9"></a>D9 | **第三方資料的來源與授權範圍**。B2 預授權顧問個案及 B3 一般會員自助授權。 | 分別核定兩期要整合的來源、帳戶、資料與可用權限，並定義重查或撤銷授權的測試。不預定一次支援所有平台。 | 小黑＋各來源維護者 | [B2-05](https://github.com/backtrue/realtime-black/issues/36)、[B3-01](https://github.com/backtrue/realtime-black/issues/37) |
-| <a name="d10"></a>D10 | **30 天保存的技術邊界與原始音檔**。M2 紀錄清除。未決原音不影響文字紀錄開發。 | 確認到期計算時點、儲存位置、衍生副本與刪除檢查方式。原始音檔是否保留另決。未核准時不啟用產品端保存。成果另有保存需求時再定。 | 小黑＋資料儲存維護者 | [M2-03](https://github.com/backtrue/realtime-black/issues/17) |
+| <a name="d10"></a>D10 | **30 天保存的技術邊界與原始音檔**。2026-11-04 已核定從服務端確認通話結束起算 | 核對正式儲存位置、衍生副本與刪除查詢。原始音檔是否保留另決，未核准時不啟用產品端保存。成果另有保存需求時再定 | 小黑＋資料儲存維護者 | [M2-03](https://github.com/backtrue/realtime-black/issues/17) |
 
 ## ▌第一期 M0 會員、額度與網頁通話
 

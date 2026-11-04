@@ -1,0 +1,9 @@
+OPENAI_API_KEY=
+REALTIME_MODEL=
+TEXT_MODEL=
+ECCAL_ORIGIN=https://eccal.thinkwithblack.com
+ECCAL_SERVICE_TOKEN=
+AUTH_VAULT_KEY=
+# HTTPS 使用本站 client metadata，loopback 測試使用預先登記的 client id
+MCP_CLIENT_ID=
+APP_ORIGIN=http://127.0.0.1:8787
