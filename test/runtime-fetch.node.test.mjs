@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
-import { Miniflare, convertV4MiniflareOptions, Response } from 'miniflare';
+import { Miniflare, convertV4MiniflareOptions, Response, WebSocketPair } from 'miniflare';
 
 test('五個服務 client 的預設 fetch 在原生 Workers runtime 可完成請求', async () => {
   const bundle = await build({
@@ -63,5 +63,54 @@ test('五個服務 client 的預設 fetch 在原生 Workers runtime 可完成請
       'https://api.openai.com/v1/realtime/calls/rtc_fixture/hangup',
       'https://api.openai.com/v1/responses',
     ].sort());
+  } finally { await mf.dispose(); }
+});
+
+test('後端控制連線在接通五秒後仍可接收提供者事件', async () => {
+  const bundle = await build({
+    stdin: { resolveDir: process.cwd(), contents: `
+      import { MemberRoom } from './src/worker';
+      export default { async fetch() {
+        const room = {
+          env: { OPENAI_API_KEY: 'fixture-key' }, sockets: new Map(), pendingSpeech: new Map(), drains: new Map(),
+          ctx: { waitUntil(promise) { promise.catch(() => {}); } },
+          engine: { async ingest() {} },
+          async run(operation) { await operation(); return { ok: true }; },
+          async stop() {},
+        };
+        await MemberRoom.prototype.attach.call(room, 'fixture-member', 'fixture-record', 'rtc_fixture');
+        const socket = room.sockets.get('fixture-record');
+        await new Promise(resolve => setTimeout(resolve, 5300));
+        const openAfterHandshakeTimeout = socket.readyState === WebSocket.OPEN;
+        let receivedProbe = false;
+        if (openAfterHandshakeTimeout) {
+          await new Promise(resolve => {
+            const timer = setTimeout(resolve, 1000);
+            socket.addEventListener('message', message => { if (message.data === '{"type":"probe"}') { receivedProbe = true; clearTimeout(timer); resolve(); } });
+            socket.send('{"type":"probe"}');
+          });
+          socket.close(1000, 'fixture complete');
+        }
+        return Response.json({openAfterHandshakeTimeout, receivedProbe});
+      }};
+    ` },
+    bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', external: ['cloudflare:workers'],
+  });
+  const mf = new Miniflare(convertV4MiniflareOptions({
+    modules: true, script: bundle.outputFiles[0].text,
+    compatibilityDate: '2026-11-04', compatibilityFlags: ['nodejs_compat', 'global_fetch_strictly_public'],
+    outboundService: async request => {
+      assert.equal(request.url, 'https://api.openai.com/v1/realtime?call_id=rtc_fixture');
+      assert.equal(request.headers.get('authorization'), 'Bearer fixture-key');
+      const pair = new WebSocketPair();
+      pair[1].accept();
+      pair[1].addEventListener('message', message => pair[1].send(message.data));
+      return new Response(null, {status:101, webSocket:pair[0]});
+    },
+  }));
+  try {
+    const response = await mf.dispatchFetch('https://fixture.example.test/');
+    assert.equal(response.status, 200, await response.clone().text());
+    assert.deepEqual(await response.json(), {openAfterHandshakeTimeout:true, receivedProbe:true});
   } finally { await mf.dispose(); }
 });

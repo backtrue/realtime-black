@@ -165,4 +165,14 @@ Issue #10 已更新驗收勾選、日期與 `831a8d9` 的固定版本證據連�
 
 首頁、前端 JavaScript、OAuth metadata 與匿名登入狀態均正常，回應未包含永久 OpenAI 金鑰，私密設定範例路徑回 404。第二位會員部署後讀回 authenticated=true、mcpAuthorized=true、eligible=true、remainingSeconds=300
 
-完整去識別 API、binding 與入口讀回見 [OpenAI 正式設定證據](examples/production-openai-2026-11-05.json)。實際瀏覽器通話正等待麥克風許可
+完整去識別 API、binding 與入口讀回見 [OpenAI 正式設定證據](examples/production-openai-2026-11-05.json)
+
+## Realtime 接通後五秒斷線修正
+
+內建瀏覽器取得麥克風許可並完成兩次 WebRTC 接通。第一通尚未說話即結束，扣 0 秒；第二通已說話但未聽到回覆，服務端記錄逐字稿失敗 1 筆、扣 3 秒，餘額 297 秒
+
+以合成資料直接連到同一 Realtime 模型，語音回覆為 completed，將其合成音訊交回同一會話後，gpt-4o-transcribe 成功產生逐字事件。測試未使用會員音訊，未保存合成音檔
+
+原生 Workers 實測發現，sideband 使用的五秒 AbortSignal 在 101 upgrade 後仍會中斷 WebSocket：有此計時器時於 5019ms 關閉、代碼 1006；無此計時器時 8747ms 仍維持連線
+
+修正為只在建立連線期間執行五秒計時器，fetch 完成後清除。新增原生 Workers 測試直接執行 MemberRoom.attach，驗證超過五秒仍可接收提供者事件；修改前失敗，修改後通過。型別、133 Workers、8 frontend、2 native runtime 與 dry-run 建置通過

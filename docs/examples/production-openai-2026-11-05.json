@@ -111,7 +111,59 @@
       }
     ]
   },
-  "browserCall": "PENDING_MICROPHONE_PERMISSION",
+  "browserCall": {
+    "microphonePermission": "GRANTED",
+    "firstAttempt": {
+      "webRtcConnected": true,
+      "memberSpoke": false,
+      "serverStatus": "ended",
+      "transcriptItems": 0,
+      "billedSeconds": 0,
+      "remainingSeconds": 300
+    },
+    "secondAttempt": {
+      "webRtcConnected": true,
+      "memberSpoke": true,
+      "memberHeardReply": false,
+      "serverStatus": "ended",
+      "transcriptItems": 0,
+      "pendingTranscripts": 0,
+      "transcriptionFailures": 1,
+      "billedSeconds": 3,
+      "remainingSeconds": 297
+    },
+    "verification": "PENDING_SIDEBAND_REPAIR_RETEST"
+  },
+  "syntheticAudioDiagnostic": {
+    "transport": "Realtime WebSocket",
+    "model": "gpt-realtime-2.1",
+    "responseStatus": "completed",
+    "transcriptionModel": "gpt-4o-transcribe",
+    "transcriptionEvent": "conversation.item.input_audio_transcription.completed",
+    "transcriptPresent": true,
+    "memberAudioUsed": false,
+    "audioPersisted": false
+  },
+  "sidebandRepair": {
+    "cause": "Handshake AbortSignal.timeout remained active after WebSocket upgrade",
+    "nativeProviderReproduction": {
+      "withTimeout": {"status": 101, "elapsedMs": 5019, "signalAborted": true, "closed": true, "closeCode": 1006},
+      "withoutTimeout": {"status": 101, "elapsedMs": 8747, "closed": false}
+    },
+    "nativeRegression": {
+      "before": {"openAfterHandshakeTimeout": false, "receivedProbe": false, "test": "FAILED"},
+      "after": {"openAfterHandshakeTimeout": true, "receivedProbe": true, "test": "PASSED"}
+    },
+    "change": "Clear the five-second handshake timer after fetch completes",
+    "review": "CANDIDATE_PASS",
+    "localValidation": {
+      "typecheck": "PASSED",
+      "workers": 133,
+      "frontend": 8,
+      "nativeRuntime": 2,
+      "dryRunBuild": "PASSED"
+    }
+  },
   "publicHttp": {
     "observedAt": "2026-11-04T18:37:30.247Z",
     "requests": [
@@ -151,7 +203,7 @@
       }
     ]
   },
-  "memberRegression": {
+  "memberRegressionBeforeBrowserCalls": {
     "authenticated": true,
     "mcpAuthorized": true,
     "eligible": true,

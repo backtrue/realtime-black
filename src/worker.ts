@@ -274,9 +274,14 @@ export class MemberRoom extends DurableObject<Env> {
     }
   }
   private async attach(memberId: string, id: string, callId: string) {
-    const response = await fetch(`https://api.openai.com/v1/realtime?call_id=${encodeURIComponent(callId)}`, {
-      headers: { Upgrade: "websocket", authorization: `Bearer ${this.env.OPENAI_API_KEY}` }, redirect: "manual", signal: AbortSignal.timeout(5000),
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    let response: Response;
+    try {
+      response = await fetch(`https://api.openai.com/v1/realtime?call_id=${encodeURIComponent(callId)}`, {
+        headers: { Upgrade: "websocket", authorization: `Bearer ${this.env.OPENAI_API_KEY}` }, redirect: "manual", signal: controller.signal,
+      });
+    } finally { clearTimeout(timeout); }
     const socket = response.webSocket;
     if (!socket) throw new AppError("CALL_CONTROL_UNAVAILABLE", 502);
     socket.accept();
