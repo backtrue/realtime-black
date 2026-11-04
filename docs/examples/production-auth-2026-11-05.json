@@ -666,7 +666,34 @@
       "anonymousIsNull": true
     }
   },
-  "mcpDeployment": {
+  "browserLogin": {
+    "observedAt": "2026-11-04T17:30:20.206Z",
+    "googleSignIn": "COMPLETED",
+    "returnedOrigin": "https://call.thinkwithblack.com",
+    "memberPage": "剩餘通話時間：5 分 0 秒，請授權使用你的方法庫",
+    "remainingSeconds": 300,
+    "recordsPage": "還沒有通話紀錄",
+    "mcpConsent": "COMPLETED",
+    "consentText": "讀取行銷方法庫並核對目前帳號，僅提供諮詢使用",
+    "finalMcpAuthorized": false
+  },
+  "runtimeValidation": {
+    "commit": "f51fc0050dedd301d12ae747f151c6464f3acd92",
+    "workers": 133,
+    "frontend": 8,
+    "nativeRuntime": 1,
+    "typecheck": "PASSED",
+    "dryRunBuild": "PASSED",
+    "nativeFailureBeforeFix": "ECCAL_UNAVAILABLE / 500",
+    "nativeClients": [
+      "HttpEccalQuota",
+      "McpOAuth",
+      "ThinkWithBlackMcp",
+      "OpenAiRealtime",
+      "OpenAiDocuments"
+    ]
+  },
+  "mcpDeploymentReceiptAtPublish": {
     "repository": "backtrue/thinkwithblack-mcp",
     "commit": "789a263c94b952fa01bbbb2c0dcf6a522e6f018c",
     "worker": "thinkwithblack-mcp",
@@ -688,33 +715,274 @@
       "protected_resource_metadata": 200,
       "unauthenticated_mcp": 401
     },
-    "authenticated_smoke": "pending",
-    "status": "DEPLOYED_AWAITING_AUTHENTICATED_SMOKE"
+    "authenticatedSmokeAtPublish": "pending",
+    "statusAtPublish": "DEPLOYED_AWAITING_AUTHENTICATED_SMOKE"
   },
-  "browserLogin": {
-    "observedAt": "2026-11-04T17:30:20.206Z",
-    "googleSignIn": "COMPLETED",
-    "returnedOrigin": "https://call.thinkwithblack.com",
-    "memberPage": "剩餘通話時間：5 分 0 秒，請授權使用你的方法庫",
-    "remainingSeconds": 300,
-    "recordsPage": "還沒有通話紀錄",
-    "mcpConsent": "AWAITING_USER_CONFIRMATION",
-    "consentText": "讀取行銷方法庫並核對目前帳號，僅提供諮詢使用"
+  "mcpLiveAtAuthenticatedVerification": {
+    "deploymentId": "328dfb28-f4bb-475d-99b1-e06f4442aedd",
+    "versionId": "dd26e166-ce7a-4033-8e9e-31885a0314bc",
+    "createdOn": "2026-11-04T17:26:41.275827Z",
+    "versions": [
+      {
+        "version_id": "dd26e166-ce7a-4033-8e9e-31885a0314bc",
+        "percentage": 100
+      }
+    ],
+    "scriptEtag": "9f4a6484cef5a90008a8d9911470116c9ef48df7e818f3a810244e24c9bac0b9",
+    "releaseVersion": "76a64f8d-290e-4579-bcd3-a1cbf3a23508",
+    "sameScriptEtag": true
   },
-  "runtimeValidation": {
-    "commit": "f51fc0050dedd301d12ae747f151c6464f3acd92",
-    "workers": 133,
-    "frontend": 8,
-    "nativeRuntime": 1,
-    "typecheck": "PASSED",
-    "dryRunBuild": "PASSED",
-    "nativeFailureBeforeFix": "ECCAL_UNAVAILABLE / 500",
-    "nativeClients": [
-      "HttpEccalQuota",
-      "McpOAuth",
-      "ThinkWithBlackMcp",
-      "OpenAiRealtime",
-      "OpenAiDocuments"
-    ]
+  "personalMcpValidation": {
+    "recordedAt": "2026-11-04T17:54:44.648Z",
+    "status": "TWO_MEMBERS_AUTHORIZATION_PASSED",
+    "method": "Production AuthVault lifecycle via temporary Cloudflare remote preview",
+    "memberSelection": {
+      "distinctActiveSessions": 1,
+      "source": "Production PostgreSQL SELECT DISTINCT active voice_sessions joined to existing users",
+      "identifiersInArtifact": false
+    },
+    "before": {
+      "authenticated": true,
+      "mcpAuthorized": true,
+      "source": "Browser GET /auth/status"
+    },
+    "read": {
+      "observedAt": "2026-11-04T17:48:43.995Z",
+      "phase": "/read",
+      "ok": true,
+      "grantAccepted": true,
+      "tools": [
+        "thinkwithblack_entry_catalog",
+        "thinkwithblack_entry_read",
+        "thinkwithblack_list_modules",
+        "thinkwithblack_marketing_skill_read",
+        "thinkwithblack_marketing_skill_search"
+      ],
+      "toolsMatchAllowed": true,
+      "catalog": {
+        "tool": "thinkwithblack_entry_catalog",
+        "ok": true,
+        "entryId": null,
+        "entryIds": [
+          "E01",
+          "E02",
+          "E03",
+          "E04",
+          "E05",
+          "E06",
+          "E07",
+          "E08",
+          "E09",
+          "E10",
+          "E11",
+          "E12",
+          "E13",
+          "E14",
+          "E15",
+          "E16",
+          "E17",
+          "E18",
+          "E19",
+          "E20",
+          "E21",
+          "E22",
+          "E23",
+          "E24",
+          "E25",
+          "E26",
+          "E27",
+          "E28",
+          "E29",
+          "E30",
+          "E31"
+        ],
+        "resultBytes": 433580,
+        "sha256": "99d074bee3469d257be2aa42bff76b9fa40acadde61ee24d9ade344ff45fde34"
+      },
+      "entry": {
+        "tool": "thinkwithblack_entry_read",
+        "ok": true,
+        "entryId": "E01",
+        "resultBytes": 33327,
+        "sha256": "3c639d14680aefd9323c5d73e57f32c39045823afe66be92905c6cb53afbaf66"
+      }
+    },
+    "revocation": {
+      "uiMessage": "已解除方法庫授權",
+      "revocationPending": false,
+      "fieldEvidence": "Rendered non-pending branch in public/app.js mcp-revoke handler",
+      "after": {
+        "authenticated": true,
+        "mcpAuthorized": false,
+        "source": "Browser GET /auth/status"
+      },
+      "oldGrant": {
+        "observedAt": "2026-11-04T17:49:36.329Z",
+        "phase": "/after-revoke",
+        "ok": true,
+        "grant": {
+          "ok": false,
+          "error": "MCP_AUTH_REQUIRED",
+          "status": 403
+        },
+        "oldHandleList": {
+          "ok": false,
+          "error": "MCP_AUTH_REQUIRED",
+          "status": 403
+        },
+        "oldHandleCall": {
+          "ok": false,
+          "error": "MCP_AUTH_REQUIRED",
+          "status": 403
+        }
+      }
+    },
+    "quota": {
+      "beforeSeconds": 300,
+      "afterSeconds": 300
+    },
+    "cleanup": {
+      "remotePreviewStopped": true,
+      "brokerStopped": true,
+      "ports8795And8796Closed": true,
+      "temporarySecretRemoved": true
+    },
+    "secondMember": {
+      "googleSignIn": "COMPLETED",
+      "remainingSeconds": 300,
+      "beforeGrant": {
+        "authenticated": true,
+        "mcpAuthorized": false
+      },
+      "mcpConsent": "COMPLETED",
+      "afterIsolation": {
+        "authenticated": true,
+        "mcpAuthorized": true
+      },
+      "isolation": "PASSED"
+    },
+    "memberIsolation": {
+      "identityCheck": {
+        "activeMemberCount": 2,
+        "distinctMembers": true,
+        "requestedMemberMatched": true,
+        "memberIdentitiesPassedThroughPipe": true,
+        "queryMode": "SELECT_ONLY"
+      },
+      "result": {
+        "observedAt": "2026-11-04T18:04:21.121Z",
+        "phase": "member-isolation",
+        "ok": true,
+        "memberAAlreadyRevoked": {
+          "ok": false,
+          "error": "MCP_AUTH_REQUIRED",
+          "status": 403
+        },
+        "memberBOwnGrantAccepted": true,
+        "memberBTools": [
+          "thinkwithblack_entry_catalog",
+          "thinkwithblack_entry_read",
+          "thinkwithblack_list_modules",
+          "thinkwithblack_marketing_skill_read",
+          "thinkwithblack_marketing_skill_search"
+        ],
+        "toolsMatchAllowed": true,
+        "catalog": {
+          "tool": "thinkwithblack_entry_catalog",
+          "ok": true,
+          "entryId": null,
+          "entryIds": [
+            "E01",
+            "E02",
+            "E03",
+            "E04",
+            "E05",
+            "E06",
+            "E07",
+            "E08",
+            "E09",
+            "E10",
+            "E11",
+            "E12",
+            "E13",
+            "E14",
+            "E15",
+            "E16",
+            "E17",
+            "E18",
+            "E19",
+            "E20",
+            "E21",
+            "E22",
+            "E23",
+            "E24",
+            "E25",
+            "E26",
+            "E27",
+            "E28",
+            "E29",
+            "E30",
+            "E31"
+          ],
+          "resultBytes": 433580,
+          "sha256": "99d074bee3469d257be2aa42bff76b9fa40acadde61ee24d9ade344ff45fde34"
+        },
+        "entry": {
+          "tool": "thinkwithblack_entry_read",
+          "ok": true,
+          "entryId": "E01",
+          "resultBytes": 33327,
+          "sha256": "3c639d14680aefd9323c5d73e57f32c39045823afe66be92905c6cb53afbaf66"
+        },
+        "memberBHandleOnMemberA": {
+          "ok": false,
+          "error": "MCP_AUTH_REQUIRED",
+          "status": 403
+        },
+        "memberBIdentityOnMemberAObject": {
+          "ok": false,
+          "error": "MCP_MEMBER_MISMATCH",
+          "status": 403
+        },
+        "memberAIdentityOnMemberBObject": {
+          "ok": false,
+          "error": "MCP_MEMBER_MISMATCH",
+          "status": 403
+        },
+        "memberARepeatedRevoke": {
+          "ok": true,
+          "revocationPending": false
+        },
+        "memberBGrantAfterMemberARevokeAccepted": true,
+        "memberBMethodAfterMemberARevoke": {
+          "tool": "thinkwithblack_entry_read",
+          "ok": true,
+          "entryId": "E01",
+          "resultBytes": 33327,
+          "sha256": "3c639d14680aefd9323c5d73e57f32c39045823afe66be92905c6cb53afbaf66"
+        }
+      },
+      "cleanup": {
+        "remotePreviewStopped": true,
+        "brokerStopped": true,
+        "ports8795And8796Closed": true,
+        "temporarySecretRemoved": true,
+        "identityPipesRemoved": true
+      }
+    },
+    "finalState": {
+      "memberA": "REVOKED",
+      "memberB": "AUTHORIZED",
+      "memberBRemainingSeconds": 300
+    }
+  },
+  "voiceRuntime": {
+    "verification": "PENDING_OPENAI_CONFIGURATION",
+    "missingBindingNames": [
+      "OPENAI_API_KEY",
+      "REALTIME_MODEL",
+      "TEXT_MODEL"
+    ],
+    "sourceWorkerVersion": "c50b4264-c5f7-44c6-a0bc-f19d94436c2c"
   }
 }

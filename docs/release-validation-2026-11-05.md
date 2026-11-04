@@ -21,7 +21,7 @@ MCP 候選從正式 main `4a00d964` 加入七個授權檔案與 `scripts/verify-
 | realtime-black | `npm run check`：型別、133 項 Workers、8 項前端、1 項原生 Workers 服務連線、三個 DO dry-run 建置通過 |
 | ECCAL | 型別、17 項語音帳本、1 項額度跨 repo、8 項登入、2 項三 repo MCP、前後端建置、指定檔案 secretlint 通過 |
 | MCP | 方法參數修正候選 44 個檔案共 2414 項測試通過；最新 main 的正式發布流程另完成安裝、scope、來源、型別、完整測試、全庫 secretlint 及 dry-run 建置 |
-| Fresh spec_evaluator | 三個 Git 候選、方法參數限制、正式 migration、語音站設定與原生 fetch 修正通過；整體 NEEDS_WORK，真實會員驗收待完成 |
+| Fresh spec_evaluator | 三個 Git 候選、方法參數限制、正式 migration、語音站設定與原生 fetch 修正通過；Issue #10 的真實雙會員授權、方法讀取、越權拒絕與撤銷隔離驗收通過 |
 
 方法庫授權另封閉既有工具的私人 context 參數：`entry_read` 只接受 `entry_id`、`marketing_skill_read` 只接受 `id`、`marketing_skill_search` 只接受 `query`／`cursor`，其餘三項工具接受空參數。品牌、任務與未知欄位在 handler 前拒絕，混合 batch 整批拒絕，既有不含 methods scope 的 client 保留原有行為
 
@@ -37,6 +37,8 @@ MCP 候選從正式 main `4a00d964` 加入七個授權檔案與 `scripts/verify-
 - Authorization metadata 與 protected-resource metadata：200，包含 `thinkwithblack.methods.read`
 - 未登入 `/mcp`：401，OAuth challenge 正確
 - 發布收據：MCP 候選的 `dist/production-deployment-receipt.json`
+
+真實會員測試時的執行版本已為 `dd26e166-ce7a-4033-8e9e-31885a0314bc`，deployment `328dfb28-f4bb-475d-99b1-e06f4442aedd`，100% 流量。Cloudflare 讀回此版本與本輪 `76a64f8d` 的 script ETag 完全相同，遠端 main 仍為 `789a263c`。原發布收據的當時狀態與實際驗證版本分別記錄於正式證據 JSON
 
 ## ECCAL Git 同步與 Republish
 
@@ -103,4 +105,45 @@ ECCAL 正式設定已讀回 `VOICE_APP_ORIGIN` 與 `THINKWITHBLACK_VOICE_SERVICE
 
 正式網路設定包含 `global_fetch_strictly_public`，讓同 zone 子請求依公開網路路徑路由；單獨發布此 flag 後仍重現 503，再透過原生 runtime 測試確認上述 receiver 問題。依據：[Cloudflare 公開 fetch 設定](https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public)、[Illegal invocation 說明](https://developers.cloudflare.com/workers/observability/errors/#illegal-invocation-errors)
 
-正式 Google 跨站登入已成功。第一位會員已從語音站進入 MCP 同意頁，顯示「讀取行銷方法庫並核對目前帳號，僅提供諮詢使用」，目前等待使用者依瀏覽器工具新增存取授權的當下確認。MCP 工具讀取／撤銷、第二位會員隔離與成果連結轉傳拒絕待驗證
+正式 Google 跨站登入已成功。第一位會員完成 MCP 同意後，語音站顯示「方法庫授權已完成」，瀏覽器 `/auth/status` 讀回 authenticated=true、mcpAuthorized=true
+
+透過臨時 Cloudflare remote preview 連到正式 AuthVault，使用該會員自己的 grant 完成以下驗證；會員身分由正式資料庫唯一有效的 voice_session 核對，原始 bearer 留在 AuthVault。grant 呼叫可依正常生命週期換發或清理憑證
+
+| 驗證 | 正式結果 |
+|---|---|
+| 工具清單 | 精確五項方法庫工具，沒有重複 |
+| `thinkwithblack_entry_catalog` | 成功，含 E01～E31，433580 bytes |
+| `thinkwithblack_entry_read`，`entry_id=E01` | 成功，回 E01，33327 bytes |
+| UI 解除授權 | 顯示「已解除方法庫授權」；對應前端 revocationPending=false 的分支 |
+| 撤銷後瀏覽器狀態 | authenticated=true、mcpAuthorized=false |
+| 撤銷後 grant／舊 handle list／舊 handle call | 均為 403、MCP_AUTH_REQUIRED |
+| 會員額度 | 前後均為 300 秒 |
+
+兩份工具結果的 SHA-256、名稱、方法 ID 與長度已保存於正式證據 JSON。臨時 preview 與 broker 已停止，兩個本機連接埠已關閉，臨時驗證憑證已移除
+
+## 第二位會員與 MCP 授權隔離
+
+第二位指定會員完成 Google 跨站登入並顯示 300 秒；授權前 `/auth/status` 為 authenticated=true、mcpAuthorized=false。使用者完成密碼金鑰登入並確認該會員的新 MCP 授權後，語音站顯示「方法庫授權已完成」
+
+正式資料庫 SELECT 核對兩個不同且有效的 voice_session 會員，第二位會員與使用者指定的既有帳號唯一對應。會員 ID 經 FIFO 送入臨時驗證程序，只在記憶體保留；正式 RPC 結果以甲／乙表示
+
+| 驗證 | 正式結果 |
+|---|---|
+| 甲原本已撤銷的 grant | 403、MCP_AUTH_REQUIRED |
+| 乙自己的 grant／五項方法工具 | 成功，工具清單精確且不重複 |
+| 乙讀方法目錄／E01 全文 | 成功，433580／33327 bytes，方法 ID 與結果 SHA-256 均與甲的公開方法一致 |
+| 乙的有效 handle 改用於甲 | 403、MCP_AUTH_REQUIRED |
+| 乙身分呼叫甲的授權物件 | 403、MCP_MEMBER_MISMATCH |
+| 甲身分呼叫乙的授權物件 | 403、MCP_MEMBER_MISMATCH |
+| 再次撤銷甲 | 成功、revocationPending=false |
+| 撤銷甲後，乙的 grant／E01 讀取 | 仍成功 |
+| 最終瀏覽器狀態 | 乙 authenticated=true、mcpAuthorized=true、剩餘 300 秒 |
+
+兩輪臨時 preview、broker、連接埠與驗證憑證均已清理。正式 Worker 仍為 `c50b4264`，MCP 仍為 `dd26e166`，皆為 100% 流量。甲維持已撤銷，乙保留自己的有效授權
+
+後續語音實測需要設定 OPENAI_API_KEY、REALTIME_MODEL 與 TEXT_MODEL；目前正式 Worker 的 binding 名稱讀回未包含這三項。逐字稿與成果連結跨會員轉傳另依 Issue #21 驗證
+
+## Issue #10 驗收紀錄
+
+- [x] 已附版本、正式環境、實際結果與去識別證據
+- [x] 2026-11-05 由 fresh spec_evaluator 核對兩位會員各自授權／工具呼叫、失效 grant、跨會員識別與後端授權邊界，符合 [Issue #10 通過條件](https://github.com/backtrue/realtime-black/issues/10)
