@@ -1,8 +1,8 @@
 # Issue 實作與驗證紀錄
 
-更新日期：2026-11-04
+更新日期：2026-11-05
 
-產品行為依 [產品規格 V0.3](product-spec.md)，任務及驗收依 [開發清單](development-plan.md)與對應 Issue
+產品行為依 [產品規格 V0.3](product-spec.md)，任務及驗收依 [開發清單](development-plan.md)與對應 Issue。三 repo 提交、ECCAL 發布與 MCP 正式版本見 [2026-11-05 發布紀錄](release-validation-2026-11-05.md)
 
 ## 本機驗證
 
@@ -18,7 +18,7 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 
 | Issue | 任務 | 已有實作 | 待完成的驗收或串接 |
 |---|---|---|---|
-| #1 | M0-01 | ECCAL 語音 v1 HTTP 契約、PostgreSQL 帳本、一次性跨站登入與本站會話；跨 repo 實際程式對帳 | 正式 migration、設定與瀏覽器 Google 登入驗收 |
+| #1 | M0-01 | ECCAL 語音 v1 HTTP 契約、PostgreSQL 帳本、一次性跨站登入與本站會話；跨 repo 實際程式對帳；ECCAL 已同步發布 | 正式 migration、語音專用設定與瀏覽器 Google 登入驗收 |
 | #2 | M0-02 | Worker、靜態資產、後端金鑰、短效發證及建置設定 | Cloudflare 測試環境讀回 |
 | #3 | M0-03 | 本站 HttpOnly 會話、到期與登出撤銷、身分與餘額拒絕、操作重放拒絕 | D1 正式測試會員登入與發證案例 |
 | #4 | M0-04 | WebRTC、麥克風權限、播放與掛斷清理 | Realtime 實際聽測、插話與追問 |
@@ -27,7 +27,7 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 | #7 | M0-07 | 獨立 CallCutoff alarm，依音訊開始與工具等待更新截止 | 實際提供者截止事件與餘額 |
 | #8 | M0-08 | 工具等待聯集、斷線至確認結束、結算重試與重放測試 | 真實 ECCAL 重送與斷線事件對帳、提供者結束證據 |
 | #9 | M0-09 | 過期憑證拒絕、未接通 0 秒結算與 UI 清理 | 真實 ECCAL 未接通額度釋放、sideband 中斷與掛斷 404 的結束證據 |
-| #10 | M1-01 | 個人 OAuth PKCE、雙端會員核對、AES-GCM 憑證、換發與撤銷佇列；實際 Provider 三 repo 測試 | MCP 新 scope 發布、正式設定及真實會員同意與撤銷 |
+| #10 | M1-01 | 個人 OAuth PKCE、雙端會員核對、AES-GCM 憑證、換發與撤銷佇列；實際 Provider 三 repo 測試；MCP 新 scope 已正式發布 | 語音站／ECCAL 正式設定及真實會員同意與撤銷 |
 | #11 | M1-02 | MCP SDK、工具結果、sideband 語音續答 | 同一通真實工具呼叫與語音紀錄 |
 | #12 | M1-03 | 方法庫專用 scope、provider 及語音站雙端工具限制、拒絕私人來源與寫入、授權與工具逾時處理 | 已發布版本的真實逾時與拒絕驗收 |
 | #13 | M1-04 | 顧問式追問與說明指示 | 小黑本人試聽與修改紀錄 |

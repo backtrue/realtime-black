@@ -49,7 +49,7 @@ ECCAL 已有可在本機執行的 PostgreSQL 語音帳本、四項內部 HTTP �
 
 MCP 使用既有 OAuth 同意頁與 S256 PKCE，要求 `thinkwithblack.use thinkwithblack.methods.read`。AuthVault 逐次以該會員 token 查詢帳號，再由 ECCAL 核對歸屬；換發與撤銷使用 metadata 公告的 `/oauth/token`。token 留在 AuthVault，工具執行與撤銷共用同一工作佇列，撤銷回覆後舊授權識別值拒絕使用。瀏覽器不取得 MCP token，儲存端保存綁定會員及用途的密文
 
-`thinkwithblack.methods.read` 已在 MCP 本機來源新增，限制為帳號核對及五項行銷方法工具，並拒絕與 GSC／GTM scope 混用。啟用前須同步 MCP 的此項增量；提供者現行公開 metadata 尚未包含新 scope。來源與驗證見 MCP repo 的 `docs/realtime-methods-scope.md`
+`thinkwithblack.methods.read` 已正式發布，限制為帳號核對及五項行銷方法工具，並拒絕與 GSC／GTM scope 混用。2026-11-05 讀回提供者的公開 metadata 已包含新 scope，Cloudflare 版本及 ECCAL 發布結果見 [正式環境驗證](release-validation-2026-11-05.md)
 
 既有 ECCAL 登入與會員 API 的查核見 [M0-01 串接查核](eccal-integration-check.md)
 

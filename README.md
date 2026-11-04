@@ -31,6 +31,6 @@
 
 已新增 Cloudflare Worker、WebRTC 通話頁、會員通話協調、獨立後端掛斷、MCP 工具呼叫、紀錄保存與成果產出程式，以及 Workers runtime 測試。跨站 ECCAL 登入、本站會話、個人 MCP OAuth、方法庫專用 scope、換發與撤銷已在三個 repo 完成本機實作與整合測試
 
-正式環境 migration／設定、MCP scope 發布、Google／MCP 會員同意、OpenAI 通話、交付通路與本人音色待實際環境驗收。逐項進度見 [Issue 實作與驗證紀錄](docs/implementation-status.md)，執行與設定見 [本機執行與串接](docs/runtime-integration.md)
+三個 repo 已提交並推上 GitHub，ECCAL 已同步發布，MCP 方法庫 scope 已正式發布。正式環境 migration／語音設定、Google／MCP 會員同意、OpenAI 通話、交付通路與本人音色待驗證，實際發布版本與入口讀回見 [正式環境驗證](docs/release-validation-2026-11-05.md)。逐項進度見 [Issue 實作與驗證紀錄](docs/implementation-status.md)，執行與設定見 [本機執行與串接](docs/runtime-integration.md)
 
 **安全注意：此 repository 是 Public。禁止提交 API Key、OAuth Token、Email、LINE 使用者資訊、諮詢內容及其他會員資料。**
