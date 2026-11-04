@@ -1,0 +1,720 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "database": {
+    "source": "Replit ECCAL Production Database Settings and Publishing Production app secrets DATABASE_URL",
+    "identityMatches": true,
+    "hostSha256": "e35657705feb4f9a4c5d8d5e22fc38a72c065de8fd16a9121df4295c07659679",
+    "database": "neondb",
+    "serverVersion": "16.15 (23d2a0d)",
+    "inRecovery": false,
+    "schema": "public"
+  },
+  "migrations": {
+    "sourceCommit": "be31e6ee81bce7e27caab4ca42b6535ec610a868",
+    "files": [
+      {
+        "name": "0004_voice_quotas.sql",
+        "sha256": "7a71d4049c706144449e3ddad6723c0c2195acc592b55b6255613513d42b01ad"
+      },
+      {
+        "name": "0005_voice_login.sql",
+        "sha256": "04a731b85a5eacfaa75fb60ff8e695b45397bc61788203bf7f24e95f9a362c60"
+      }
+    ],
+    "before": [
+      {
+        "name": "voice_quotas",
+        "relation": null
+      },
+      {
+        "name": "voice_reservations",
+        "relation": null
+      },
+      {
+        "name": "voice_login_codes",
+        "relation": null
+      },
+      {
+        "name": "voice_sessions",
+        "relation": null
+      }
+    ],
+    "transaction": "COMMITTED",
+    "replay": {
+      "replay": "PASSED",
+      "tableCount": 4,
+      "columnCount": 24,
+      "constraintCount": 18,
+      "indexCount": 8
+    },
+    "catalog": {
+      "tables": [
+        {
+          "relname": "voice_login_codes",
+          "relkind": "r"
+        },
+        {
+          "relname": "voice_quotas",
+          "relkind": "r"
+        },
+        {
+          "relname": "voice_reservations",
+          "relkind": "r"
+        },
+        {
+          "relname": "voice_sessions",
+          "relkind": "r"
+        }
+      ],
+      "columns": [
+        {
+          "relname": "voice_login_codes",
+          "attname": "code_hash",
+          "attnum": 1,
+          "type": "character varying(64)",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_login_codes",
+          "attname": "state_hash",
+          "attnum": 2,
+          "type": "character varying(64)",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_login_codes",
+          "attname": "user_id",
+          "attnum": 3,
+          "type": "character varying",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_login_codes",
+          "attname": "audience",
+          "attnum": 4,
+          "type": "text",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_login_codes",
+          "attname": "expires_at",
+          "attnum": 5,
+          "type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_login_codes",
+          "attname": "session_expires_at",
+          "attnum": 6,
+          "type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_login_codes",
+          "attname": "consumed_at",
+          "attnum": 7,
+          "type": "timestamp with time zone",
+          "attnotnull": false,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_quotas",
+          "attname": "user_id",
+          "attnum": 1,
+          "type": "character varying",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_quotas",
+          "attname": "granted_seconds",
+          "attnum": 2,
+          "type": "integer",
+          "attnotnull": true,
+          "default_expr": "300"
+        },
+        {
+          "relname": "voice_quotas",
+          "attname": "billed_seconds",
+          "attnum": 3,
+          "type": "integer",
+          "attnotnull": true,
+          "default_expr": "0"
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "id",
+          "attnum": 1,
+          "type": "uuid",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "user_id",
+          "attnum": 2,
+          "type": "character varying",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "operation_id",
+          "attnum": 3,
+          "type": "character varying(100)",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "reserved_seconds",
+          "attnum": 4,
+          "type": "integer",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "created_at",
+          "attnum": 5,
+          "type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "deadline",
+          "attnum": 6,
+          "type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "settled_at",
+          "attnum": 7,
+          "type": "timestamp with time zone",
+          "attnotnull": false,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "billed_seconds",
+          "attnum": 8,
+          "type": "integer",
+          "attnotnull": false,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "remaining_seconds",
+          "attnum": 9,
+          "type": "integer",
+          "attnotnull": false,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_reservations",
+          "attname": "events_digest",
+          "attnum": 10,
+          "type": "character varying(64)",
+          "attnotnull": false,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_sessions",
+          "attname": "token_hash",
+          "attnum": 1,
+          "type": "character varying(64)",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_sessions",
+          "attname": "user_id",
+          "attnum": 2,
+          "type": "character varying",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_sessions",
+          "attname": "expires_at",
+          "attnum": 3,
+          "type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": null
+        },
+        {
+          "relname": "voice_sessions",
+          "attname": "created_at",
+          "attnum": 4,
+          "type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": "now()"
+        }
+      ],
+      "constraints": [
+        {
+          "relname": "voice_login_codes",
+          "conname": "voice_login_codes_check",
+          "contype": "c",
+          "definition": "CHECK ((expires_at <= session_expires_at))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_login_codes",
+          "conname": "voice_login_codes_code_hash_check",
+          "contype": "c",
+          "definition": "CHECK (((code_hash)::text ~ '^[a-f0-9]{64}$'::text))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_login_codes",
+          "conname": "voice_login_codes_pkey",
+          "contype": "p",
+          "definition": "PRIMARY KEY (code_hash)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_login_codes",
+          "conname": "voice_login_codes_state_hash_check",
+          "contype": "c",
+          "definition": "CHECK (((state_hash)::text ~ '^[a-f0-9]{64}$'::text))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_login_codes",
+          "conname": "voice_login_codes_user_id_fkey",
+          "contype": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES users(id)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_quotas",
+          "conname": "voice_quotas_billed_seconds_check",
+          "contype": "c",
+          "definition": "CHECK (((billed_seconds >= 0) AND (billed_seconds <= 300)))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_quotas",
+          "conname": "voice_quotas_granted_seconds_check",
+          "contype": "c",
+          "definition": "CHECK ((granted_seconds = 300))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_quotas",
+          "conname": "voice_quotas_pkey",
+          "contype": "p",
+          "definition": "PRIMARY KEY (user_id)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_quotas",
+          "conname": "voice_quotas_user_id_fkey",
+          "contype": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES users(id)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_reservations",
+          "conname": "voice_reservations_deadline_check",
+          "contype": "c",
+          "definition": "CHECK ((deadline = (created_at + ((reserved_seconds)::double precision * '00:00:01'::interval))))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_reservations",
+          "conname": "voice_reservations_operation_key",
+          "contype": "u",
+          "definition": "UNIQUE (user_id, operation_id)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_reservations",
+          "conname": "voice_reservations_pkey",
+          "contype": "p",
+          "definition": "PRIMARY KEY (id)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_reservations",
+          "conname": "voice_reservations_reserved_seconds_check",
+          "contype": "c",
+          "definition": "CHECK (((reserved_seconds >= 1) AND (reserved_seconds <= 300)))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_reservations",
+          "conname": "voice_reservations_settlement_check",
+          "contype": "c",
+          "definition": "CHECK ((((settled_at IS NULL) AND (billed_seconds IS NULL) AND (remaining_seconds IS NULL) AND (events_digest IS NULL)) OR ((settled_at IS NOT NULL) AND (billed_seconds IS NOT NULL) AND ((billed_seconds >= 0) AND (billed_seconds <= reserved_seconds)) AND (remaining_seconds IS NOT NULL) AND ((remaining_seconds >= 0) AND (remaining_seconds <= 300)) AND (events_digest IS NOT NULL) AND ((events_digest)::text ~ '^[a-f0-9]{64}$'::text))))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_reservations",
+          "conname": "voice_reservations_user_id_fkey",
+          "contype": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES voice_quotas(user_id)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_sessions",
+          "conname": "voice_sessions_pkey",
+          "contype": "p",
+          "definition": "PRIMARY KEY (token_hash)",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_sessions",
+          "conname": "voice_sessions_token_hash_check",
+          "contype": "c",
+          "definition": "CHECK (((token_hash)::text ~ '^[a-f0-9]{64}$'::text))",
+          "convalidated": true
+        },
+        {
+          "relname": "voice_sessions",
+          "conname": "voice_sessions_user_id_fkey",
+          "contype": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES users(id)",
+          "convalidated": true
+        }
+      ],
+      "indexes": [
+        {
+          "relname": "voice_login_codes",
+          "index_name": "voice_login_codes_expiry_idx",
+          "indisunique": false,
+          "indisvalid": true,
+          "definition": "CREATE INDEX voice_login_codes_expiry_idx ON public.voice_login_codes USING btree (expires_at)"
+        },
+        {
+          "relname": "voice_login_codes",
+          "index_name": "voice_login_codes_pkey",
+          "indisunique": true,
+          "indisvalid": true,
+          "definition": "CREATE UNIQUE INDEX voice_login_codes_pkey ON public.voice_login_codes USING btree (code_hash)"
+        },
+        {
+          "relname": "voice_quotas",
+          "index_name": "voice_quotas_pkey",
+          "indisunique": true,
+          "indisvalid": true,
+          "definition": "CREATE UNIQUE INDEX voice_quotas_pkey ON public.voice_quotas USING btree (user_id)"
+        },
+        {
+          "relname": "voice_reservations",
+          "index_name": "voice_one_active_reservation_idx",
+          "indisunique": true,
+          "indisvalid": true,
+          "definition": "CREATE UNIQUE INDEX voice_one_active_reservation_idx ON public.voice_reservations USING btree (user_id) WHERE (settled_at IS NULL)"
+        },
+        {
+          "relname": "voice_reservations",
+          "index_name": "voice_reservations_operation_key",
+          "indisunique": true,
+          "indisvalid": true,
+          "definition": "CREATE UNIQUE INDEX voice_reservations_operation_key ON public.voice_reservations USING btree (user_id, operation_id)"
+        },
+        {
+          "relname": "voice_reservations",
+          "index_name": "voice_reservations_pkey",
+          "indisunique": true,
+          "indisvalid": true,
+          "definition": "CREATE UNIQUE INDEX voice_reservations_pkey ON public.voice_reservations USING btree (id)"
+        },
+        {
+          "relname": "voice_sessions",
+          "index_name": "voice_sessions_expiry_idx",
+          "indisunique": false,
+          "indisvalid": true,
+          "definition": "CREATE INDEX voice_sessions_expiry_idx ON public.voice_sessions USING btree (expires_at)"
+        },
+        {
+          "relname": "voice_sessions",
+          "index_name": "voice_sessions_pkey",
+          "indisunique": true,
+          "indisvalid": true,
+          "definition": "CREATE UNIQUE INDEX voice_sessions_pkey ON public.voice_sessions USING btree (token_hash)"
+        }
+      ]
+    },
+    "priorObservation": {
+      "initialMigration": "COMMITTED_AND_REPLAY_PASSED",
+      "laterPostPublishCheck": {
+        "tables": [
+          {
+            "name": "voice_quotas",
+            "relation": null
+          },
+          {
+            "name": "voice_reservations",
+            "relation": null
+          },
+          {
+            "name": "voice_login_codes",
+            "relation": null
+          },
+          {
+            "name": "voice_sessions",
+            "relation": null
+          }
+        ],
+        "createCodeError": "42P01",
+        "diagnosticTransaction": "ROLLED_BACK"
+      }
+    },
+    "postPublishMigration": {
+      "observedAt": "2026-11-04T17:30:20.111Z",
+      "transaction": "COMMITTED",
+      "replay": "PASSED",
+      "source": "Current Publishing Production app secrets DATABASE_URL"
+    }
+  },
+  "worker": {
+    "commit": "f51fc0050dedd301d12ae747f151c6464f3acd92",
+    "versionId": "c50b4264-c5f7-44c6-a0bc-f19d94436c2c",
+    "deploymentId": "ac466c34-8b56-4275-8b6e-fb385b5bdf3c",
+    "createdOn": "2026-11-04T17:23:21.23808Z",
+    "versions": [
+      {
+        "version_id": "c50b4264-c5f7-44c6-a0bc-f19d94436c2c",
+        "percentage": 100
+      }
+    ],
+    "domain": "call.thinkwithblack.com",
+    "compatibilityDate": "2026-11-04",
+    "compatibilityFlags": [
+      "nodejs_compat",
+      "global_fetch_strictly_public"
+    ],
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text",
+        "value": "https://call.thinkwithblack.com"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "AUTH_VAULT_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text",
+        "value": "https://eccal.thinkwithblack.com"
+      },
+      {
+        "name": "ECCAL_SERVICE_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace"
+      }
+    ]
+  },
+  "publicHttp": {
+    "observedAt": "2026-11-04T17:30:21.194Z",
+    "origin": "https://call.thinkwithblack.com",
+    "requests": [
+      {
+        "name": "home",
+        "path": "/",
+        "method": "GET",
+        "status": 200,
+        "cacheControl": "no-store"
+      },
+      {
+        "name": "clientMetadata",
+        "path": "/oauth/client-metadata.json",
+        "method": "GET",
+        "status": 200,
+        "cacheControl": "no-store",
+        "metadata": {
+          "client_id": "https://call.thinkwithblack.com/oauth/client-metadata.json",
+          "client_name": "打電話給小黑",
+          "redirect_uris": [
+            "https://call.thinkwithblack.com/auth/mcp/callback"
+          ],
+          "grant_types": [
+            "authorization_code",
+            "refresh_token"
+          ],
+          "response_types": [
+            "code"
+          ],
+          "token_endpoint_auth_method": "none",
+          "scope": "thinkwithblack.use thinkwithblack.methods.read"
+        }
+      },
+      {
+        "name": "login",
+        "path": "/auth/login",
+        "method": "GET",
+        "status": 303,
+        "cacheControl": "no-store",
+        "redirect": {
+          "origin": "https://eccal.thinkwithblack.com",
+          "path": "/api/voice/login"
+        },
+        "cookie": {
+          "name": "__Host-realtime_login",
+          "secure": true,
+          "httpOnly": true,
+          "sameSite": "Lax"
+        }
+      },
+      {
+        "name": "crossOriginLogout",
+        "path": "/auth/logout",
+        "method": "POST",
+        "status": 403,
+        "cacheControl": "no-store",
+        "code": "ORIGIN_FORBIDDEN"
+      },
+      {
+        "name": "privateConfig",
+        "path": "/.dev.vars.example",
+        "method": "GET",
+        "status": 404,
+        "cacheControl": "no-store"
+      },
+      {
+        "path": "/auth/status",
+        "status": 200,
+        "body": {
+          "authenticated": false,
+          "mcpAuthorized": false
+        },
+        "cacheControl": "no-store"
+      },
+      {
+        "path": "/api/me",
+        "status": 401,
+        "body": {
+          "error": "LOGIN_REQUIRED"
+        },
+        "cacheControl": "no-store"
+      }
+    ],
+    "priorAnonymousStatus": {
+      "name": "anonymousStatus",
+      "path": "/auth/status",
+      "method": "GET",
+      "status": 503,
+      "cacheControl": "no-store",
+      "code": "ECCAL_UNAVAILABLE"
+    }
+  },
+  "eccalPublicHttp": {
+    "observedAt": "2026-11-04T17:14:15.833Z",
+    "origin": "https://eccal.thinkwithblack.com",
+    "requests": [
+      {
+        "path": "/",
+        "method": "GET",
+        "status": 200,
+        "contract": null
+      },
+      {
+        "path": "/api/voice/login",
+        "method": "GET",
+        "status": 400,
+        "contract": "eccal-voice-v1",
+        "code": "LOGIN_STATE_INVALID"
+      },
+      {
+        "path": "/api/voice/internal/authenticate",
+        "method": "POST",
+        "status": 401,
+        "contract": "eccal-voice-v1",
+        "code": "UNAUTHORIZED_CALLER"
+      }
+    ]
+  },
+  "productionServiceKeyReadback": {
+    "observedAt": "2026-11-04T17:22:24.172Z",
+    "workerStateServiceKeyMatches": true,
+    "eccalStateRequest": {
+      "status": 302,
+      "redirectPath": "/api/voice/login",
+      "contract": "eccal-voice-v1"
+    },
+    "eccalServiceAuthentication": {
+      "status": 200,
+      "anonymousIsNull": true
+    }
+  },
+  "mcpDeployment": {
+    "repository": "backtrue/thinkwithblack-mcp",
+    "commit": "789a263c94b952fa01bbbb2c0dcf6a522e6f018c",
+    "worker": "thinkwithblack-mcp",
+    "deployment": {
+      "deployment_id": "337ee314-dcd4-4371-85d0-99ae08cfe4c7",
+      "version_id": "76a64f8d-290e-4579-bcd3-a1cbf3a23508",
+      "created_on": "2026-11-04T17:23:38.869492Z"
+    },
+    "checks": [
+      "npm ci",
+      "verify:scope",
+      "verify:sources",
+      "typecheck",
+      "npm test",
+      "security:scan",
+      "build"
+    ],
+    "public_smoke": {
+      "protected_resource_metadata": 200,
+      "unauthenticated_mcp": 401
+    },
+    "authenticated_smoke": "pending",
+    "status": "DEPLOYED_AWAITING_AUTHENTICATED_SMOKE"
+  },
+  "browserLogin": {
+    "observedAt": "2026-11-04T17:30:20.206Z",
+    "googleSignIn": "COMPLETED",
+    "returnedOrigin": "https://call.thinkwithblack.com",
+    "memberPage": "剩餘通話時間：5 分 0 秒，請授權使用你的方法庫",
+    "remainingSeconds": 300,
+    "recordsPage": "還沒有通話紀錄",
+    "mcpConsent": "AWAITING_USER_CONFIRMATION",
+    "consentText": "讀取行銷方法庫並核對目前帳號，僅提供諮詢使用"
+  },
+  "runtimeValidation": {
+    "commit": "f51fc0050dedd301d12ae747f151c6464f3acd92",
+    "workers": 133,
+    "frontend": 8,
+    "nativeRuntime": 1,
+    "typecheck": "PASSED",
+    "dryRunBuild": "PASSED",
+    "nativeFailureBeforeFix": "ECCAL_UNAVAILABLE / 500",
+    "nativeClients": [
+      "HttpEccalQuota",
+      "McpOAuth",
+      "ThinkWithBlackMcp",
+      "OpenAiRealtime",
+      "OpenAiDocuments"
+    ]
+  }
+}

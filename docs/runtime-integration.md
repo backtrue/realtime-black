@@ -10,6 +10,8 @@ npm run dev -- --port 8787
 
 本機入口為 `http://127.0.0.1:8787`，`npm run check` 執行型別檢查、Workers runtime 測試、通話頁 Node 事件測試與 Wrangler dry-run 建置
 
+正式入口為 `https://call.thinkwithblack.com`，Wrangler 已設定 custom domain、APP_ORIGIN 與 ECCAL_ORIGIN。正式部署、資料庫 migration 及各階段讀回見 [正式環境驗證](release-validation-2026-11-05.md)
+
 ## 後端設定
 
 將 `.dev.vars.example` 複製為 `.dev.vars` 後，在本機填入設定

@@ -6,9 +6,9 @@
 
 ## 本機驗證
 
-`npm run check` 已通過：型別檢查、133 項 Cloudflare Workers runtime 測試、8 項通話頁 Node 事件測試及 Wrangler dry-run 建置
+`npm run check` 已通過：型別檢查、133 項 Cloudflare Workers runtime 測試、8 項通話頁 Node 事件測試、1 項原生 Workers 服務連線整合測試及 Wrangler dry-run 建置
 
-ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 repo MCP 授權測試通過，型別與建置通過。MCP 117 項 OAuth／scope 測試、型別與 dry-run 建置通過，細節見 [跨站登入與個別會員授權驗證](auth-validation-2026-11-04.md)
+ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 repo MCP 授權測試通過，型別與建置通過。MCP 138 項 OAuth／scope 測試及完整 2,414 項回歸測試、型別、安全掃描與 dry-run 建置通過，驗證紀錄見 [跨站登入與個別會員授權驗證](auth-validation-2026-11-04.md)及[正式發布紀錄](release-validation-2026-11-05.md)
 
 `npm audit --omit=dev` 回報 0 個弱點。詳細案例與本機 HTTP 讀回見 [2026-11-04 驗證紀錄](validation-2026-11-04.md)
 
@@ -18,8 +18,8 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 
 | Issue | 任務 | 已有實作 | 待完成的驗收或串接 |
 |---|---|---|---|
-| #1 | M0-01 | ECCAL 語音 v1 HTTP 契約、PostgreSQL 帳本、一次性跨站登入與本站會話；跨 repo 實際程式對帳；ECCAL 已同步發布 | 正式 migration、語音專用設定與瀏覽器 Google 登入驗收 |
-| #2 | M0-02 | Worker、靜態資產、後端金鑰、短效發證及建置設定 | Cloudflare 測試環境讀回 |
+| #1 | M0-01 | ECCAL 語音 v1 HTTP 契約、PostgreSQL 帳本、一次性跨站登入與本站會話；跨 repo 對帳；ECCAL 已發布、目前正式 migration 與服務憑證／origin 核對、首位會員真實 Google 跨站登入通過 | 第二位正式會員登入與帳目核對 |
+| #2 | M0-02 | call.thinkwithblack.com 已部署，三個 DO、後端 secret、正式 origin／cookie／metadata／來源拒絕均已讀回 | OpenAI 專用憑證與正式發證路徑驗證 |
 | #3 | M0-03 | 本站 HttpOnly 會話、到期與登出撤銷、身分與餘額拒絕、操作重放拒絕 | D1 正式測試會員登入與發證案例 |
 | #4 | M0-04 | WebRTC、麥克風權限、播放與掛斷清理 | Realtime 實際聽測、插話與追問 |
 | #5 | M0-05 | 核定規則跨通話扣秒、工具等待排除、取整；HTTP → PostgreSQL 實際對帳 | 正式 ECCAL 環境會員帳目核對 |
@@ -27,9 +27,9 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 | #7 | M0-07 | 獨立 CallCutoff alarm，依音訊開始與工具等待更新截止 | 實際提供者截止事件與餘額 |
 | #8 | M0-08 | 工具等待聯集、斷線至確認結束、結算重試與重放測試 | 真實 ECCAL 重送與斷線事件對帳、提供者結束證據 |
 | #9 | M0-09 | 過期憑證拒絕、未接通 0 秒結算與 UI 清理 | 真實 ECCAL 未接通額度釋放、sideband 中斷與掛斷 404 的結束證據 |
-| #10 | M1-01 | 個人 OAuth PKCE、雙端會員核對、AES-GCM 憑證、換發與撤銷佇列；實際 Provider 三 repo 測試；MCP 新 scope 已正式發布 | 語音站／ECCAL 正式設定及真實會員同意與撤銷 |
+| #10 | M1-01 | 個人 OAuth PKCE、雙端會員核對、AES-GCM 憑證、換發與撤銷佇列；實際 Provider 三 repo 測試；MCP 新 scope 已正式發布 | 真實會員同意、隔離與撤銷 |
 | #11 | M1-02 | MCP SDK、工具結果、sideband 語音續答 | 同一通真實工具呼叫與語音紀錄 |
-| #12 | M1-03 | 方法庫專用 scope、provider 及語音站雙端工具限制、拒絕私人來源與寫入、授權與工具逾時處理 | 已發布版本的真實逾時與拒絕驗收 |
+| #12 | M1-03 | 方法庫專用 scope、provider 及語音站雙端工具限制、精確參數限制拒絕既存品牌／任務 context、拒絕私人來源與寫入、授權與工具逾時處理 | 已發布版本的真實逾時與拒絕驗收 |
 | #13 | M1-04 | 顧問式追問與說明指示 | 小黑本人試聽與修改紀錄 |
 | #14 | M1-05 | 會員資料、工具、推論、建議及缺口分類 | 兩組實際模型對話逐項評核 |
 | #15 | M2-01 | 會員隔離、provider item 順序、晚到轉寫、播放完成後保存助理全文 | 插話時已播放片段的文字對齊與真實掛斷聽測 |
