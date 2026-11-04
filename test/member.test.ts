@@ -320,6 +320,23 @@ describe("Cloudflare 路由與實際 Durable Object 儲存", () => {
     expect(result).toEqual({ ok: false, error: "MEMBER_INELIGIBLE", status: 403 });
     expect(await stub.records("a")).toEqual({ ok: true, value: [] });
   });
+  it("內部通話證據核對歸屬，只回傳工具雜湊與事件", async () => {
+    const f = fixture(); const call = await f.start(); const record = (await f.record(call.id))!;
+    record.tools = ["fixture-private-tool-content", { private: "fixture-private-tool-content" }, ["fixture-private-tool-content"]].map((entry_id, index) => ({ id: `fixture-tool-${index}`, name: "read_method", result: { evidence: "fixture-private-tool-content", structuredContent: { entry: { entry_id } } } }));
+    const stub = runtime.MEMBERS.get(runtime.MEMBERS.idFromName(crypto.randomUUID()));
+    await runInDurableObject(stub, async (_instance, state) => { await state.storage.put(`call:${record.id}`, record); });
+    expect(await stub.callEvidence("b", record.id)).toEqual({ ok: false, error: "RECORD_NOT_FOUND", status: 404 });
+    const evidence = await stub.callEvidence("a", record.id);
+    expect(evidence.ok).toBe(true);
+    if (evidence.ok) {
+      expect(evidence.value.providerCallId).toBe("rtc_fixture");
+      expect(evidence.value.tools).toHaveLength(3);
+      for (const tool of evidence.value.tools) expect(tool).toMatchObject({ name: "read_method", isError: false, entryId: null, resultSha256: expect.stringMatching(/^[a-f0-9]{64}$/) });
+      expect(JSON.stringify(evidence.value)).not.toContain("fixture-private-tool-content");
+    }
+    expect(JSON.stringify(await stub.record("a", record.id))).not.toContain("rtc_fixture");
+    await runInDurableObject(stub, async (_instance, state) => { await state.storage.deleteAll(); await state.storage.deleteAlarm(); });
+  });
   it("兩個分頁同時搶最後一秒，實際 RPC 序列只建立一通", async () => {
     const f = fixture(); f.balances.set("a", 1);
     const stub = runtime.MEMBERS.get(runtime.MEMBERS.idFromName(crypto.randomUUID()));

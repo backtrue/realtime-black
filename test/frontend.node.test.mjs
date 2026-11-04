@@ -40,7 +40,7 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
       else if (path === '/auth/mcp/revoke') { authStatus = { authenticated: true, mcpAuthorized: false }; data = { authorized: false, revocationPending: authOptions.revocationPending === true }; }
       else if (path === "/api/me") data = { eligible: true, remainingSeconds: 300 };
       else if (path === "/api/calls" && init?.method === "POST") data = startResponse ? await startResponse() : { id: "fixture-call", sdp: "v=0\r\nanswer", deadline: Date.now() + 300000 };
-      else if (path.endsWith("/end")) data = { status: "ended" };
+      else if (path.endsWith("/end")) data = authOptions.endResponse ? await authOptions.endResponse() : { status: "ended" };
       else if (path.endsWith("/deliveries")) data = deliveryResponse ?? { job: { state: "pending" } };
       else data = recordsResponse;
       return { ok: true, json: async () => data };
@@ -76,6 +76,21 @@ test("拒絕麥克風時不發開始請求並正確呈現未接通", async () =>
   assert.equal(p.requests.some(request => request.init?.method === "POST"), false);
   assert.match(p.elements.get("notice").textContent, /麥克風權限未開啟/);
   assert.equal(p.elements.get("call-status").textContent, "未接通");
+});
+
+test("掛斷立即停止收音播放，等待後端確認後才關閉 WebRTC", async () => {
+  const ended = deferred(), stream = audio();
+  const p = await page(async () => stream, undefined, [], undefined, { endResponse: () => ended.promise });
+  await p.click("start");
+  const ending = p.click("stop");
+  await flush();
+  assert.equal(stream.stops(), 1);
+  assert.notEqual(p.connections[0].connectionState, "closed");
+  assert.equal(p.elements.get("call-status").textContent, "正在結束通話");
+  ended.resolve({ status: "ended" });
+  await ending;
+  assert.equal(p.connections[0].connectionState, "closed");
+  assert.equal(p.elements.get("call-status").textContent, "通話已結束");
 });
 
 test("發證請求尚未回來就取消，回應抵達後結束伺服器會話且不播放", async () => {

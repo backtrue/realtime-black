@@ -208,6 +208,18 @@ export class MemberRoom extends DurableObject<Env> {
   async records(memberId: string) {
     return this.run(async () => (await this.engine.list(memberId)).map(publicRecord));
   }
+  async callEvidence(memberId: string, id: string) {
+    return this.run(async () => {
+      const record = await this.engine.get(memberId, id);
+      const tools = await Promise.all(record.tools.map(async tool => {
+        const result = JSON.stringify(tool.result) ?? "null";
+        const data = tool.result as { isError?: boolean; structuredContent?: { entry?: { entry_id?: string } } } | null;
+        const entryId = data?.structuredContent?.entry?.entry_id;
+        return { id: tool.id, name: tool.name, isError: data?.isError === true, entryId: typeof entryId === "string" && /^E\d{2}$/.test(entryId) ? entryId : null, resultBytes: new TextEncoder().encode(result).byteLength, resultSha256: await memberKey(result) };
+      }));
+      return { status: record.status, providerCallId: record.callId ?? null, reservationId: record.reservation.id, events: record.events, tools, createdAt: record.createdAt, endedAt: record.endedAt ?? null, expiresAt: record.expiresAt ?? null, settlement: record.settlement ?? null };
+    });
+  }
   async document(memberId: string, id: string, kind: DocumentKind) {
     return this.run(() => this.engine.document(memberId, id, kind));
   }

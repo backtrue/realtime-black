@@ -25,11 +25,14 @@ async function api(path, init = {}) {
   if (!response.ok) throw new Error(errors[data.error] ?? "目前無法完成操作，請稍後再試");
   return data;
 }
-function releaseAudio() {
-  channel?.close(); channel = undefined;
-  peer?.close(); peer = undefined;
+function stopMedia() {
   stream?.getTracks().forEach(track => track.stop()); stream = undefined;
   $("speaker").pause(); $("speaker").srcObject = null;
+}
+function releaseAudio() {
+  stopMedia();
+  channel?.close(); channel = undefined;
+  peer?.close(); peer = undefined;
 }
 async function membership() {
   try {
@@ -49,7 +52,7 @@ async function membership() {
 async function end() {
   attempt += 1;
   const inFlight = starting;
-  releaseAudio();
+  stopMedia();
   $("stop").disabled = true;
   $("call-status").textContent = "正在結束通話";
   try {
@@ -58,7 +61,7 @@ async function end() {
     if (current) { await api(`/api/calls/${current.id}/end`, { method: "POST" }); session = undefined; }
     $("call-status").textContent = "通話已結束";
   } catch (error) { $("notice").textContent = error.message; $("call-status").textContent = "正在確認通話結束狀態"; }
-  finally { if (starting === inFlight) starting = undefined; busy = false; await membership(); await records(); }
+  finally { releaseAudio(); if (starting === inFlight) starting = undefined; busy = false; await membership(); await records(); }
 }
 $("start").addEventListener("click", async () => {
   if (busy || !eligible) return;

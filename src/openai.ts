@@ -38,7 +38,10 @@ export class OpenAiRealtime implements RealtimePort {
     const response = await this.fetcher(`https://api.openai.com/v1/realtime/calls/${callId}/hangup`, {
       method: "POST", redirect: "manual", signal: AbortSignal.timeout(10000), headers: { authorization: `Bearer ${this.key}` },
     });
-    if (!response.ok) throw new AppError("REALTIME_HANGUP_FAILED", 502);
+    if (!response.ok) {
+      console.warn("realtime_hangup_rejected", { status: response.status });
+      throw new AppError("REALTIME_HANGUP_FAILED", 502);
+    }
   }
 }
 
