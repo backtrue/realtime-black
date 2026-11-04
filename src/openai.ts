@@ -1,12 +1,12 @@
 import { AppError, type RealtimePort, type Tool, type DocumentPort, type DocumentKind, type CallRecord, type Document } from "./contracts";
-import { CONSULTANT_INSTRUCTIONS } from "./consultant";
+import { CONSULTANT_INSTRUCTIONS, REALTIME_METHOD_INSTRUCTIONS } from "./consultant";
 
 export class OpenAiRealtime implements RealtimePort {
   constructor(private key: string, private model: string, private fetcher: typeof fetch = fetch.bind(globalThis)) {}
   async create(sdp: string, tools: Tool[]) {
     if (!this.key || !this.model) throw new AppError("REALTIME_NOT_CONFIGURED");
     const config = {
-      type: "realtime", model: this.model, instructions: CONSULTANT_INSTRUCTIONS,
+      type: "realtime", model: this.model, instructions: `${CONSULTANT_INSTRUCTIONS}\n${REALTIME_METHOD_INSTRUCTIONS}`,
       audio: { input: { transcription: { model: "gpt-4o-transcribe", language: "zh" }, turn_detection: { type: "server_vad", interrupt_response: true, create_response: true } }, output: { voice: "marin" } },
       tools: tools.map(tool => ({ type: "function", ...tool })),
     };
