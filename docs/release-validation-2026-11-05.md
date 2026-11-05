@@ -333,3 +333,22 @@ Issue #9 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，正式提�
 實際提供者回應、原 controller 報告、去識別事件、逐通帳目、重放、瀏覽器讀回與清理見 [斷線與重複結算正式證據](examples/production-disconnect-2026-11-05.json)
 
 Issue #8 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，逐項核對五個正式案例、原驗收程式結果、工具等待、重放、財務時間軸及清理，判定 PASS
+
+## Issue #7 用盡額度後由後端停止通話正式驗收
+
+沿用正式版本 `5a03a65f-5dd6-4183-8d73-78b90c5edbc0`、source `4d9d3a934b56da003c53b9e5d4c23143af13d726`，驗收前後 deployment 讀回均為 100% 流量。原生 WebRTC client 使用會員 A 既有剩餘 41 秒，透過正式 MemberRoom 建立通話並持續產生合成數字音訊，前端倒數停用，成功路徑未由操作員送出掛斷
+
+| 正式檢查 | 實際結果 |
+|---|---|
+| 後端截止 | 首段音訊至服務端確認結束共 41,151ms，工具等待 0ms，狀態 ended |
+| 額度結算 | 占用、事件重算、settlement 與 ECCAL ledger 均為 41 秒；累計 300、剩餘 0、未結算占用 0 |
+| 原連線送新問題 | 服務端確認結束後，DataChannel 已關閉；觀察 8,001ms，新增回覆、音訊啟動與 RTP 均為 0 |
+| 另外要求新憑證 | 使用新 operation 呼叫正式 MemberRoom.start，回 403 QUOTA_EXHAUSTED，未新增紀錄 |
+| 其他會員 | 會員 B／C 的授予、累計、剩餘與占用皆未改變 |
+| 瀏覽器 | 完整重新整理後顯示 0 分 0 秒、開始通話停用、最新紀錄已結束 |
+
+驗收程式的額度公式與失敗清理共 14 項檢查通過，執行前獨立 preflight PASS。本次 PostgreSQL 操作皆為 SELECT，未重設額度，保留正式服務的占用與結算流程；未使用麥克風或保存音檔
+
+臨時 preview、broker、8806／8807 連接埠、FIFO 與暫存憑證皆已清理。實際事件、截止後探測、帳目、新憑證拒絕與瀏覽器證據見 [後端截止正式證據](examples/production-cutoff-2026-11-05.json)
+
+Issue #7 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，截止、額度公式、原連線、新憑證拒絕、正式帳目、瀏覽器與清理逐項核對，判定 PASS

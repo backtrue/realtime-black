@@ -1,0 +1,298 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #7 / docs/development-plan.md M0-07",
+  "productSpec": "docs/product-spec.md V0.3",
+  "issue": 7,
+  "productionCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+  "environment": {
+    "deploymentId": "cdeafb09-64f3-434a-a022-fbd8ed4e6d99",
+    "versions": [
+      {
+        "version_id": "5a03a65f-5dd6-4183-8d73-78b90c5edbc0",
+        "percentage": 100
+      }
+    ],
+    "versionId": "5a03a65f-5dd6-4183-8d73-78b90c5edbc0",
+    "tag": "4d9d3a9",
+    "createdOn": "2026-11-05T06:44:32.6609Z",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text",
+        "value": "https://call.thinkwithblack.com"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "AUTH_VAULT_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text",
+        "value": "https://eccal.thinkwithblack.com"
+      },
+      {
+        "name": "ECCAL_SERVICE_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text",
+        "value": "gpt-realtime-2.1"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text",
+        "value": "gpt-6.1-sol"
+      }
+    ]
+  },
+  "execution": {
+    "client": "werift 0.26.0",
+    "mode": "Native WebRTC through actual production MemberRoom and CallCutoff bindings",
+    "baseline": "Existing 41-second balance; no quota reset",
+    "clientCountdownEnabled": false,
+    "operatorStopOnSuccess": false,
+    "sqlMode": "SELECT_ONLY",
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "helperTestsPassed": 14,
+    "helperSha256": {
+      "broker.mjs": "4330009ef67e9d9ed6b95e4b021826cf7d516cb1afdd28f2c99b6ad506eb6e00",
+      "worker.js": "59cbe67e511420b2fc2dbf44dc3096a3c902a36ed8438f950838d5a2c2491a5e",
+      "assertions.mjs": "aeaef5e1b7d6ee5d7fffccb48a34b1153e24a97c2b0f621d725a4a9bdd3db2f1",
+      "wrangler.json": "29a4ef59a462b7fa634e41cff5303fd4c7244f22cedfa44488af77181c726aa1"
+    }
+  },
+  "result": {
+    "observedAt": "2026-11-05T07:44:17.965Z",
+    "purpose": "Issue #7 backend cutoff without client countdown, original connection probe and new credential rejection",
+    "memberLabel": "A",
+    "baseline": {
+      "members": {
+        "A": {
+          "grantedSeconds": 300,
+          "billedSeconds": 259,
+          "reservedSeconds": 0,
+          "remainingSeconds": 41
+        },
+        "B": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        },
+        "C": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        }
+      },
+      "session": {
+        "active": 2,
+        "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+      },
+      "unsettled": 0
+    },
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "sqlMode": "SELECT_ONLY",
+    "clientCountdownEnabled": false,
+    "operatorStopOnSuccess": false,
+    "cutoff": {
+      "observedAt": "2026-11-05T07:45:25.651Z",
+      "status": "ended",
+      "createdAt": 1793864666214,
+      "endedAt": 1793864714226,
+      "expiresAt": 1796456714226,
+      "settlement": {
+        "billedSeconds": 41,
+        "remainingSeconds": 0
+      },
+      "ledger": {
+        "reserved_seconds": 41,
+        "settled_at": "2026-11-05T07:45:14.734Z",
+        "billed_seconds": 41,
+        "remaining_seconds": 0,
+        "events_digest": "b9e42d49c0118e93b2b241456b79221ae4b43dc8fad8dbcbf5966e0777ebf4ba"
+      },
+      "math": {
+        "elapsedMs": 41151,
+        "toolWaitMs": 0,
+        "billableMs": 41151,
+        "expectedBilledSeconds": 41,
+        "connected": true
+      },
+      "events": [
+        {
+          "type": "reserved",
+          "at": 1793864666214
+        },
+        {
+          "type": "connected",
+          "at": 1793864673075
+        },
+        {
+          "type": "ended",
+          "at": 1793864714226
+        }
+      ],
+      "speechRequests": 5,
+      "rtpPackets": 2156,
+      "after": {
+        "members": {
+          "A": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          },
+          "B": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          },
+          "C": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          }
+        },
+        "session": {
+          "active": 2,
+          "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+        },
+        "unsettled": 0
+      },
+      "checks": {
+        "ended": true,
+        "actualAudio": true,
+        "deadlineReached": true,
+        "toolWaitZero": true,
+        "reservationMatchesExpected": true,
+        "formulaMatchesExpected": true,
+        "fullQuotaBilled": true,
+        "remainingZero": true,
+        "lifetimeThreeHundred": true,
+        "noPendingReservation": true,
+        "otherMembersUnchanged": true,
+        "eventDigestMatches": true
+      },
+      "ok": true
+    },
+    "originalConnectionProbe": {
+      "probeAtMs": 1793864725651,
+      "afterServerConfirmedEnd": true,
+      "sentAfterEnd": true,
+      "transportRejected": false,
+      "channelStateBefore": "closed",
+      "channelStateAfter": "closed",
+      "observedMs": 8001,
+      "newResponsesCreated": 0,
+      "newAudioStarted": 0,
+      "newErrors": 0,
+      "rtpPacketsDelta": 0,
+      "ok": true
+    },
+    "newCredentials": {
+      "issued": false,
+      "status": 403,
+      "error": "QUOTA_EXHAUSTED",
+      "ok": true,
+      "newRecordCreated": false
+    },
+    "final": {
+      "members": {
+        "A": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        },
+        "B": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        },
+        "C": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        }
+      },
+      "session": {
+        "active": 2,
+        "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+      },
+      "unsettled": 0
+    },
+    "ok": true
+  },
+  "browser": {
+    "observedAt": "2026-11-05T07:46:08.792Z",
+    "url": "https://call.thinkwithblack.com/",
+    "fullReload": true,
+    "remainingSeconds": 0,
+    "startDisabled": true,
+    "latestRecordEnded": true,
+    "screenshot": "call-cutoff-completed-zero.png"
+  },
+  "cleanup": {
+    "observedAt": "2026-11-05T07:45:51.116Z",
+    "files": {
+      "db-input": {
+        "absent": true
+      },
+      ".dev.vars": {
+        "absent": true
+      },
+      "run-token.json": {
+        "absent": true
+      }
+    },
+    "ports": [
+      {
+        "port": 8806,
+        "closed": true
+      },
+      {
+        "port": 8807,
+        "closed": true
+      }
+    ]
+  },
+  "validation": {
+    "typecheck": "PASS",
+    "workersTests": 143,
+    "frontendTests": 11,
+    "nativeRuntimeTests": 2,
+    "wranglerDryRun": "PASS",
+    "productCheckEvidence": "docs/examples/production-disconnect-2026-11-05.json",
+    "helperPreflight": "PASS"
+  }
+}
