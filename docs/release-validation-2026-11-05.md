@@ -454,3 +454,15 @@ Issue #29 保持開啟，待已登入且具可用測試額度的 ECCAL 會員，
 正式 `MCP_METHODS` 綁定與 `CallMethods` named handler 已核對，未使用會員憑證的正式 RPC 讀到四個工具、31 個入口、E03 與 MK-453 全文，私人工具、寫入與額外品牌欄位均拒絕。首頁及 app.js 與提交原檔一致，內建瀏覽器讀回既有登入、0 秒餘額與通話紀錄，MCP 授權及解除按鈕已移除
 
 語音站 169 Workers、14 前端、3 原生連線、型別及 dry-run；MCP 2,438 Vitest、46 Python、型別、scope、安全掃描及建置通過，fresh spec_evaluator 候選與證據驗收 PASS。本輪未使用正式額度、改動 ECCAL 或 migration，完整版本、資料流及去識別證據見 [內建方法驗證](default-methods-validation-2026-11-05.md)
+
+## 剩餘項目的自動驗證
+
+以語音 source `ee533fb2b384597a9af158d0d6988a5cb2dc2bff` 與 ECCAL `codex/thinkwithblack-mcp-auth` source `2702955844df9d30947ca49448f8f04e6dfe1055` 補跑驗收
+
+Issue #22 的 Email／LINE 各四種交付結果，完成 HTTP 建立與重放、SQLite 實存與重建讀回，以及六個需派送案例的 RPC。只有通路確認並附正確成果／通路收據時登記 succeeded，未送為 pending、拒絕為 failed、不明為 unknown。fresh spec_evaluator 判定 PASS，正式實收依 #23／#24 繼續驗收，見 [交付狀態驗收](delivery-state-validation-2026-11-05.md)
+
+ECCAL 與原生 voice HTTP 的八種發證情境及最後一秒雙請求對帳通過。真實會員資格失效案例先讀到 300 秒，再於隔離 schema 取消該會員；原 JWT 尚有效，ECCAL 仍拒絕身分、餘額及通話發證。現有會員仍各有 300 秒，額外 eligible:false 防護明列為測試覆寫，#1／#3 的契約與五態發證經獨立行為驗收通過。兩份 JWT 搶最後一秒回 201／409，重送結束兩次只扣一次，原 SQL 帳目與 voice 回應一致，見 [發證與搶用驗證](voice-gate-validation-2026-11-05.md)
+
+Issue #13 以實際 gpt-realtime-2.1 與目前內建 MCP 方法完成不足資訊、同通補充及完整資訊對照，MK-453 全文 SHA 相符。首次完整案例回 incomplete 已保留，單獨提高測試輸出上限重測後 completed，全部提供者通話已掛斷。本人教學口吻試聽仍待完成，見 [顧問對話驗證](consultant-validation-2026-11-05.md)
+
+同版五類異常與第一期未完成條件見 [異常流程驗證](exception-validation-2026-11-05.md)。語音完整檢查為 170 Workers、14 前端、3 原生、型別與 dry-run；ECCAL 17 額度、1 跨 repo 額度、8 登入、2 舊 OAuth 相容、2 原生 gate／搶用通過。正式會員與額度未改動，本機測試 schema、提供者通話與原生 runtime 已清理

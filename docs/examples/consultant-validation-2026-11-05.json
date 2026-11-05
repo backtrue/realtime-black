@@ -1,0 +1,429 @@
+{
+  "observedDate": "2026-11-05",
+  "voiceBaseCommit": "ee533fb2b384597a9af158d0d6988a5cb2dc2bff",
+  "model": "gpt-realtime-2.1",
+  "successfulCases": [
+    {
+      "id": "clarification-and-followup",
+      "turns": [
+        {
+          "input": "廣告沒訂單",
+          "replies": [
+            "好，我先整理一下可能的癥結和需要的資料，再一步步幫你定位問題。",
+            "我先幫你把方向抓清楚。你說的「廣告沒訂單」，是有點擊或到網站，但就是沒有成交？還是連曝光或流量都很少？只要你回我哪一種，我就用對應的方法，一步一步幫你定位問題。"
+          ],
+          "elapsedMs": 22679,
+          "rtpPackets": 1136,
+          "responseStatus": "completed",
+          "toolCalls": 1
+        },
+        {
+          "input": "我賣65W USB-C桌面充電座，單價1500元，受眾是需要替筆電充電的上班族，目標是網站下單。同一週到站1000次、加入購物車200次、訂單2筆，還沒驗證追蹤；只有我一個人，每週能做4小時。運費呈現和放棄原因還不知道。請接著剛才的問題，告訴我第一個要查什麼，為什麼，以及再做什麼。",
+          "replies": [
+            "好，我先把這個漏斗的關鍵卡點整理一下，再按順序說你該先查什麼。",
+            "我會先把診斷流程對齊一下，確認依據和停損點後，再給你順序。",
+            "第一個要查的是「加入購物車之後到付款之前，到底卡在哪一步」，而且要用同一個來源、同一個期間的資料來看。因為你已經有 1000 次到站、200 次加入購物車，卻只有 2 筆訂單，落差很明顯在後段，但現在追蹤還沒驗證，不能直接猜是運費、價格，或是系統壞掉。\n\n接著要做的是兩件事擇一先來。最省時的是先看結帳流程的事件或付款成功的紀錄有沒有對得上，確認統計口徑相容，不要混算。\n\n如果你暫時拿不到事件或訂單資料，那就先提供商品頁或結帳流程的實際畫面內容，先做可見內容的檢查，把待驗證的假說列出來。在你每週只有 4 小時的情況下，先把「能清楚驗證的問題」弄清楚，再決定要不要改頁面或改運費，這樣最划算。"
+          ],
+          "elapsedMs": 85716,
+          "rtpPackets": 4285,
+          "responseStatus": "completed",
+          "toolCalls": 5
+        }
+      ],
+      "tools": [
+        {
+          "turn": 0,
+          "name": "thinkwithblack_entry_catalog",
+          "args": {}
+        },
+        {
+          "turn": 1,
+          "name": "thinkwithblack_entry_read",
+          "args": {
+            "entry_id": "E03"
+          },
+          "entryId": "E03"
+        },
+        {
+          "turn": 1,
+          "name": "thinkwithblack_marketing_skill_read",
+          "args": {
+            "id": "MK-453"
+          },
+          "methodId": "MK-453",
+          "bytes": 18972,
+          "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+          "digestVerified": true
+        },
+        {
+          "turn": 1,
+          "name": "thinkwithblack_marketing_skill_read",
+          "args": {
+            "id": "references/HOST_MCP_POLICY.md"
+          },
+          "methodId": "references/HOST_MCP_POLICY.md",
+          "bytes": 3231,
+          "sha256": "f2de2eae31d589c4078f54fa8fd16f12ddfea11fb6c9d7b1572104f9fb620b30",
+          "digestVerified": true
+        },
+        {
+          "turn": 1,
+          "name": "thinkwithblack_marketing_skill_read",
+          "args": {
+            "id": "references/COMMON_EXECUTION_RULES.md"
+          },
+          "methodId": "references/COMMON_EXECUTION_RULES.md",
+          "bytes": 11236,
+          "sha256": "f6c2af4696ae1d0e9bfbac98c7d459d6262872efd8e2d324bd98785970a5cda2",
+          "digestVerified": true
+        },
+        {
+          "turn": 1,
+          "name": "thinkwithblack_marketing_skill_read",
+          "args": {
+            "id": "references/MARKETING_ENTRY_ORCHESTRATOR.md"
+          },
+          "methodId": "references/MARKETING_ENTRY_ORCHESTRATOR.md",
+          "bytes": 6718,
+          "sha256": "92ae2343a02b9ba8657f00f35eca24286dde8397380f5386571036445c7369df",
+          "digestVerified": true
+        }
+      ],
+      "fullMethodRead": true,
+      "transportOk": true,
+      "errors": [],
+      "providerEndConfirmed": true
+    },
+    {
+      "id": "complete-context",
+      "turns": [
+        {
+          "input": "我賣65W USB-C桌面充電座，單價1500元，受眾是需要替筆電充電的上班族，目標是網站下單。同一週到站1000次、加入購物車200次、訂單2筆，還沒驗證追蹤；只有我一個人，每週能做4小時。運費呈現和放棄原因還不知道。我的廣告沒訂單，請告訴我先查什麼、改善順序及怎麼核對。",
+          "replies": [
+            "好，我先抓行銷診斷的入口，然後依你的數據一步一步排優先順序。",
+            "我會先用網站結帳診斷的方法整理可查的落差，再幫你排成可執行的順序。",
+            "先把「問題在哪裡」和「數據口徑」處理清楚，不然你做再多調整也很容易白忙一場。基於你提供的事實來源，也就是同一週一千次到站、兩百次加入購物車、兩筆訂單，再加上「追蹤還沒驗證」這個限制，現在的主問題是：你看到的漏斗數字可能不在同一個統計口徑，所以不能直接算轉換率，也不能直接推論是運費、價格或廣告造成的。\n\n先查什麼，請照這個順序來。第一，先核對口徑。要確認同一期間、同一來源、同一統計單位下的商品瀏覽、加入購物車、開始結帳、付款成功，以及商店已付款訂單。追蹤沒驗證之前，不要計算結帳完成率，也不要拿事件數直接除以訂單數。第二，核對付款與錯誤的證據。要看是否有付款完成、失敗或被拒的紀錄。沒有這些資料，就只能說「尚未確認」，不能推定金流或運費就是原因。\n\n改善順序也要抓重點。先做的是追蹤與漏斗口徑的核對，至少要能分清楚哪一些步驟有資料、哪一些完全缺資料。再來才是結帳流程的可見問題，例如商品資訊是否清楚、規格選擇是否容易、價格和運費是否看得懂，以及手機操作是否順。最後才是針對假設的測試，例如運費呈現方式、商品頁訊息、或優惠安排要不要改。\n\n核對方式可以很務實。你用同一個期間，先列出各步驟的數字和來源，標註清楚已知和未知。一旦有了同口徑的漏斗和付款記錄，就可以定位流失大概卡在商品頁、購物車、結帳，還是付款。\n\n另外你只有每週四小時，所以先把時間用在「把事件和訂單的口徑對齊」這件事。若你願意，我可以幫你整理成一份最小檢查清單，你照表做就好。"
+          ],
+          "elapsedMs": 69334,
+          "rtpPackets": 3467,
+          "responseStatus": "completed",
+          "toolCalls": 3
+        }
+      ],
+      "tools": [
+        {
+          "turn": 0,
+          "name": "thinkwithblack_entry_catalog",
+          "args": {}
+        },
+        {
+          "turn": 0,
+          "name": "thinkwithblack_entry_read",
+          "args": {
+            "entry_id": "E03"
+          },
+          "entryId": "E03"
+        },
+        {
+          "turn": 0,
+          "name": "thinkwithblack_marketing_skill_read",
+          "args": {
+            "id": "MK-453"
+          },
+          "methodId": "MK-453",
+          "bytes": 18972,
+          "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+          "digestVerified": true
+        }
+      ],
+      "fullMethodRead": true,
+      "transportOk": true,
+      "errors": [],
+      "providerEndConfirmed": true
+    }
+  ],
+  "initialAttempt": {
+    "observedAt": "2026-11-05T12:38:12.565Z",
+    "purpose": "Issue #13 incomplete question, same-call supplemental facts and complete-context comparison",
+    "environment": "Actual gpt-realtime-2.1 voice replies and actual current MemberEngine/DefaultMethods; actual local native MCP CallMethods; controlled member/store only",
+    "model": "gpt-realtime-2.1",
+    "productionQuotaUsed": false,
+    "productionRecordCreated": false,
+    "personalOAuthUsed": false,
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "ownerVoiceStyleSignoff": null,
+    "sourceSha256": {
+      "src/consultant.ts": "5f24b79f66c0e29f048c1522cc5cb6604071b93a11626e3e8363b0917b74a3f1",
+      "src/openai.ts": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+      "src/member-engine.ts": "1f7804de29d6d4b609bfa1a2238906ed96a6a92ba169ac074df01bf2ccf2b7bf",
+      "src/default-methods.ts": "6b3f5661360720fa7f08677e117ee53640c35040dbd50cf30aee68c897a9c74e"
+    },
+    "cases": [
+      {
+        "id": "clarification-and-followup",
+        "turns": [
+          {
+            "input": "廣告沒訂單",
+            "replies": [
+              "好，我先整理一下可能的癥結和需要的資料，再一步步幫你定位問題。",
+              "我先幫你把方向抓清楚。你說的「廣告沒訂單」，是有點擊或到網站，但就是沒有成交？還是連曝光或流量都很少？只要你回我哪一種，我就用對應的方法，一步一步幫你定位問題。"
+            ],
+            "elapsedMs": 22679,
+            "rtpPackets": 1136,
+            "responseStatus": "completed",
+            "toolCalls": 1
+          },
+          {
+            "input": "我賣65W USB-C桌面充電座，單價1500元，受眾是需要替筆電充電的上班族，目標是網站下單。同一週到站1000次、加入購物車200次、訂單2筆，還沒驗證追蹤；只有我一個人，每週能做4小時。運費呈現和放棄原因還不知道。請接著剛才的問題，告訴我第一個要查什麼，為什麼，以及再做什麼。",
+            "replies": [
+              "好，我先把這個漏斗的關鍵卡點整理一下，再按順序說你該先查什麼。",
+              "我會先把診斷流程對齊一下，確認依據和停損點後，再給你順序。",
+              "第一個要查的是「加入購物車之後到付款之前，到底卡在哪一步」，而且要用同一個來源、同一個期間的資料來看。因為你已經有 1000 次到站、200 次加入購物車，卻只有 2 筆訂單，落差很明顯在後段，但現在追蹤還沒驗證，不能直接猜是運費、價格，或是系統壞掉。\n\n接著要做的是兩件事擇一先來。最省時的是先看結帳流程的事件或付款成功的紀錄有沒有對得上，確認統計口徑相容，不要混算。\n\n如果你暫時拿不到事件或訂單資料，那就先提供商品頁或結帳流程的實際畫面內容，先做可見內容的檢查，把待驗證的假說列出來。在你每週只有 4 小時的情況下，先把「能清楚驗證的問題」弄清楚，再決定要不要改頁面或改運費，這樣最划算。"
+            ],
+            "elapsedMs": 85716,
+            "rtpPackets": 4285,
+            "responseStatus": "completed",
+            "toolCalls": 5
+          }
+        ],
+        "tools": [
+          {
+            "turn": 0,
+            "name": "thinkwithblack_entry_catalog",
+            "args": {}
+          },
+          {
+            "turn": 1,
+            "name": "thinkwithblack_entry_read",
+            "args": {
+              "entry_id": "E03"
+            },
+            "entryId": "E03"
+          },
+          {
+            "turn": 1,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "MK-453"
+            },
+            "methodId": "MK-453",
+            "bytes": 18972,
+            "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+            "digestVerified": true
+          },
+          {
+            "turn": 1,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "references/HOST_MCP_POLICY.md"
+            },
+            "methodId": "references/HOST_MCP_POLICY.md",
+            "bytes": 3231,
+            "sha256": "f2de2eae31d589c4078f54fa8fd16f12ddfea11fb6c9d7b1572104f9fb620b30",
+            "digestVerified": true
+          },
+          {
+            "turn": 1,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "references/COMMON_EXECUTION_RULES.md"
+            },
+            "methodId": "references/COMMON_EXECUTION_RULES.md",
+            "bytes": 11236,
+            "sha256": "f6c2af4696ae1d0e9bfbac98c7d459d6262872efd8e2d324bd98785970a5cda2",
+            "digestVerified": true
+          },
+          {
+            "turn": 1,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "references/MARKETING_ENTRY_ORCHESTRATOR.md"
+            },
+            "methodId": "references/MARKETING_ENTRY_ORCHESTRATOR.md",
+            "bytes": 6718,
+            "sha256": "92ae2343a02b9ba8657f00f35eca24286dde8397380f5386571036445c7369df",
+            "digestVerified": true
+          }
+        ],
+        "fullMethodRead": true,
+        "transportOk": true,
+        "errors": [],
+        "providerEndConfirmed": true
+      },
+      {
+        "id": "complete-context",
+        "turns": [
+          {
+            "input": "我賣65W USB-C桌面充電座，單價1500元，受眾是需要替筆電充電的上班族，目標是網站下單。同一週到站1000次、加入購物車200次、訂單2筆，還沒驗證追蹤；只有我一個人，每週能做4小時。運費呈現和放棄原因還不知道。我的廣告沒訂單，請告訴我先查什麼、改善順序及怎麼核對。",
+            "replies": [
+              "好，我先用方法庫的流程抓出最適合的診斷方向，再幫你排出優先順序。",
+              "我會先把網站漏斗診斷的方法讀完整，再把你現在的數據和限制整理成可行的檢查清單。",
+              "我再把共用規則和執行規範補齊，這樣流程才完整、好核對。",
+              "先講重點：你現在有流量，也有加入購物車，但訂單很少，而且追蹤還沒驗證。在證據還沒對齊前，先不要直接怪廣告或價格，也不能計算結帳完成率。\n\n先查什麼，依序來看。第一，先核對追蹤與報表口徑。要確認同一段期間、同一來源的商品頁瀏覽、加購、結帳、付款成功，以及商店已付款訂單能不能對得起來。現在沒有實際報表可讀，所以這一步是「尚未取得資料」。\n\n第二，先用網站漏斗方法看流程，不急著改廣告。檢查商品頁是否說清楚用途、規格、保固或相容性，購物車與結帳的步驟是否順暢，付款方式是否容易理解。\n\n第三，針對你自己也提到的未知點，像運費呈現和放棄原因，優先檢查運費、到貨時間、退換貨政策是否清楚。這常常是轉換卡住的地方，但不能先假設一定是原因。\n\n改善順序，先做追蹤口徑與漏斗流程，再做運費與付款呈現，最後才是廣告投放方向與素材。因為你每週只有四小時，一次只處理一個關鍵阻塞"
+            ],
+            "elapsedMs": 80203,
+            "rtpPackets": 4008,
+            "responseStatus": "incomplete",
+            "toolCalls": 6
+          }
+        ],
+        "tools": [
+          {
+            "turn": 0,
+            "name": "thinkwithblack_entry_catalog",
+            "args": {}
+          },
+          {
+            "turn": 0,
+            "name": "thinkwithblack_entry_read",
+            "args": {
+              "entry_id": "E03"
+            },
+            "entryId": "E03"
+          },
+          {
+            "turn": 0,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "MK-453"
+            },
+            "methodId": "MK-453",
+            "bytes": 18972,
+            "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+            "digestVerified": true
+          },
+          {
+            "turn": 0,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "references/HOST_MCP_POLICY.md"
+            },
+            "methodId": "references/HOST_MCP_POLICY.md",
+            "bytes": 3231,
+            "sha256": "f2de2eae31d589c4078f54fa8fd16f12ddfea11fb6c9d7b1572104f9fb620b30",
+            "digestVerified": true
+          },
+          {
+            "turn": 0,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "references/COMMON_EXECUTION_RULES.md"
+            },
+            "methodId": "references/COMMON_EXECUTION_RULES.md",
+            "bytes": 11236,
+            "sha256": "f6c2af4696ae1d0e9bfbac98c7d459d6262872efd8e2d324bd98785970a5cda2",
+            "digestVerified": true
+          },
+          {
+            "turn": 0,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "references/MARKETING_ENTRY_ORCHESTRATOR.md"
+            },
+            "methodId": "references/MARKETING_ENTRY_ORCHESTRATOR.md",
+            "bytes": 6718,
+            "sha256": "92ae2343a02b9ba8657f00f35eca24286dde8397380f5386571036445c7369df",
+            "digestVerified": true
+          }
+        ],
+        "fullMethodRead": true,
+        "transportOk": false,
+        "error": "ACCEPTANCE_FAILED",
+        "providerEndConfirmed": true
+      }
+    ],
+    "methodRuntimeDisposed": true,
+    "helperSha256": "34bb8b1d8dbcd2ee241107bd98fce516bbe01859386a041ebc228bb571da046d",
+    "bundleSha256": "d002a2ee5c7d8e38107af0d7f0351f9e02c8d31fb0bfc0cb3cec6756de140222",
+    "mcpBundleSha256": "b277b15a492e3951b5cf33cfba2d312c09f5bfe18cccde1f7aaeddfb7c017eb0",
+    "transportOk": false
+  },
+  "retest": {
+    "observedAt": "2026-11-05T12:43:25.114Z",
+    "purpose": "Issue #13 incomplete question, same-call supplemental facts and complete-context comparison",
+    "environment": "Actual gpt-realtime-2.1 voice replies and actual current MemberEngine/DefaultMethods; actual local native MCP CallMethods; controlled member/store only",
+    "model": "gpt-realtime-2.1",
+    "productionQuotaUsed": false,
+    "productionRecordCreated": false,
+    "personalOAuthUsed": false,
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "ownerVoiceStyleSignoff": null,
+    "sourceSha256": {
+      "src/consultant.ts": "5f24b79f66c0e29f048c1522cc5cb6604071b93a11626e3e8363b0917b74a3f1",
+      "src/openai.ts": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+      "src/member-engine.ts": "1f7804de29d6d4b609bfa1a2238906ed96a6a92ba169ac074df01bf2ccf2b7bf",
+      "src/default-methods.ts": "6b3f5661360720fa7f08677e117ee53640c35040dbd50cf30aee68c897a9c74e"
+    },
+    "cases": [
+      {
+        "id": "complete-context",
+        "turns": [
+          {
+            "input": "我賣65W USB-C桌面充電座，單價1500元，受眾是需要替筆電充電的上班族，目標是網站下單。同一週到站1000次、加入購物車200次、訂單2筆，還沒驗證追蹤；只有我一個人，每週能做4小時。運費呈現和放棄原因還不知道。我的廣告沒訂單，請告訴我先查什麼、改善順序及怎麼核對。",
+            "replies": [
+              "好，我先抓行銷診斷的入口，然後依你的數據一步一步排優先順序。",
+              "我會先用網站結帳診斷的方法整理可查的落差，再幫你排成可執行的順序。",
+              "先把「問題在哪裡」和「數據口徑」處理清楚，不然你做再多調整也很容易白忙一場。基於你提供的事實來源，也就是同一週一千次到站、兩百次加入購物車、兩筆訂單，再加上「追蹤還沒驗證」這個限制，現在的主問題是：你看到的漏斗數字可能不在同一個統計口徑，所以不能直接算轉換率，也不能直接推論是運費、價格或廣告造成的。\n\n先查什麼，請照這個順序來。第一，先核對口徑。要確認同一期間、同一來源、同一統計單位下的商品瀏覽、加入購物車、開始結帳、付款成功，以及商店已付款訂單。追蹤沒驗證之前，不要計算結帳完成率，也不要拿事件數直接除以訂單數。第二，核對付款與錯誤的證據。要看是否有付款完成、失敗或被拒的紀錄。沒有這些資料，就只能說「尚未確認」，不能推定金流或運費就是原因。\n\n改善順序也要抓重點。先做的是追蹤與漏斗口徑的核對，至少要能分清楚哪一些步驟有資料、哪一些完全缺資料。再來才是結帳流程的可見問題，例如商品資訊是否清楚、規格選擇是否容易、價格和運費是否看得懂，以及手機操作是否順。最後才是針對假設的測試，例如運費呈現方式、商品頁訊息、或優惠安排要不要改。\n\n核對方式可以很務實。你用同一個期間，先列出各步驟的數字和來源，標註清楚已知和未知。一旦有了同口徑的漏斗和付款記錄，就可以定位流失大概卡在商品頁、購物車、結帳，還是付款。\n\n另外你只有每週四小時，所以先把時間用在「把事件和訂單的口徑對齊」這件事。若你願意，我可以幫你整理成一份最小檢查清單，你照表做就好。"
+            ],
+            "elapsedMs": 69334,
+            "rtpPackets": 3467,
+            "responseStatus": "completed",
+            "toolCalls": 3
+          }
+        ],
+        "tools": [
+          {
+            "turn": 0,
+            "name": "thinkwithblack_entry_catalog",
+            "args": {}
+          },
+          {
+            "turn": 0,
+            "name": "thinkwithblack_entry_read",
+            "args": {
+              "entry_id": "E03"
+            },
+            "entryId": "E03"
+          },
+          {
+            "turn": 0,
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "MK-453"
+            },
+            "methodId": "MK-453",
+            "bytes": 18972,
+            "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+            "digestVerified": true
+          }
+        ],
+        "fullMethodRead": true,
+        "transportOk": true,
+        "errors": [],
+        "providerEndConfirmed": true
+      }
+    ],
+    "methodRuntimeDisposed": true,
+    "helperSha256": "78ea4d4969a2d5f0c66a6dc727657f44f1814494395a7508cc4bd83f8d9abc6d",
+    "bundleSha256": "d002a2ee5c7d8e38107af0d7f0351f9e02c8d31fb0bfc0cb3cec6756de140222",
+    "mcpBundleSha256": "b277b15a492e3951b5cf33cfba2d312c09f5bfe18cccde1f7aaeddfb7c017eb0",
+    "requestMaxOutputTokens": 4096,
+    "transportOk": true
+  },
+  "comparison": {
+    "initialQuestionOnly": "廣告沒訂單",
+    "initialReplyAsksDiagnosticQuestion": true,
+    "sameCallSupplementUsed": true,
+    "completeContextDirectlyAdvances": true,
+    "fullMethodsReadInBothCases": true,
+    "allProviderCallsEnded": true,
+    "ownerVoiceStyleSignoff": null,
+    "issue13State": "open"
+  },
+  "productionQuotaUsed": false,
+  "productionRecordCreated": false,
+  "microphoneUsed": false,
+  "audioPersisted": false
+}

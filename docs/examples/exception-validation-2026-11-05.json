@@ -1,0 +1,41 @@
+{
+  "observedAt": "2026-11-05T12:41:40.776Z",
+  "voiceBaseCommit": "ee533fb2b384597a9af158d0d6988a5cb2dc2bff",
+  "sourceSha256": {
+    "src/worker.ts": "420683854a7ae6ec84fe4b851fcf955263c2b00b19847fc2f4d8851494cb1158",
+    "src/member-engine.ts": "1f7804de29d6d4b609bfa1a2238906ed96a6a92ba169ac074df01bf2ccf2b7bf",
+    "src/metering.ts": "74891e34d8d4b35a3b04f242c592a4b53aae0dabe4a0904fc542f689c9ea5df7",
+    "src/default-methods.ts": "6b3f5661360720fa7f08677e117ee53640c35040dbd50cf30aee68c897a9c74e",
+    "src/delivery.ts": "e7a17ee16ee7dee2018841b44c289d971607d6cfe0b02ce976c7c102e55aa2c4"
+  },
+  "logSha256": {
+    "voice": "f916e6e2ebf473dfac4f44055c12b0834a20a30c818bd8e700c6155cc3308842",
+    "eccal": "34365cc25ee207d8e859262e1d894e492497d19cc07532fbd64436bc7fb36015",
+    "eccalMcp": "29d8625a0352f135957b6d29948ed31c3874d996254177ce5c06a6f7ba696848",
+    "gate": "cab8ec03e62fc376daae56415abdf8085f1594f85e46df9f4cd9292fdd6d6a23"
+  },
+  "voice": {
+    "command": "npm run check",
+    "workers": 170,
+    "frontend": 14,
+    "nativeRuntime": 3,
+    "typecheck": "PASS",
+    "dryRun": "PASS"
+  },
+  "eccal": {
+    "typecheck": "PASS",
+    "quota": 17,
+    "quotaContract": 1,
+    "login": 8,
+    "legacyMcpContract": 2,
+    "gateAndRace": 2
+  },
+  "note": "ECCAL combined command initially omitted THINKWITHBLACK_MCP_ROOT; 26 cases passed, the missing-environment file failed, and that file was run separately with both required roots: 2 passed",
+  "additionalEvidence": {
+    "gate": "voice-gate-validation-2026-11-05.json",
+    "delivery": "delivery-state-validation-2026-11-05.json",
+    "consultant": "consultant-validation-2026-11-05.json"
+  },
+  "gateTestCommit": "6d0de51a7703fbc1e22e90e523eb9e40ebff9d46",
+  "productFilesUnchangedBetweenChecks": true
+}

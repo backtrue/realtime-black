@@ -1,0 +1,404 @@
+{
+  "observedAt": "2026-11-05T12:53:08.515Z",
+  "environment": "Actual ECCAL Express routes and PostgreSQL; actual voice HTTP, MemberRoom queue and native Workers SQLite; controlled method definitions, provider and audio events",
+  "productionMemberUsed": false,
+  "productionQuotaUsed": false,
+  "externalProviderCalled": false,
+  "cases": [
+    {
+      "name": "anonymous",
+      "status": 401,
+      "error": "LOGIN_REQUIRED",
+      "providerCreated": false,
+      "credentialsReturned": false
+    },
+    {
+      "name": "expired-jwt",
+      "status": 401,
+      "error": "LOGIN_REQUIRED",
+      "providerCreated": false,
+      "credentialsReturned": false
+    },
+    {
+      "name": "invalid-signature",
+      "status": 401,
+      "error": "LOGIN_REQUIRED",
+      "providerCreated": false,
+      "credentialsReturned": false
+    },
+    {
+      "name": "deleted-member",
+      "status": 401,
+      "error": "LOGIN_REQUIRED",
+      "providerCreated": false,
+      "credentialsReturned": false
+    },
+    {
+      "name": "zero-balance",
+      "status": 403,
+      "error": "QUOTA_EXHAUSTED",
+      "providerCreated": false,
+      "credentialsReturned": false
+    },
+    {
+      "name": "controlled-ineligible-contract",
+      "status": 403,
+      "error": "MEMBER_INELIGIBLE",
+      "providerCreated": false,
+      "credentialsReturned": false
+    },
+    {
+      "name": "eligible-with-balance",
+      "status": 201,
+      "providerCreated": true,
+      "reservationOwner": "A",
+      "otherMemberRecordStatus": 404,
+      "otherMemberRemainingSeconds": 300,
+      "noAudioBilledSeconds": 0,
+      "publicFields": [
+        "deadline",
+        "id",
+        "sdp"
+      ]
+    },
+    {
+      "name": "forged-member-query-and-header",
+      "status": 201,
+      "providerCreated": true,
+      "reservationOwner": "A",
+      "otherMemberRecordStatus": 404,
+      "otherMemberRemainingSeconds": 300,
+      "noAudioBilledSeconds": 0,
+      "publicFields": [
+        "deadline",
+        "id",
+        "sdp"
+      ]
+    }
+  ],
+  "voiceCommit": "6d0de51a7703fbc1e22e90e523eb9e40ebff9d46",
+  "eccalBaseCommit": "2702955844df9d30947ca49448f8f04e6dfe1055",
+  "bundleSha256": "b2ac06440c6de8a53063fa604c0716cfa53d0a8e0db6be6ec92ead0f6c8210af",
+  "sourceSha256": {
+    "src/worker.ts": "420683854a7ae6ec84fe4b851fcf955263c2b00b19847fc2f4d8851494cb1158",
+    "src/member-engine.ts": "1f7804de29d6d4b609bfa1a2238906ed96a6a92ba169ac074df01bf2ccf2b7bf",
+    "src/eccal-http.ts": "db23242da422f40426967b93fcbc81d699fc202e45a5cd2d529b6462e2d044fc",
+    "server/voiceQuotaRoutes.ts": "07ffb8bfeedff76e944c421aa4bdb26c4b3d4dae483b9d98669b1b577306ba4a",
+    "server/voiceQuotaService.ts": "4466b39c45a597b077854d9585c9bfb8b4823d59cad6bb540f29897974c6e8c8",
+    "server/voiceQuotaRepository.ts": "b420f4f7ab881ee23a83e9b9d0af6bf37d4001e49c90633eae5e76b63956e3f8"
+  },
+  "bridge": [
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 46
+    },
+    {
+      "path": "/api/voice/internal/balance",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 110
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 4
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 4
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 4
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 4
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/balance",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 107
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 50
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 40
+    },
+    {
+      "path": "/api/voice/internal/balance",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 104
+    },
+    {
+      "path": "/api/voice/internal/reserve",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 107
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 40
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 40
+    },
+    {
+      "path": "/api/voice/internal/settle",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 42
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 40
+    },
+    {
+      "path": "/api/voice/internal/balance",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 104
+    },
+    {
+      "path": "/api/voice/internal/reserve",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 107
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 40
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 40
+    },
+    {
+      "path": "/api/voice/internal/settle",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 42
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/balance",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 107
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/reserve",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 108
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/settle",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 40
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/authenticate",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 43
+    },
+    {
+      "path": "/api/voice/internal/balance",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "contentType": "application/json; charset=utf-8",
+      "bytes": 107
+    }
+  ],
+  "membershipRemoval": {
+    "before": {
+      "memberStatus": 200,
+      "eligible": true,
+      "remainingSeconds": 300
+    },
+    "removedRows": 1,
+    "originalCredentialStillValid": true,
+    "after": {
+      "authenticateStatus": 200,
+      "authenticateResult": null,
+      "balanceStatus": 404,
+      "balanceError": "MEMBER_NOT_FOUND"
+    },
+    "source": "Actual ECCAL membership lookup after removing only the isolated test member"
+  },
+  "eligibilityContract": {
+    "existingEccalMembers": "eligible:true",
+    "actualUnqualifiedCase": "Previously eligible member removed from isolated users table; original JWT is still valid but actual ECCAL identity returns null and balance returns MEMBER_NOT_FOUND",
+    "controlledIneligibleResponseExercised": true,
+    "controlledResponseSource": "Additional test-only eligible:false guard after actual JWT and PostgreSQL membership verification",
+    "membershipRule": "Every existing ECCAL member retains 300 seconds; no paid-tier or new eligibility restriction"
+  },
+  "race": {
+    "independentSignedCredentials": 2,
+    "clients": "Two native HTTP clients; physical-device test remains pending",
+    "requests": [
+      {
+        "requestedAt": 1793883190464,
+        "completedAt": 1793883190491,
+        "status": 201
+      },
+      {
+        "requestedAt": 1793883190464,
+        "completedAt": 1793883190491,
+        "status": 409
+      }
+    ],
+    "reservedSeconds": 1,
+    "repeatStartStatus": 409,
+    "repeatEndStatuses": [
+      200,
+      200
+    ],
+    "providerEndCount": 1,
+    "ledger": [
+      {
+        "billed_seconds": 299,
+        "remaining_seconds": 1
+      },
+      {
+        "billed_seconds": 1,
+        "remaining_seconds": 0
+      }
+    ],
+    "totalSeconds": 300,
+    "billedSeconds": 300,
+    "reservedAfterEnd": 0,
+    "remainingSeconds": 0,
+    "newStartStatus": 403
+  },
+  "schemaRemoved": true,
+  "runtimeDisposed": true,
+  "helperSha256": "df4842e2d5959716f818c642fcd017d77a6a4560f6129cd8fd158d3a2026a60e",
+  "expiredRealtimeCredential": {
+    "observedAt": "2026-11-05T12:56:48.631Z",
+    "purpose": "Current OpenAiRealtime configuration with actual expired ephemeral credential",
+    "model": "gpt-realtime-2.1",
+    "toolNames": [
+      "thinkwithblack_entry_catalog",
+      "thinkwithblack_entry_read",
+      "thinkwithblack_marketing_skill_search",
+      "thinkwithblack_marketing_skill_read"
+    ],
+    "productionMemberUsed": false,
+    "productionQuotaUsed": false,
+    "providerCallCreated": false,
+    "clientSecretPersisted": false,
+    "audioGenerated": false,
+    "mintStatus": 200,
+    "expiredBeforeProviderRequest": true,
+    "providerStatus": 401,
+    "applicationError": "REALTIME_UNAVAILABLE",
+    "peerClosed": true,
+    "sourceSha256": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+    "helperSha256": "ae99a57b17aa9303a70b434797b4a4406f2ee904646e99f400df34d307a5283e",
+    "providerBundleSha256": "d002a2ee5c7d8e38107af0d7f0351f9e02c8d31fb0bfc0cb3cec6756de140222"
+  }
+}
