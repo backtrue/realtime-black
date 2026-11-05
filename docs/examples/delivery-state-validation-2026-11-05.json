@@ -1,0 +1,111 @@
+{
+  "environment": "Native Workers SQLite and actual HTTP/RPC routes; controlled identity, document and delivery providers",
+  "productionMemberUsed": false,
+  "externalMessageSent": false,
+  "results": [
+    {
+      "channel": "email",
+      "scenario": "not-sent",
+      "state": "pending",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 0,
+      "correctDocumentAndChannel": true,
+      "receiptStored": false,
+      "receipt": null
+    },
+    {
+      "channel": "email",
+      "scenario": "rejected",
+      "state": "failed",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 1,
+      "correctDocumentAndChannel": true,
+      "receiptStored": false,
+      "receipt": null
+    },
+    {
+      "channel": "email",
+      "scenario": "unknown",
+      "state": "unknown",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 1,
+      "correctDocumentAndChannel": true,
+      "receiptStored": false,
+      "receipt": null
+    },
+    {
+      "channel": "email",
+      "scenario": "confirmed",
+      "state": "succeeded",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 1,
+      "correctDocumentAndChannel": true,
+      "receiptStored": true,
+      "receipt": "controlled-email-confirmed-receipt"
+    },
+    {
+      "channel": "line",
+      "scenario": "not-sent",
+      "state": "pending",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 0,
+      "correctDocumentAndChannel": true,
+      "receiptStored": false,
+      "receipt": null
+    },
+    {
+      "channel": "line",
+      "scenario": "rejected",
+      "state": "failed",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 1,
+      "correctDocumentAndChannel": true,
+      "receiptStored": false,
+      "receipt": null
+    },
+    {
+      "channel": "line",
+      "scenario": "unknown",
+      "state": "unknown",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 1,
+      "correctDocumentAndChannel": true,
+      "receiptStored": false,
+      "receipt": null
+    },
+    {
+      "channel": "line",
+      "scenario": "confirmed",
+      "state": "succeeded",
+      "sqliteReload": true,
+      "ownerStatus": 200,
+      "otherMemberStatus": 404,
+      "anonymousStatus": 401,
+      "providerAttempts": 1,
+      "correctDocumentAndChannel": true,
+      "receiptStored": true,
+      "receipt": "controlled-line-confirmed-receipt"
+    }
+  ]
+}
