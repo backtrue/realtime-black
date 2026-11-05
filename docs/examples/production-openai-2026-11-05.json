@@ -132,7 +132,7 @@
       "billedSeconds": 3,
       "remainingSeconds": 297
     },
-    "verification": "REPLY_INTERRUPTION_FOLLOW_UP_CONFIRMED; NORMAL_HANGUP_AND_METHOD_FULL_TEXT_PENDING",
+    "verification": "METHOD_FULL_TEXT_AND_NORMAL_HANGUP_CONFIRMED",
     "thirdAttempt": {
       "sourceCommit": "2bef275e34ebc280c9a1f1fda9bc3e46c8a13937",
       "workerVersionId": "77253751-6d2e-4f4e-9999-fc897beb3b00",
@@ -197,6 +197,24 @@
       "remainingSeconds": 0,
       "operatorAssistedSettlement": true,
       "scenarioCategory": "Website conversion diagnosis"
+    },
+    "fourthAttempt": {
+      "humanHeardMethodAndAnswer": true,
+      "status": "ended",
+      "endedAt": 1793853544330,
+      "expiresAt": 1796445544330,
+      "settlement": {
+        "billedSeconds": 68,
+        "remainingSeconds": 232
+      },
+      "transcriptItems": 6,
+      "userItems": 2,
+      "assistantItems": 4,
+      "pending": 0,
+      "failures": 0,
+      "summaryPresent": true,
+      "transcriptSha256": "a816bd74c2a8b1a53d37d2f04a07d293a26b91aece1a20389b5e0191cfba1d53",
+      "spokenMethodId": "MK-453"
     }
   },
   "syntheticAudioDiagnostic": {
@@ -410,17 +428,17 @@
     "review": "DEPLOYMENT_STAGE_PASS"
   },
   "latestDeployment": {
-    "commit": "29f57f47c78d0b272bd12eec20daaa4a6d3122fd",
-    "versionId": "ccec0aad-0e81-445c-adc6-b612d6afa65c",
-    "deploymentId": "2e1db52a-3946-4816-9f2b-8b73e31dc7ca",
-    "createdOn": "2026-11-04T20:41:40.361704Z",
+    "commit": "46c0164111ae39d4d0d9fa137372e36cffec27bf",
+    "versionId": "24344d38-9a9a-40d0-9e26-4be28fd588c2",
+    "deploymentId": "007fe466-751f-45fe-ae46-b46b2dd310c6",
+    "createdOn": "2026-11-05T04:35:44.420317Z",
     "versions": [
       {
-        "version_id": "ccec0aad-0e81-445c-adc6-b612d6afa65c",
+        "version_id": "24344d38-9a9a-40d0-9e26-4be28fd588c2",
         "percentage": 100
       }
     ],
-    "tag": "29f57f4",
+    "tag": "46c0164",
     "bindings": [
       {
         "name": "APP_ORIGIN",
@@ -473,7 +491,7 @@
     ]
   },
   "latestPublicHttp": {
-    "observedAt": "2026-11-04T20:42:32.142Z",
+    "observedAt": "2026-11-05T04:36:13.663Z",
     "requests": [
       {
         "path": "/",
@@ -485,7 +503,8 @@
         "path": "/app.js",
         "status": 200,
         "cacheControl": "no-store",
-        "backendSecretsAbsent": true
+        "backendSecretsAbsent": true,
+        "boundaryDiagnosticPresent": true
       },
       {
         "path": "/oauth/client-metadata.json",
@@ -513,5 +532,9 @@
       }
     ]
   },
-  "voiceEvidence": "production-voice-2026-11-05.json"
+  "voiceEvidence": "production-voice-2026-11-05.json",
+  "microphoneDenial": {
+    "verification": "CANCELLED_BY_USER",
+    "date": "2026-11-05"
+  }
 }

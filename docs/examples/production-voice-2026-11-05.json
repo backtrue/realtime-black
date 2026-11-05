@@ -71,7 +71,7 @@
       "before": "FAILED",
       "after": "PASSED"
     },
-    "generalNewCallEndVerification": "PENDING"
+    "generalNewCallEndVerification": "PASSED"
   },
   "operatorRecovery": {
     "observedAt": "2026-11-04T20:40:48.177Z",
@@ -367,7 +367,7 @@
         }
       ]
     },
-    "realVoiceVerification": "PENDING"
+    "realVoiceVerification": "PASSED"
   },
   "publicRecords": {
     "fields": [
@@ -386,9 +386,188 @@
     "providerIdentifiersAbsent": true
   },
   "pending": [
-    "New-call normal hangup with provider confirmation",
-    "Actual microphone denial",
-    "Same-call method full-text read and spoken application"
+    "General recovery for sideband loss and provider hangup failure"
   ],
-  "operatorRecoveryReview": "PASS"
+  "operatorRecoveryReview": "PASS",
+  "actualMethodRetest": {
+    "commit": "46c0164111ae39d4d0d9fa137372e36cffec27bf",
+    "versionId": "24344d38-9a9a-40d0-9e26-4be28fd588c2",
+    "browser": {
+      "observedAt": "2026-11-05T04:40:29.384Z",
+      "source": "In-app browser actual call response log and authenticated GET /api/calls",
+      "boundary": {
+        "timestamp": "2026-11-05T04:37:45.501Z",
+        "status": 201,
+        "fields": [
+          "deadline",
+          "id",
+          "sdp"
+        ],
+        "unexpectedFieldCount": 0,
+        "types": {
+          "deadline": "number",
+          "id": "string",
+          "sdp": "string"
+        },
+        "sdpValid": true,
+        "cacheControl": "no-store",
+        "credentialFieldsAbsent": true
+      },
+      "voice": {
+        "humanHeardMethodAndAnswer": true,
+        "status": "ended",
+        "endedAt": 1793853544330,
+        "expiresAt": 1796445544330,
+        "settlement": {
+          "billedSeconds": 68,
+          "remainingSeconds": 232
+        },
+        "transcriptItems": 6,
+        "userItems": 2,
+        "assistantItems": 4,
+        "pending": 0,
+        "failures": 0,
+        "summaryPresent": true,
+        "transcriptSha256": "a816bd74c2a8b1a53d37d2f04a07d293a26b91aece1a20389b5e0191cfba1d53",
+        "spokenMethodId": "MK-453"
+      }
+    },
+    "backend": {
+      "observedAt": "2026-11-05T04:48:19.889Z",
+      "identityVerified": true,
+      "operatorAssisted": false,
+      "queryMode": "SELECT_ONLY",
+      "status": "ended",
+      "endedAt": 1793853544330,
+      "expiresAt": 1796445544330,
+      "settlement": {
+        "billedSeconds": 68,
+        "remainingSeconds": 232
+      },
+      "ledger": {
+        "reserved_seconds": 300,
+        "settled_at": "2026-11-05T04:39:04.725Z",
+        "billed_seconds": 68,
+        "remaining_seconds": 232,
+        "events_digest": "1316765b7a1ab2fa3e4db65edb0ab9e7a767389c460c3b0ce51cbac344e94b2f",
+        "granted_seconds": 300,
+        "lifetime_billed": 68
+      },
+      "math": {
+        "elapsedMs": 76468,
+        "toolWaitMs": 9276,
+        "billableMs": 67192,
+        "expectedBilledSeconds": 68
+      },
+      "method": {
+        "methodId": "MK-453",
+        "fullTextValid": true,
+        "resultBytes": 77855,
+        "resultSha256": "8f87bf36fadada8aca4589ed600cf094a9f9caea7d7539ae052543952e47b209",
+        "textBytes": 18972,
+        "textSha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+        "sameCallFullTextMatched": true
+      },
+      "tools": [
+        {
+          "name": "thinkwithblack_entry_catalog",
+          "isError": false,
+          "entryId": null,
+          "resultBytes": 433580,
+          "resultSha256": "99d074bee3469d257be2aa42bff76b9fa40acadde61ee24d9ade344ff45fde34"
+        },
+        {
+          "name": "thinkwithblack_entry_read",
+          "isError": false,
+          "entryId": "E03",
+          "resultBytes": 132698,
+          "resultSha256": "0cac208797494f73f2a81fbc5e05b657edf6fb11f5b4e1d128ccdc9515c9d69d"
+        },
+        {
+          "name": "thinkwithblack_marketing_skill_read",
+          "isError": false,
+          "entryId": null,
+          "resultBytes": 77855,
+          "resultSha256": "8f87bf36fadada8aca4589ed600cf094a9f9caea7d7539ae052543952e47b209"
+        }
+      ],
+      "events": [
+        {
+          "type": "reserved",
+          "at": 1793853460725
+        },
+        {
+          "type": "connected",
+          "at": 1793853467862
+        },
+        {
+          "type": "tool_started",
+          "at": 1793853480362,
+          "toolRef": "tool-1"
+        },
+        {
+          "type": "tool_finished",
+          "at": 1793853483502,
+          "toolRef": "tool-1"
+        },
+        {
+          "type": "tool_started",
+          "at": 1793853497159,
+          "toolRef": "tool-2"
+        },
+        {
+          "type": "tool_finished",
+          "at": 1793853500389,
+          "toolRef": "tool-2"
+        },
+        {
+          "type": "tool_started",
+          "at": 1793853507979,
+          "toolRef": "tool-3"
+        },
+        {
+          "type": "tool_finished",
+          "at": 1793853510885,
+          "toolRef": "tool-3"
+        },
+        {
+          "type": "ended",
+          "at": 1793853544330
+        }
+      ],
+      "checks": {
+        "ended": true,
+        "methodFullTextValid": true,
+        "methodMatchesSameCall": true,
+        "billedMatchesMath": true,
+        "eccalBilledMatches": true,
+        "eccalRemainingMatches": true,
+        "eventDigestMatches": true,
+        "retentionFromConfirmedEnd": true,
+        "lifetimeTotalMatches": true,
+        "lifetimeGrantUnchanged": true
+      },
+      "ok": true
+    },
+    "spokenApplication": {
+      "methodId": "MK-453",
+      "comparedToPrivateTranscript": true,
+      "applicationExplanationPresent": true
+    },
+    "cleanup": {
+      "temporarySecretFilesRemoved": true,
+      "ports8798And8799Closed": true
+    },
+    "freshReview": "PASS"
+  },
+  "microphoneDenial": {
+    "verification": "CANCELLED_BY_USER",
+    "date": "2026-11-05"
+  },
+  "voiceUiReview": {
+    "issue": 4,
+    "result": "PASS",
+    "date": "2026-11-05",
+    "microphoneDenial": "CANCELLED_BY_USER"
+  }
 }
