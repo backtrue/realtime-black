@@ -15,8 +15,13 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
     append(...children) { this.children.push(...children); }
     replaceChildren(...children) { this.children = children; }
     pause() {} async play() {}
+    scrollIntoView() { this.scrolled = true; }
   }
   const elements = new Map(["start", "stop", "speaker", "membership", "call-status", "notice", "records", "refresh", "login", "logout", "mcp-connect", "mcp-revoke"].map(id => [id, new Element()]));
+  const findElement = id => {
+    const find = element => element.id === id ? element : element.children.map(find).find(Boolean);
+    return elements.get(id) ?? [...elements.values()].map(find).find(Boolean);
+  };
   const requests = [], connections = [], intervals = [], logs = [];
   let authStatus = authOptions.status ?? { authenticated: true, mcpAuthorized: true };
   class Peer {
@@ -30,9 +35,9 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
   }
   const context = vm.createContext({
     console: { info: (...args) => logs.push(args) },
-    document: { getElementById: id => elements.get(id), createElement: () => new Element() },
+    document: { getElementById: findElement, createElement: () => new Element() },
     navigator: { mediaDevices: { getUserMedia } }, RTCPeerConnection: Peer, crypto: { randomUUID },
-    window: { addEventListener() {}, location: { hash: "" } }, URLSearchParams, Date, setInterval: callback => { intervals.push(callback); return intervals.length; }, clearInterval() {},
+    window: { addEventListener() {}, location: { hash: authOptions.hash ?? "" } }, URLSearchParams, Date, setInterval: callback => { intervals.push(callback); return intervals.length; }, clearInterval() {},
     fetch: async (path, init) => {
       requests.push({ path, init });
       let data;
@@ -49,8 +54,25 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
   });
   vm.runInContext(source, context);
   await flush();
-  return { elements, requests, connections, logs, click: id => elements.get(id).listeners.get("click")(), tick: () => { for (const callback of intervals) callback(); } };
+  return { elements, findElement, requests, connections, logs, click: id => elements.get(id).listeners.get("click")(), tick: () => { for (const callback of intervals) callback(); } };
 }
+
+test("三類成果 hash 只開啟目前會員回應內的文件，竄改識別值無法顯示他人內容", async () => {
+  const documents = ["report", "copy", "plan"].map(kind => ({ id: `fixture-${kind}`, kind, title: `合成${kind}`, findings: [{ kind: "member", text: "合成會員內容" }] }));
+  const record = { id: "fixture-owned-call", status: "ended", createdAt: Date.now(), transcript: [], documents, deliveries: [] };
+  for (const artifact of documents) {
+    const p = await page(async () => audio(), undefined, [record], undefined, { hash: `#call=${record.id}&document=${artifact.id}` });
+    const target = p.findElement(`document-${artifact.id}`);
+    assert.equal(target.open, true); assert.equal(target.scrolled, true);
+    for (const other of documents.filter(item => item.id !== artifact.id)) assert.notEqual(p.findElement(`document-${other.id}`).open, true);
+    const read = p.requests.find(request => request.path === "/api/calls");
+    assert.equal(read.init.credentials, "same-origin"); assert.equal(read.init.cache, "no-store");
+  }
+  const forged = await page(async () => audio(), undefined, [record], undefined, { hash: `#call=${record.id}&document=another-members-document` });
+  assert.equal(forged.findElement("document-another-members-document"), undefined);
+  assert.equal(forged.elements.get("notice").textContent, "找不到這份成果，請確認登入帳號並重新整理");
+  for (const artifact of documents) assert.notEqual(forged.findElement(`document-${artifact.id}`).open, true);
+});
 
 test("發證回應只記錄欄位統計，識別值、SDP、未知欄位與憑證不進紀錄", async () => {
   for (const extra of [{}, { access_token: "private-token-value", "private-field-name": "private-field-value" }]) {

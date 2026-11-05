@@ -428,3 +428,11 @@ MCP 的模型參數可能包含對話文字，OpenAI 的文件請求使用 store
 A 的 1000／200／2 推得加購至訂單 1%，先驗證追蹤再查結帳；B 的 1000／10／5 推得 1%／50%，先驗證追蹤再查廣告與商品頁。抽掉加購數後，兩案均指出缺少分母、無法確定主要流失階段，先補資料而未沿用另一案的數字
 
 四份答覆均區分會員口述、工具、推論、建議與未知，改善順序符合各自資料，原因未當成已確認。2026-11-05 fresh spec_evaluator 逐句核對原始輸入、方法與答覆、獨立重算數字、比對 source/helper/bundle SHA，Issue #14 判定 PASS。完整對照見 [漏斗診斷驗收](diagnosis-validation-2026-11-05.md)
+
+## Issue #21 三類成果連結自動驗收
+
+在 Native Workers SQLite 使用實際 Worker、MemberRoom、MemberEngine、authRoutes 與 HttpEccalQuota，搭配受控 ECCAL HTTP 及文件產出。正常建立同筆通話的 report、copy、plan 三類成果，A 完成登入碼交換後可讀、登出後舊 cookie 401，再次登入新 cookie 後三份原件相符；B 另次登入後回 404，匿名與 Email／LINE 交付身分皆回 401，拒絕內容無 ID、標題或 documents
+
+實際 app.js 的前端測試逐一開啟三類 hash，只展開目前會員回應中的指定文件；竄改文件 ID 無內容並提示錯誤，竄改通話 ID 後端回 404。讀取使用 same-origin、no-store，三次登入交換與一次撤銷的存取矩陣由 toMatchFileSnapshot 直接寫出
+
+完整 npm run check 通過型別、156 Workers、14 前端、3 原生連線及 dry-run。2026-11-05 fresh spec_evaluator 依 Issue #21 獨立重跑受控 HTTP／SQLite、前端、型別與 secretlint，判定 PASS。版本、環境與三類存取紀錄見 [成果連結驗收](result-links-validation-2026-11-05.md)

@@ -1,0 +1,97 @@
+{
+  "environment": "Native Workers SQLite; controlled ECCAL HTTP responses and document provider",
+  "productionMemberUsed": false,
+  "ssoExchanges": 3,
+  "logoutRevocations": 1,
+  "revokedSessionStatus": 401,
+  "sameOwnerAfterRelogin": true,
+  "results": [
+    {
+      "kind": "report",
+      "link": "/#call=fixture-owned-call&document=fixture-report",
+      "ownerAfterRelogin": 200,
+      "denied": [
+        {
+          "identity": "B",
+          "status": 404,
+          "contentAbsent": true
+        },
+        {
+          "identity": "anonymous",
+          "status": 401,
+          "contentAbsent": true
+        },
+        {
+          "identity": "email-receipt",
+          "status": 401,
+          "contentAbsent": true
+        },
+        {
+          "identity": "line-receipt",
+          "status": 401,
+          "contentAbsent": true
+        }
+      ],
+      "forgedCall": 404,
+      "forgedDocument": "Frontend selects only an ID in the current member response"
+    },
+    {
+      "kind": "copy",
+      "link": "/#call=fixture-owned-call&document=fixture-copy",
+      "ownerAfterRelogin": 200,
+      "denied": [
+        {
+          "identity": "B",
+          "status": 404,
+          "contentAbsent": true
+        },
+        {
+          "identity": "anonymous",
+          "status": 401,
+          "contentAbsent": true
+        },
+        {
+          "identity": "email-receipt",
+          "status": 401,
+          "contentAbsent": true
+        },
+        {
+          "identity": "line-receipt",
+          "status": 401,
+          "contentAbsent": true
+        }
+      ],
+      "forgedCall": 404,
+      "forgedDocument": "Frontend selects only an ID in the current member response"
+    },
+    {
+      "kind": "plan",
+      "link": "/#call=fixture-owned-call&document=fixture-plan",
+      "ownerAfterRelogin": 200,
+      "denied": [
+        {
+          "identity": "B",
+          "status": 404,
+          "contentAbsent": true
+        },
+        {
+          "identity": "anonymous",
+          "status": 401,
+          "contentAbsent": true
+        },
+        {
+          "identity": "email-receipt",
+          "status": 401,
+          "contentAbsent": true
+        },
+        {
+          "identity": "line-receipt",
+          "status": 401,
+          "contentAbsent": true
+        }
+      ],
+      "forgedCall": 404,
+      "forgedDocument": "Frontend selects only an ID in the current member response"
+    }
+  ]
+}
