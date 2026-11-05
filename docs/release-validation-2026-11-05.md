@@ -270,3 +270,31 @@ Issue #11 的同通方法全文與語音應用、Issue #4 保留範圍的語音�
 去識別時間軸、兩筆用量、ECCAL 前後餘額、瀏覽器讀回與清理結果見 [跨通話額度正式證據](examples/production-quota-2026-11-05.json)
 
 Issue #5 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，逐項核對兩通扣秒、餘額、重登、會員隔離及個別帳目，判定 PASS
+
+## Issue #9 未接通與憑證失效正式驗收
+
+正式重現接通前中斷：提供者已建立會話，WebRTC peer 尚未套用 answer 就關閉，再以正常服務流程掛斷。原版本扣 0 秒、餘額 232 秒及占用釋放皆正確，後端卻回 `ended`，瀏覽器顯示「通話已結束」
+
+提交 `7d38c1db1f4f3afb287930d77c05924ea623b94f` 已推送 main 並發布。結算時依既有實際音訊開始事件判斷是否接通；前端依後端結果顯示「未接通」。新增的後端、前端回歸在修改前分別重現錯誤，修改後通過
+
+型別、136 項 Workers、11 項前端、2 項原生服務連線、dry-run 建置及指定檔案 secretlint 通過。晚到逐字稿及交付的對話 fixture 已補入實際音訊開始事件，既有重試、重放、成果更新及正常有音訊結束案例通過。fresh spec_evaluator 已獨立核對候選並判定 PASS
+
+- Deployment：`be9ec969-023e-4e96-9ff9-15dd1a305c2e`
+- Version：`2322a096-5c8b-44dd-ac77-d1c2a4a00119`，100% 流量，tag `7d38c1d`
+- 正式 origin、模型及三項後端 secret binding 已核對；六項公開入口的狀態、no-store 與後端憑證排除檢查通過
+
+| 正式案例 | 實際結果 | 本通扣秒 | 會員餘額 |
+|---|---|---|---|
+| 短效憑證過期 | 10 秒期限後 2,001ms 才要求建立，提供者回 401／invalid_request_error；有效憑證控制組回 201 | 未使用會員帳目 | 未使用會員帳目 |
+| Realtime 拒絕建立 | 正式服務回 502／REALTIME_UNAVAILABLE，紀錄 failed／未接通 | 0 | 232 |
+| 接通前中斷 | peer 未套用 answer、未開 DataChannel、無音訊；正常掛斷後 failed／未接通 | 0 | 232 |
+| 重送同一開始操作 | 409／OPERATION_REPLAYED，沒有新紀錄或額度變動 | 0 | 232 |
+| 登出、SSO 重登、完整重新整理 | 瀏覽器仍顯示 3 分 52 秒，最新兩筆皆為未接通，開始通話可用 | — | 232 |
+
+兩筆正式服務案例皆無實際音訊事件，事件重算為 0 秒，ECCAL ledger、語音站結算及事件 digest 一致，未結算占用為 0，另外兩位會員仍為 0 秒。短效憑證控制組的提供者會話已正常掛斷，回 200
+
+本次 PostgreSQL 查詢皆為 SELECT，占用及結算由正式服務執行。兩輪臨時 preview、broker、連接埠、FIFO 與暫存憑證皆已清理
+
+修正前後時間軸、提供者憑證拒絕、ECCAL 帳目、重登與瀏覽器狀態見 [未接通正式證據](examples/production-call-failures-2026-11-05.json)
+
+Issue #9 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，正式提供者、會員帳目、未接通畫面與重登結果逐項核對，判定 PASS

@@ -1,0 +1,633 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #9 / docs/development-plan.md M0-09",
+  "productSpec": "docs/product-spec.md V0.3",
+  "issue": 9,
+  "productionCommit": "7d38c1db1f4f3afb287930d77c05924ea623b94f",
+  "environment": {
+    "appOrigin": "https://call.thinkwithblack.com",
+    "eccalOrigin": "https://eccal.thinkwithblack.com",
+    "deploymentId": "be9ec969-023e-4e96-9ff9-15dd1a305c2e",
+    "version": {
+      "versionId": "2322a096-5c8b-44dd-ac77-d1c2a4a00119",
+      "tag": "7d38c1d",
+      "createdOn": "2026-11-05T06:25:05.680707Z",
+      "bindings": [
+        {
+          "name": "APP_ORIGIN",
+          "type": "plain_text",
+          "value": "https://call.thinkwithblack.com"
+        },
+        {
+          "name": "ASSETS",
+          "type": "assets"
+        },
+        {
+          "name": "AUTH",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "AUTH_VAULT_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "CUTOFFS",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "ECCAL_ORIGIN",
+          "type": "plain_text",
+          "value": "https://eccal.thinkwithblack.com"
+        },
+        {
+          "name": "ECCAL_SERVICE_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "MEMBERS",
+          "type": "durable_object_namespace"
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "REALTIME_MODEL",
+          "type": "plain_text",
+          "value": "gpt-realtime-2.1"
+        },
+        {
+          "name": "TEXT_MODEL",
+          "type": "plain_text",
+          "value": "gpt-6.1-sol"
+        }
+      ]
+    },
+    "traffic": [
+      {
+        "version_id": "2322a096-5c8b-44dd-ac77-d1c2a4a00119",
+        "percentage": 100
+      }
+    ]
+  },
+  "localValidation": {
+    "typecheck": "PASS",
+    "workersTests": 136,
+    "frontendTests": 11,
+    "nativeRuntimeTests": 2,
+    "dryRunBuild": "PASS",
+    "secretlint": "PASS",
+    "freshCandidateReview": "PASS",
+    "regressionsFailedBeforeFix": [
+      "backend ended instead of failed for pre-connect interruption",
+      "frontend displayed ended instead of unconnected"
+    ]
+  },
+  "execution": {
+    "operatorInitiated": true,
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "quotaReset": false,
+    "eventInjection": false,
+    "databaseQueries": "SELECT only; normal production service reserves and settles",
+    "fixedMemberLabel": "A",
+    "helperPreflightReview": "PASS",
+    "helperTestsPassed": 8,
+    "helperSha256": {
+      "broker.mjs": "c80ebf707202d6000034688ef52d331b45468fa53e7f3d9a7697c0d2086693bf",
+      "worker.js": "0720930fd1e2d64014a38e7d0f0fa2229e6b017a0f52af9359284b0365b1b734",
+      "wrangler.json": "52f580361ee96e104542dd387e7162a26bc43ff34f88a50da8137f1065435985"
+    }
+  },
+  "beforeFix": {
+    "versionId": "24344d38-9a9a-40d0-9e26-4be28fd588c2",
+    "actualResult": {
+      "observedAt": "2026-11-05T06:16:16.623Z",
+      "purpose": "Issue #9 production call creation failure and pre-connect interruption",
+      "memberLabel": "A",
+      "baseline": {
+        "members": {
+          "A": {
+            "grantedSeconds": 300,
+            "billedSeconds": 68,
+            "reservedSeconds": 0,
+            "remainingSeconds": 232
+          },
+          "B": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          },
+          "C": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          }
+        },
+        "session": {
+          "active": 2,
+          "newestCreatedAt": "2026-11-05T06:00:06.187Z"
+        },
+        "unsettled": 0
+      },
+      "microphoneUsed": false,
+      "audioPersisted": false,
+      "sqlMode": "SELECT_ONLY",
+      "providerRejected": {
+        "label": "provider rejects invalid SDP",
+        "observedAt": "2026-11-05T06:16:41.951Z",
+        "request": {
+          "ok": false,
+          "status": 502,
+          "error": "REALTIME_UNAVAILABLE"
+        },
+        "status": "failed",
+        "providerCallIdPresent": false,
+        "createdAt": 1793859390068,
+        "endedAt": 1793859391745,
+        "expiresAt": 1796451391745,
+        "settlement": {
+          "billedSeconds": 0,
+          "remainingSeconds": 232
+        },
+        "ledger": {
+          "reserved_seconds": 232,
+          "settled_at": "2026-11-05T06:16:32.122Z",
+          "billed_seconds": 0,
+          "remaining_seconds": 232,
+          "events_digest": "a4adfbc81c548481187677df6d6052fd4b13a6af8ab43cefa3c2ec5d38c47d47"
+        },
+        "math": {
+          "elapsedMs": 0,
+          "toolWaitMs": 0,
+          "billableMs": 0,
+          "expectedBilledSeconds": 0,
+          "connected": false
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793859390068
+          },
+          {
+            "type": "ended",
+            "at": 1793859391745
+          }
+        ],
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 68,
+              "reservedSeconds": 0,
+              "remainingSeconds": 232
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:00:06.187Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "noActualAudio": true,
+          "billedZero": true,
+          "allBalancesUnchanged": true,
+          "noPendingReservations": true,
+          "eventDigestMatches": true,
+          "backendShowsUnconnected": true,
+          "retentionFromEnd": true
+        },
+        "ok": true
+      },
+      "startReplay": {
+        "ok": false,
+        "status": 409,
+        "error": "OPERATION_REPLAYED",
+        "balancesUnchanged": true,
+        "newRecordsCreated": false
+      },
+      "peerClosedBeforeAnswerApplied": true,
+      "preconnectInterrupted": {
+        "label": "client transport closed before applying answer",
+        "observedAt": "2026-11-05T06:17:00.205Z",
+        "request": {
+          "ok": true,
+          "status": 200
+        },
+        "status": "ended",
+        "providerCallIdPresent": true,
+        "createdAt": 1793859412320,
+        "endedAt": 1793859415701,
+        "expiresAt": 1796451415701,
+        "settlement": {
+          "billedSeconds": 0,
+          "remainingSeconds": 232
+        },
+        "ledger": {
+          "reserved_seconds": 232,
+          "settled_at": "2026-11-05T06:16:56.026Z",
+          "billed_seconds": 0,
+          "remaining_seconds": 232,
+          "events_digest": "d831975610af3b50e482c27bc825615aff9be198fc51b17089e720ea33e649f3"
+        },
+        "math": {
+          "elapsedMs": 0,
+          "toolWaitMs": 0,
+          "billableMs": 0,
+          "expectedBilledSeconds": 0,
+          "connected": false
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793859412320
+          },
+          {
+            "type": "ended",
+            "at": 1793859415701
+          }
+        ],
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 68,
+              "reservedSeconds": 0,
+              "remainingSeconds": 232
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:00:06.187Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "noActualAudio": true,
+          "billedZero": true,
+          "allBalancesUnchanged": true,
+          "noPendingReservations": true,
+          "eventDigestMatches": true,
+          "backendShowsUnconnected": false,
+          "retentionFromEnd": true
+        },
+        "ok": false,
+        "normalEndReturnedStatus": "ended",
+        "peerHadNoAudio": true,
+        "peerDataChannelNeverOpened": true
+      },
+      "ok": false
+    },
+    "browser": {
+      "observedAt": "2026-11-05T06:17:27.127Z",
+      "remainingSeconds": 232,
+      "failedRecords": 1,
+      "endedRecords": 2
+    },
+    "cleanup": {
+      "temporaryFilesAbsent": true,
+      "portsClosed": true
+    }
+  },
+  "providerCredentialExpiry": {
+    "officialSource": "https://developers.openai.com/api/reference/resources/realtime/subresources/client_secrets/methods/create",
+    "requestedTtlSeconds": 10,
+    "actualResult": {
+      "observedAt": "2026-11-05T06:20:35.228Z",
+      "purpose": "Issue #9 provider short-lived credential expiry",
+      "memberAccountUsed": false,
+      "microphoneUsed": false,
+      "audioPersisted": false,
+      "model": "gpt-realtime-2.1",
+      "issueStatus": 200,
+      "validCreateStatus": 201,
+      "validControlDataChannelOpened": true,
+      "attemptAfterExpiryMs": 2001,
+      "expiredCreateStatus": 401,
+      "expiredHttpSuccess": false,
+      "expiredHasCallLocation": true,
+      "providerErrorCode": null,
+      "providerErrorType": "invalid_request_error",
+      "ok": true,
+      "cleanupHangupStatuses": [
+        200
+      ],
+      "cleanupPeerClosed": true
+    }
+  },
+  "afterFix": {
+    "actualResult": {
+      "observedAt": "2026-11-05T06:26:35.744Z",
+      "purpose": "Issue #9 production call creation failure and pre-connect interruption",
+      "memberLabel": "A",
+      "baseline": {
+        "members": {
+          "A": {
+            "grantedSeconds": 300,
+            "billedSeconds": 68,
+            "reservedSeconds": 0,
+            "remainingSeconds": 232
+          },
+          "B": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          },
+          "C": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          }
+        },
+        "session": {
+          "active": 2,
+          "newestCreatedAt": "2026-11-05T06:00:06.187Z"
+        },
+        "unsettled": 0
+      },
+      "microphoneUsed": false,
+      "audioPersisted": false,
+      "sqlMode": "SELECT_ONLY",
+      "providerRejected": {
+        "label": "provider rejects invalid SDP",
+        "observedAt": "2026-11-05T06:26:52.872Z",
+        "request": {
+          "ok": false,
+          "status": 502,
+          "error": "REALTIME_UNAVAILABLE"
+        },
+        "status": "failed",
+        "providerCallIdPresent": false,
+        "createdAt": 1793860003977,
+        "endedAt": 1793860006278,
+        "expiresAt": 1796452006278,
+        "settlement": {
+          "billedSeconds": 0,
+          "remainingSeconds": 232
+        },
+        "ledger": {
+          "reserved_seconds": 232,
+          "settled_at": "2026-11-05T06:26:46.605Z",
+          "billed_seconds": 0,
+          "remaining_seconds": 232,
+          "events_digest": "ce2f35174fd707d7e04432c83e5d42f6f2143f5bbcacab19febfb1300fd9c676"
+        },
+        "math": {
+          "elapsedMs": 0,
+          "toolWaitMs": 0,
+          "billableMs": 0,
+          "expectedBilledSeconds": 0,
+          "connected": false
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793860003977
+          },
+          {
+            "type": "ended",
+            "at": 1793860006278
+          }
+        ],
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 68,
+              "reservedSeconds": 0,
+              "remainingSeconds": 232
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:00:06.187Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "noActualAudio": true,
+          "billedZero": true,
+          "allBalancesUnchanged": true,
+          "noPendingReservations": true,
+          "eventDigestMatches": true,
+          "backendShowsUnconnected": true,
+          "retentionFromEnd": true
+        },
+        "ok": true
+      },
+      "startReplay": {
+        "ok": false,
+        "status": 409,
+        "error": "OPERATION_REPLAYED",
+        "balancesUnchanged": true,
+        "newRecordsCreated": false
+      },
+      "peerClosedBeforeAnswerApplied": true,
+      "preconnectInterrupted": {
+        "label": "client transport closed before applying answer",
+        "observedAt": "2026-11-05T06:27:11.087Z",
+        "request": {
+          "ok": true,
+          "status": 200
+        },
+        "status": "failed",
+        "providerCallIdPresent": true,
+        "createdAt": 1793860023141,
+        "endedAt": 1793860026426,
+        "expiresAt": 1796452026426,
+        "settlement": {
+          "billedSeconds": 0,
+          "remainingSeconds": 232
+        },
+        "ledger": {
+          "reserved_seconds": 232,
+          "settled_at": "2026-11-05T06:27:06.761Z",
+          "billed_seconds": 0,
+          "remaining_seconds": 232,
+          "events_digest": "7baa0ca9cbef6a75c48ced65de4ad5a95bb7331e93f8da4ee43fef07a9568390"
+        },
+        "math": {
+          "elapsedMs": 0,
+          "toolWaitMs": 0,
+          "billableMs": 0,
+          "expectedBilledSeconds": 0,
+          "connected": false
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793860023141
+          },
+          {
+            "type": "ended",
+            "at": 1793860026426
+          }
+        ],
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 68,
+              "reservedSeconds": 0,
+              "remainingSeconds": 232
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:00:06.187Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "noActualAudio": true,
+          "billedZero": true,
+          "allBalancesUnchanged": true,
+          "noPendingReservations": true,
+          "eventDigestMatches": true,
+          "backendShowsUnconnected": true,
+          "retentionFromEnd": true
+        },
+        "ok": true,
+        "normalEndReturnedStatus": "failed",
+        "peerHadNoAudio": true,
+        "peerDataChannelNeverOpened": true
+      },
+      "ok": true
+    },
+    "browserAfterFullReload": {
+      "observedAt": "2026-11-05T06:28:02.641Z",
+      "remainingSeconds": 232,
+      "failedRecords": 3,
+      "endedRecords": 2,
+      "startEnabled": true
+    },
+    "browserLogout": {
+      "observedAt": "2026-11-05T06:28:11.605Z",
+      "guestLoginVisible": true,
+      "startDisabled": true
+    },
+    "browserAfterRelogin": {
+      "observedAt": "2026-11-05T06:28:38.044Z",
+      "source": "IAB logout, SSO login, full reload",
+      "remainingSeconds": 232,
+      "methodGrantPresent": true,
+      "startEnabled": true,
+      "latestTwoShowUnconnected": true,
+      "failedRecords": 3,
+      "endedRecords": 2
+    },
+    "cleanup": {
+      "temporaryFilesAbsent": true,
+      "portsClosed": true
+    },
+    "publicHttp": {
+      "observedAt": "2026-11-05T06:26:20.067Z",
+      "rows": [
+        {
+          "path": "/",
+          "status": 200,
+          "expected": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/app.js",
+          "status": 200,
+          "expected": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true,
+          "unconnectedStatusHandlingPresent": true
+        },
+        {
+          "path": "/oauth/client-metadata.json",
+          "status": 200,
+          "expected": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/auth/status",
+          "status": 200,
+          "expected": 200,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/.dev.vars.example",
+          "status": 404,
+          "expected": 404,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        },
+        {
+          "path": "/api/calls",
+          "status": 401,
+          "expected": 401,
+          "cacheControl": "no-store",
+          "backendSecretsAbsent": true
+        }
+      ],
+      "ok": true
+    }
+  },
+  "independentAcceptance": {
+    "status": "PASS",
+    "date": "2026-11-05",
+    "reviewer": "fresh spec_evaluator",
+    "issueCompletionAllowed": true
+  }
+}
