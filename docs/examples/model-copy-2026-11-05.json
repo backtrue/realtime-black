@@ -1,0 +1,77 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #19 / docs/development-plan.md M2-05",
+  "issue": 19,
+  "productSourceCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+  "environment": {
+    "provider": "OpenAI Responses API",
+    "model": "gpt-6.1-sol",
+    "adapter": "src/openai.ts OpenAiDocuments.generate",
+    "input": "Explicit synthetic consultation; controlled method tool response",
+    "memberAccountUsed": false,
+    "productionRecordCreated": false,
+    "store": false
+  },
+  "executionReceipt": {
+    "bundleSha256": "5ad556fee133d6e88d1b3a5a42b0e20edb6b6dd4958850930a113dac9f1fdc07",
+    "startedAt": "2026-11-05T07:55:49.208Z",
+    "elapsedMs": 10046,
+    "httpStatus": 200,
+    "responseStatus": "completed",
+    "requestModel": "gpt-6.1-sol",
+    "store": false
+  },
+  "input": {
+    "transcript": [
+      {
+        "itemId": "fixture-user-1",
+        "role": "user",
+        "text": "測試商品 A 是單口 65W USB-C 桌面充電座，售價 1500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，我想知道要先改善哪裡",
+        "at": 1793764805000
+      },
+      {
+        "itemId": "fixture-assistant-1",
+        "role": "assistant",
+        "text": "我先核對漏斗各階段，還需要知道你能投入的時間，以及運費和結帳流程的情況",
+        "at": 1793764835000
+      },
+      {
+        "itemId": "fixture-user-2",
+        "role": "user",
+        "text": "目前只有我執行，每週能投入 4 小時，運費呈現方式與放棄結帳原因還不知道",
+        "at": 1793764865000
+      },
+      {
+        "itemId": "fixture-copy-request",
+        "role": "user",
+        "text": "這次廣告對象是使用 USB-C 裝置的居家工作者。商品單口 65W USB-C 桌面充電座，售價 NT$1,500；沒有折扣、贈品或免運，也沒有提供額外功效或成效保證。請交付一則完整廣告文案，行動呼籲使用「查看完整規格」。",
+        "at": 1793764924000
+      }
+    ],
+    "tools": [
+      {
+        "id": "fixture-tool-1",
+        "name": "fixture_read_funnel_method",
+        "result": {
+          "source": "受控測試回應",
+          "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口"
+        }
+      }
+    ]
+  },
+  "document": {
+    "kind": "copy",
+    "title": "測試商品 A｜居家工作者廣告文案",
+    "findings": [
+      {
+        "kind": "recommendation",
+        "text": "居家工作，正在找 USB-C 桌面充電座？\n\n認識測試商品 A：單口 65W USB-C 桌面充電座，售價 NT$1,500。\n\n使用 USB-C 裝置的你，選購前先確認完整規格，看看是否符合自己的裝置與充電需求。\n\n查看完整規格",
+        "sourceIds": [
+          "fixture-copy-request"
+        ]
+      }
+    ]
+  },
+  "sourceValidation": "Passed actual OpenAiDocuments response validation"
+}

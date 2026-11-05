@@ -370,3 +370,11 @@ Issue #7 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，截止、�
 測試位於 [retention.test.ts](../test/retention.test.ts)，原始輸出擷取的時間、存取與清除結果見 [30 天保存驗收證據](examples/retention-validation-2026-11-05.json)
 
 Issue #17 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，兩筆正常建立紀錄、期前與到期邊界、三條清除路徑、儲存列及未到期紀錄逐項核對，判定 PASS
+
+## Issue #18、#19、#20 實際模型成果驗收
+
+以正式 source `4d9d3a934b56da003c53b9e5d4c23143af13d726` 的 OpenAiDocuments.generate，將合成商品、漏斗數據、資料缺口與指定要求交給實際 `gpt-6.1-sol`。報告、文案及計畫皆回 HTTP 200／completed，通過原程式的來源與分類檢查，請求均為 store:false
+
+報告耗時 22,142ms，數字、方法、診斷及缺口均有 sourceIds；文案耗時 10,046ms，商品、受眾、價格及 CTA 符合條件；計畫單獨重試耗時 23,502ms，第一週工時為 1＋2＋1＝4 小時，後續工作另行排序。第一輪並行產出時的計畫 25 秒失敗原樣保留，產品程式、模型與逾時設定未變
+
+2026-11-05 fresh spec_evaluator 分別依三個 Issue 核對原始回應、來源集合、數字計算、商品及活動條件、計畫人力可行性，#18、#19、#20 均判定 PASS。測試題、完整樣本與對照表見 [實際模型成果驗收](document-validation-2026-11-05.md)

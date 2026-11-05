@@ -1,0 +1,153 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #18 / docs/development-plan.md M2-04",
+  "issue": 18,
+  "productSourceCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+  "environment": {
+    "provider": "OpenAI Responses API",
+    "model": "gpt-6.1-sol",
+    "adapter": "src/openai.ts OpenAiDocuments.generate",
+    "input": "Explicit synthetic consultation; controlled method tool response",
+    "memberAccountUsed": false,
+    "productionRecordCreated": false,
+    "store": false
+  },
+  "executionReceipt": {
+    "bundleSha256": "5ad556fee133d6e88d1b3a5a42b0e20edb6b6dd4958850930a113dac9f1fdc07",
+    "startedAt": "2026-11-05T07:55:49.172Z",
+    "elapsedMs": 22142,
+    "httpStatus": 200,
+    "responseStatus": "completed",
+    "requestModel": "gpt-6.1-sol",
+    "store": false
+  },
+  "input": {
+    "transcript": [
+      {
+        "itemId": "fixture-user-1",
+        "role": "user",
+        "text": "測試商品 A 是單口 65W USB-C 桌面充電座，售價 1500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，我想知道要先改善哪裡",
+        "at": 1793764805000
+      },
+      {
+        "itemId": "fixture-assistant-1",
+        "role": "assistant",
+        "text": "我先核對漏斗各階段，還需要知道你能投入的時間，以及運費和結帳流程的情況",
+        "at": 1793764835000
+      },
+      {
+        "itemId": "fixture-user-2",
+        "role": "user",
+        "text": "目前只有我執行，每週能投入 4 小時，運費呈現方式與放棄結帳原因還不知道",
+        "at": 1793764865000
+      },
+      {
+        "itemId": "fixture-report-request",
+        "role": "user",
+        "text": "這次目標是改善測試商品 A 的下單轉換。請依已提供的漏斗數字產出分析報告，回答先查哪個階段；目前沒有運費呈現方式與放棄結帳原因的資料。",
+        "at": 1793764924000
+      }
+    ],
+    "tools": [
+      {
+        "id": "fixture-tool-1",
+        "name": "fixture_read_funnel_method",
+        "result": {
+          "source": "受控測試回應",
+          "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口"
+        }
+      }
+    ]
+  },
+  "document": {
+    "kind": "report",
+    "title": "測試商品 A 下單轉換分析：先查加入購物車後的流程",
+    "findings": [
+      {
+        "kind": "member",
+        "text": "商品為單口 65W USB-C 桌面充電座，售價 1,500 元。本次目標是改善下單轉換；目前由一人執行，每週可投入 4 小時。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-user-2",
+          "fixture-report-request"
+        ]
+      },
+      {
+        "kind": "tool",
+        "text": "本次工具回傳的方法要求：分開核對到站、加入購物車與結帳階段，並保留資料缺口。",
+        "sourceIds": [
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "member",
+        "text": "測試期間記錄為 100 次到站、10 次加入購物車、1 筆訂單。",
+        "sourceIds": [
+          "fixture-user-1"
+        ]
+      },
+      {
+        "kind": "inference",
+        "text": "依提供的次數計算，到站至加入購物車比率為 10%（10÷100），加入購物車至訂單比率為 10%（1÷10），到站至訂單比率為 1%（1÷100）。這些是次數比率；尚未確認是否為同一批訪客、相同統計口徑，因此不能直接視為個人層級的流失率。",
+        "sourceIds": [
+          "fixture-user-1"
+        ]
+      },
+      {
+        "kind": "inference",
+        "text": "建議先查「加入購物車後到完成訂單」的流程，而不是直接改廣告或降價。依據是已有 10 次加入購物車，但只記錄到 1 筆訂單，值得優先拆解購物車、開始結帳與完成付款之間的落差。不過，到站至加購的比率也同為 10%，目前不能斷定後段是唯一或最大的問題；樣本也不足以確認穩定趨勢。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-report-request"
+        ]
+      },
+      {
+        "kind": "unknown",
+        "text": "目前缺少開始結帳次數、各結帳步驟的離開情況、運費金額與呈現時點、付款失敗紀錄，以及實際放棄結帳原因。也未提供受眾與流量來源。現階段無法把落差歸因於運費、價格、付款方式或結帳操作。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-user-2",
+          "fixture-report-request"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "第一步：先核對數據口徑。建議本週先用約 1 小時，確認 100 次到站、10 次加購與 1 筆訂單是否為同一期間，並確認重複事件及訂單是否以付款完成計算。理由是口徑不一致會誤判漏斗。核對方式：列出每個指標的定義與資料來源；若可取得開始結帳次數，一併補入，無法取得就保留為缺資料。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-user-2",
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "第二步：在數據口徑確認後，建議用約 2 小時人工走查購物車至付款確認前的流程，優先看運費何時出現、總金額是否清楚、是否要求註冊，以及表單或付款選項是否有阻礙；不必建立真實訂單或修改服務。理由是這能用有限時間先找到可重現的障礙。核對方式：逐步記錄畫面、費用揭露時點與錯誤訊息，將觀察到的問題和尚未證實的放棄原因分開。",
+        "sourceIds": [
+          "fixture-user-2",
+          "fixture-report-request",
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "第三步：用剩餘約 1 小時整理結果，只選一個有證據的問題，列為下一輪改善項目；若沒有發現明確障礙，先補齊結帳階段資料，不急著改版或降價。核對方式：改善前後採相同指標定義，分別追蹤加購至開始結帳、開始結帳至完成訂單，以及整體下單比率，並保留原始次數與觀察期間，避免把少量訂單波動當成改善成效。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-user-2",
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "後續再查到站至加入購物車：若後段流程沒有明顯障礙，或已處理但整體下單仍未改善，再檢查商品頁是否清楚說明單口規格、65W 的適用條件、相容性與售價資訊，並核對流量受眾是否符合商品用途。理由是目前尚無資料判斷商品頁或流量品質的問題。核對方式：比較相同流量來源下的到站、加購與訂單次數，一次只驗證一個變動。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-report-request",
+          "fixture-tool-1"
+        ]
+      }
+    ]
+  },
+  "sourceValidation": "Passed actual OpenAiDocuments response validation"
+}

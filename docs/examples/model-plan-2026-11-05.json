@@ -1,0 +1,191 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #20 / docs/development-plan.md M2-06",
+  "issue": 20,
+  "productSourceCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+  "environment": {
+    "provider": "OpenAI Responses API",
+    "model": "gpt-6.1-sol",
+    "adapter": "src/openai.ts OpenAiDocuments.generate",
+    "input": "Explicit synthetic consultation; controlled method tool response",
+    "memberAccountUsed": false,
+    "productionRecordCreated": false,
+    "store": false
+  },
+  "executionReceipt": {
+    "bundleSha256": "5ad556fee133d6e88d1b3a5a42b0e20edb6b6dd4958850930a113dac9f1fdc07",
+    "startedAt": "2026-11-05T07:56:53.616Z",
+    "elapsedMs": 23502,
+    "httpStatus": 200,
+    "responseStatus": "completed",
+    "requestModel": "gpt-6.1-sol",
+    "store": false,
+    "signalAborted": false
+  },
+  "input": {
+    "transcript": [
+      {
+        "itemId": "fixture-user-1",
+        "role": "user",
+        "text": "測試商品 A 是單口 65W USB-C 桌面充電座，售價 1500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，我想知道要先改善哪裡",
+        "at": 1793764805000
+      },
+      {
+        "itemId": "fixture-assistant-1",
+        "role": "assistant",
+        "text": "我先核對漏斗各階段，還需要知道你能投入的時間，以及運費和結帳流程的情況",
+        "at": 1793764835000
+      },
+      {
+        "itemId": "fixture-user-2",
+        "role": "user",
+        "text": "目前只有我執行，每週能投入 4 小時，運費呈現方式與放棄結帳原因還不知道",
+        "at": 1793764865000
+      },
+      {
+        "itemId": "fixture-plan-request",
+        "role": "user",
+        "text": "請依測試商品 A 的漏斗現況列出先做與後做的改善工作，包含排序理由及核對方式。只有我一個人執行，每週最多 4 小時；運費呈現方式與放棄結帳原因尚未確認。",
+        "at": 1793764924000
+      }
+    ],
+    "tools": [
+      {
+        "id": "fixture-tool-1",
+        "name": "fixture_read_funnel_method",
+        "result": {
+          "source": "受控測試回應",
+          "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口"
+        }
+      }
+    ]
+  },
+  "document": {
+    "kind": "plan",
+    "title": "測試商品 A：每週 4 小時的漏斗改善順序",
+    "findings": [
+      {
+        "kind": "member",
+        "text": "商品為單口 65W USB-C 桌面充電座，售價 1,500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單；目前由你一人執行，每週最多投入 4 小時。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-user-2",
+          "fixture-plan-request"
+        ]
+      },
+      {
+        "kind": "tool",
+        "text": "已提供的方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口。",
+        "sourceIds": [
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "inference",
+        "text": "依提供次數粗算，到站至加購比率為 10%，加購至訂單比率為 10%，到站至訂單比率為 1%。目前優先排查加購後到下單的流程，而不是直接增加流量：已有加購行為，但訂單較少。不過只有 1 筆訂單，且尚未確認統計口徑，不能據此認定結帳有問題或運費是主因。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "unknown",
+        "text": "尚未確認測試期間、各階段是否為同一批訪客、加購是否重複計次、訂單是否以付款完成計算，以及開始結帳的人數。運費何時顯示、實際付款流程與放棄結帳原因也未知，因此目前無法把流失定位到特定步驟。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-user-2",
+          "fixture-plan-request"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "第 1 順位｜第一週用 1 小時核對漏斗資料。先用現有報表確認同一測試期間的到站、加購、開始結帳與付款完成數，記下每項計數定義。理由：先排除口徑差異，避免把重複加購或未付款訂單當成真實轉換。核對方式：整理一張四階段數據表；取不到的欄位標示「未知」，不要當成零。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-plan-request",
+          "fixture-tool-1"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "第 2 順位｜第一週用 2 小時檢查加購至付款前流程。以顧客視角檢視商品頁、購物車與結帳頁，記錄運費首次出現的位置、付款前總額是否清楚、是否強制註冊，以及有無欄位或付款錯誤；不需實際付款。理由：這段已有加購訊號，但流失原因未明，先找可重現的阻礙，比直接降價更有依據。核對方式：留下頁面截圖與操作紀錄，區分「確認有問題」與「尚待驗證」，不能把檢查結果直接當成顧客放棄原因。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-user-2",
+          "fixture-plan-request"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "第 3 順位｜第一週剩餘 1 小時，選出下一週只處理的一個問題。若發現無法完成結帳的錯誤，優先排入修正；若沒有錯誤、但付款前費用資訊不清楚，優先規劃運費與總額說明；若兩者都未發現問題，先保留原因未知，不急著改版。理由：每週只有 4 小時，應集中處理有證據且影響購買的阻礙。本階段只整理改善項目，不直接修改網站或外部服務。核對方式：每項候選問題列出證據、預估工時與驗收條件，只選一項進入後續執行。",
+        "sourceIds": [
+          "fixture-user-2",
+          "fixture-plan-request"
+        ]
+      },
+      {
+        "kind": "recommendation",
+        "text": "第 4 順位｜待結帳問題釐清後，再排商品頁改善。若加購後沒有明確阻礙，接著檢查商品頁是否清楚呈現單口、65W、USB-C、桌面使用情境與 1,500 元價格；相容性等未提供資訊須先查證，不新增功效、折扣或保證。理由：到站至加購也需要檢查，但不宜與結帳流程同時大改，否則難以判斷哪個變動有效。核對方式：一次只規劃一項調整，記錄調整日期，後續以一致口徑比較加購及付款完成的筆數與比率；樣本少時只看趨勢，不宣稱已證明成效。",
+        "sourceIds": [
+          "fixture-user-1",
+          "fixture-plan-request",
+          "fixture-tool-1"
+        ]
+      }
+    ]
+  },
+  "sourceValidation": "Passed actual OpenAiDocuments response validation",
+  "previousAttempt": {
+    "kind": "plan",
+    "ok": false,
+    "startedAt": "2026-11-05T07:55:49.209Z",
+    "elapsedMs": 25002,
+    "receipt": {
+      "httpStatus": null,
+      "responseStatus": null,
+      "requestModel": "gpt-6.1-sol",
+      "store": false
+    },
+    "error": "GENERATION_FAILED",
+    "input": {
+      "transcript": [
+        {
+          "itemId": "fixture-user-1",
+          "role": "user",
+          "text": "測試商品 A 是單口 65W USB-C 桌面充電座，售價 1500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，我想知道要先改善哪裡",
+          "at": 1793764805000
+        },
+        {
+          "itemId": "fixture-assistant-1",
+          "role": "assistant",
+          "text": "我先核對漏斗各階段，還需要知道你能投入的時間，以及運費和結帳流程的情況",
+          "at": 1793764835000
+        },
+        {
+          "itemId": "fixture-user-2",
+          "role": "user",
+          "text": "目前只有我執行，每週能投入 4 小時，運費呈現方式與放棄結帳原因還不知道",
+          "at": 1793764865000
+        },
+        {
+          "itemId": "fixture-plan-request",
+          "role": "user",
+          "text": "請依測試商品 A 的漏斗現況列出先做與後做的改善工作，包含排序理由及核對方式。只有我一個人執行，每週最多 4 小時；運費呈現方式與放棄結帳原因尚未確認。",
+          "at": 1793764924000
+        }
+      ],
+      "tools": [
+        {
+          "id": "fixture-tool-1",
+          "name": "fixture_read_funnel_method",
+          "result": {
+            "source": "受控測試回應",
+            "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口"
+          }
+        }
+      ]
+    },
+    "execution": "Initial parallel generation with report and copy; original false result preserved"
+  }
+}
