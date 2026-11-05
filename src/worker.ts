@@ -2,7 +2,8 @@ import { DurableObject } from "cloudflare:workers";
 import { AppError, type CallRecord, type EccalPort, type Identity, type DocumentKind, type Store, type TranscriptLine, type ConfirmedEnd, type DeliveryPort, type DeliveryJob } from "./contracts";
 import { MemberEngine } from "./member-engine";
 import { ThinkWithBlackMcp } from "./mcp";
-import { OpenAiRealtime, OpenAiDocuments } from "./openai";
+import { OpenAiRealtime, OpenAiDocuments, OpenAiTranscription } from "./openai";
+import { AssistantPlayback, MAX_ASSISTANT_AUDIO_CHARS } from "./assistant-playback";
 import { boundedEccal } from "./eccal";
 import { boundedDelivery } from "./delivery";
 import { callDeadline } from "./metering";
@@ -146,6 +147,7 @@ export class MemberRoom extends DurableObject<Env> {
   private engine: MemberEngine;
   private sockets = new Map<string, WebSocket>();
   private pendingSpeech = new Map<string, Map<string, TranscriptLine[]>>();
+  private assistantPlayback = new Map<string, AssistantPlayback>();
   private drains = new Map<string, { timer: ReturnType<typeof setTimeout>; resolve: () => void }>();
   private queue: Promise<unknown> = Promise.resolve();
   private run<T>(operation: () => Promise<T>): Promise<RpcResult<T>> {
@@ -195,6 +197,9 @@ export class MemberRoom extends DurableObject<Env> {
     });
   }
   async stop(memberId: string, id: string) {
+    const ownership = await this.run(() => this.engine.get(memberId, id));
+    if (!ownership.ok) return ownership;
+    this.assistantPlayback?.get(id)?.prepareEnd();
     return this.run(async () => {
       const record = await this.engine.end(memberId, id);
       await this.env.CUTOFFS.get(this.env.CUTOFFS.idFromName(id)).cancel();
@@ -274,6 +279,8 @@ export class MemberRoom extends DurableObject<Env> {
       this.sockets.get(record.id)?.close(1000, "ended");
       this.sockets.delete(record.id);
       this.pendingSpeech.delete(record.id);
+      this.assistantPlayback?.get(record.id)?.close();
+      this.assistantPlayback?.delete(record.id);
       await this.generateSummary(memberId, record.id);
       this.drains.delete(record.id);
     }));
@@ -299,14 +306,28 @@ export class MemberRoom extends DurableObject<Env> {
     socket.accept();
     this.sockets.set(id, socket);
     this.pendingSpeech.set(id, new Map());
+    const playback = new AssistantPlayback(socket, audio => new OpenAiTranscription(this.env.OPENAI_API_KEY ?? "").transcribe(audio), {
+      begin: async itemId => { unwrap(await this.run(() => this.engine.beginAssistantTranscript(memberId, id, itemId))); },
+      complete: async (itemId, text, at) => { unwrap(await this.run(() => this.engine.finishAssistantTranscript(memberId, id, itemId, text, at))); },
+      fail: async itemId => { unwrap(await this.run(() => this.engine.finishAssistantTranscript(memberId, id, itemId, null, Date.now()))); },
+      changed: async () => {
+        const result = await this.run(() => this.engine.get(memberId, id));
+        if (result.ok && result.value.endedAt !== undefined) { this.finish(memberId, result.value); this.ctx.waitUntil(this.generateSummary(memberId, id)); }
+      },
+      waitUntil: task => this.ctx.waitUntil(task),
+    });
+    (this.assistantPlayback ??= new Map()).set(id, playback);
     socket.addEventListener("message", message => {
+      if (typeof message.data !== "string" || message.data.length > MAX_ASSISTANT_AUDIO_CHARS + 65536) return;
+      let event: Record<string, unknown>;
+      try { event = JSON.parse(message.data) as Record<string, unknown>; } catch { return; }
+      if (message.data.length > 1024 * 1024 && event.type !== "conversation.item.retrieved") return;
+      if (playback.observe(event)) return;
       this.ctx.waitUntil(this.run(async () => {
-        if (typeof message.data !== "string" || message.data.length > 1024 * 1024) return;
-        const event = JSON.parse(message.data) as Record<string, unknown>;
         await this.engine.ingest(memberId, id, event);
         const responseId = typeof event.response_id === "string" ? event.response_id : "";
         const pending = this.pendingSpeech.get(id);
-        if (event.type === "response.output_audio_transcript.done" && typeof event.transcript === "string" && typeof event.item_id === "string") {
+        if (event.type === "response.output_audio_transcript.done" && typeof event.transcript === "string" && typeof event.item_id === "string" && !playback.interrupted(event.item_id)) {
           const lines = pending?.get(responseId) ?? [];
           if (!lines.some(line => line.itemId === event.item_id)) lines.push({ itemId: event.item_id, role: "assistant", text: event.transcript, at: Date.now() });
           pending?.set(responseId, lines);
@@ -315,7 +336,7 @@ export class MemberRoom extends DurableObject<Env> {
           if (responseId) pending?.delete(responseId); else pending?.clear();
         }
         if (event.type === "output_audio_buffer.stopped") {
-          for (const line of pending?.get(responseId) ?? []) await this.engine.assistantPlayed(memberId, id, line);
+          for (const line of pending?.get(responseId) ?? []) if (!playback.interrupted(line.itemId)) await this.engine.assistantPlayed(memberId, id, line);
           pending?.delete(responseId);
         }
         if (["conversation.item.input_audio_transcription.completed", "conversation.item.input_audio_transcription.failed", "output_audio_buffer.stopped"].includes(String(event.type))) {
@@ -336,6 +357,7 @@ export class MemberRoom extends DurableObject<Env> {
       }).then(async result => { if (!result.ok) await this.stop(memberId, id); }));
     });
     const closed = () => {
+      playback.close();
       if (this.drains.has(id)) return;
       this.ctx.waitUntil(this.stop(memberId, id).catch(() => {}));
     };

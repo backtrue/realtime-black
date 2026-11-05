@@ -1,0 +1,334 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #15 / docs/development-plan.md M2-01",
+  "issue": 15,
+  "baseCommit": "7b8702fe8bb8ba573d0e0ad24ae48d0cc04930a3",
+  "candidateSourceSha256": {
+    "src/assistant-playback.ts": "d19eb30f9a48c8fa9e31bf0cfb58cc3ce535f1f729d8794ab92fa7c1d43921e3",
+    "src/openai.ts": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+    "src/member-engine.ts": "c8c2149eaeb682e97f26d7f8183721e7e9c218cea5280241e63a7fbd164d5682",
+    "src/worker.ts": "627083eb0879c7d1f9d1a5c8e77c9433725a88b1cf45ccfa5deb3e2dba3dd82b",
+    "public/app.js": "409587e63c78843ff9436376667f205ef3f0ff862250af4c80d5073c1bbd0c00"
+  },
+  "environment": {
+    "runtime": "Native Cloudflare Workers SQLite through Miniflare",
+    "quota": "Controlled 300-second fixture, no production account",
+    "provider": "Actual OpenAI gpt-realtime-2.1 and gpt-4o-transcribe",
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "productionRecordCreated": false
+  },
+  "mainDialogue": {
+    "observedAt": "2026-11-05T09:18:58.247Z",
+    "purpose": "Issue #15 synthetic RTP speech, actual interruption and three-identity HTTP transcript readback",
+    "environment": {
+      "runtime": "Native Cloudflare Workers SQLite through Miniflare",
+      "quota": "Controlled 300-second fixture, no production account",
+      "provider": "Actual OpenAI gpt-realtime-2.1 and gpt-4o-transcribe",
+      "microphoneUsed": false,
+      "audioPersisted": false,
+      "productionRecordCreated": false
+    },
+    "sourceSha256": {
+      "src/assistant-playback.ts": "d19eb30f9a48c8fa9e31bf0cfb58cc3ce535f1f729d8794ab92fa7c1d43921e3",
+      "src/openai.ts": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+      "src/member-engine.ts": "c8c2149eaeb682e97f26d7f8183721e7e9c218cea5280241e63a7fbd164d5682",
+      "src/worker.ts": "627083eb0879c7d1f9d1a5c8e77c9433725a88b1cf45ccfa5deb3e2dba3dd82b",
+      "public/app.js": "409587e63c78843ff9436376667f205ef3f0ff862250af4c80d5073c1bbd0c00"
+    },
+    "clips": [
+      {
+        "question": "我的商品是充電座，這週有一百次到站、十次加購、一筆訂單。請先覆述這些數字，然後慢慢逐項問我還缺哪些資料。",
+        "spokenText": "我的商品是充電座，這週有一百次到站、十次加購、一筆訂單。請先覆述這些數字，然後慢慢逐項問我還缺哪些資料。",
+        "rtpPackets": 826,
+        "spokenTextMatched": true
+      },
+      {
+        "question": "先停一下，我每週只有四小時。請只告訴我第一個要查的數字。",
+        "spokenText": "先停一下，我每週只有四小時。請只告訴我第一個要查的數字。",
+        "rtpPackets": 368,
+        "spokenTextMatched": true
+      }
+    ],
+    "cleanup": {
+      "generatorEnded": true,
+      "mainProviderEnded": true,
+      "localRuntimeDisposed": true
+    },
+    "runtimeBundleSha256": "8f5ff97e54b10900073f57a2d5a2d37a91e566f5f75872d632b75cf6b6401bed",
+    "seed": {
+      "status": 200,
+      "body": {
+        "attached": true
+      }
+    },
+    "providerProbe": {
+      "receivedRtp": 2714,
+      "eventTypes": [
+        "session.created",
+        "input_audio_buffer.speech_started",
+        "input_audio_buffer.speech_stopped",
+        "input_audio_buffer.committed",
+        "conversation.item.added",
+        "conversation.item.done",
+        "response.created",
+        "response.done",
+        "conversation.item.input_audio_transcription.delta",
+        "conversation.item.input_audio_transcription.completed",
+        "response.output_item.added",
+        "response.content_part.added",
+        "response.output_audio_transcript.delta",
+        "output_audio_buffer.started",
+        "output_audio_buffer.cleared",
+        "response.output_audio.done",
+        "response.output_audio_transcript.done",
+        "response.content_part.done",
+        "response.output_item.done",
+        "conversation.item.truncated",
+        "conversation.item.retrieved",
+        "rate_limits.updated",
+        "output_audio_buffer.stopped"
+      ]
+    },
+    "interruptionSentAt": "2026-11-05T09:19:52.252Z",
+    "partialTranscript": [
+      {
+        "role": "user",
+        "text": "我的商品是充电座，这周有100次斗战，10次加购，1笔订单。"
+      },
+      {
+        "role": "user",
+        "text": "请先复述这些数字，然后慢慢逐项问我还缺哪些资料。"
+      },
+      {
+        "role": "assistant",
+        "text": "好，我先把你提供的敘述用口語方式說清楚。",
+        "interrupted": true
+      },
+      {
+        "role": "user",
+        "text": "先停一下，我每周只有四小时。"
+      },
+      {
+        "role": "user",
+        "text": "請只告訴我第一個要查的數字。"
+      },
+      {
+        "role": "assistant",
+        "text": "第一個要查的數字是「啟動結帳數」，也就是有多少人從加購、加入購物車之後，真的點到結帳流程。這個數字可以幫你判斷，是網站漏斗在結帳前就掉人，還是後面付款、完成訂單才出問題。"
+      }
+    ],
+    "end": {
+      "status": 200,
+      "recordStatus": "ended",
+      "settlement": {
+        "billedSeconds": 52,
+        "remainingSeconds": 248
+      }
+    },
+    "transcript": [
+      {
+        "role": "user",
+        "text": "我的商品是充电座，这周有100次斗战，10次加购，1笔订单。"
+      },
+      {
+        "role": "user",
+        "text": "请先复述这些数字，然后慢慢逐项问我还缺哪些资料。"
+      },
+      {
+        "role": "assistant",
+        "text": "好，我先把你提供的敘述用口語方式說清楚。",
+        "interrupted": true
+      },
+      {
+        "role": "user",
+        "text": "先停一下，我每周只有四小时。"
+      },
+      {
+        "role": "user",
+        "text": "請只告訴我第一個要查的數字。"
+      },
+      {
+        "role": "assistant",
+        "text": "第一個要查的數字是「啟動結帳數」，也就是有多少人從加購、加入購物車之後，真的點到結帳流程。這個數字可以幫你判斷，是網站漏斗在結帳前就掉人，還是後面付款、完成訂單才出問題。"
+      }
+    ],
+    "interruptedReply": {
+      "playedText": "好，我先把你提供的敘述用口語方式說清楚。",
+      "generatedText": "好，我先把你提供的數字用口語方式說清楚，再一步一步確認還缺哪些關鍵資料。",
+      "providerTruncationMs": 3800
+    },
+    "access": {
+      "memberA": 200,
+      "memberB": 404,
+      "anonymous": 401,
+      "otherHasTranscript": false,
+      "anonymousHasTranscript": false
+    },
+    "storage": {
+      "rowCount": 1,
+      "audioFieldAbsent": true,
+      "credentialFieldsAbsent": true,
+      "keyValueAbsent": true
+    },
+    "provider": {
+      "receivedRtp": 2732,
+      "eventTypes": [
+        "session.created",
+        "input_audio_buffer.speech_started",
+        "input_audio_buffer.speech_stopped",
+        "input_audio_buffer.committed",
+        "conversation.item.added",
+        "conversation.item.done",
+        "response.created",
+        "response.done",
+        "conversation.item.input_audio_transcription.delta",
+        "conversation.item.input_audio_transcription.completed",
+        "response.output_item.added",
+        "response.content_part.added",
+        "response.output_audio_transcript.delta",
+        "output_audio_buffer.started",
+        "output_audio_buffer.cleared",
+        "response.output_audio.done",
+        "response.output_audio_transcript.done",
+        "response.content_part.done",
+        "response.output_item.done",
+        "conversation.item.truncated",
+        "conversation.item.retrieved",
+        "rate_limits.updated",
+        "output_audio_buffer.stopped"
+      ],
+      "sidebandTruncationCount": 2
+    },
+    "checks": {
+      "twoUserTurns": true,
+      "syntheticSpeechMatches": true,
+      "followupPresent": true,
+      "playedPrefixPresent": true,
+      "unplayedTailExcluded": true,
+      "providerTruncationConfirmed": true,
+      "order": true,
+      "accessIsolated": true,
+      "audioAndCredentialsAbsent": true,
+      "normalEnd": true,
+      "receivedAudio": true
+    },
+    "ok": true
+  },
+  "stopDuringPlayback": {
+    "observedAt": "2026-11-05T09:11:02.779Z",
+    "purpose": "Issue #15 stop during generated assistant playback and asynchronous prefix transcription",
+    "environment": {
+      "runtime": "Native Cloudflare Workers SQLite through Miniflare",
+      "quota": "Controlled 300-second fixture, no production account",
+      "provider": "Actual OpenAI gpt-realtime-2.1 and gpt-4o-transcribe",
+      "microphoneUsed": false,
+      "audioPersisted": false,
+      "productionRecordCreated": false
+    },
+    "sourceSha256": {
+      "src/assistant-playback.ts": "d19eb30f9a48c8fa9e31bf0cfb58cc3ce535f1f729d8794ab92fa7c1d43921e3",
+      "src/openai.ts": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+      "src/member-engine.ts": "c8c2149eaeb682e97f26d7f8183721e7e9c218cea5280241e63a7fbd164d5682",
+      "src/worker.ts": "627083eb0879c7d1f9d1a5c8e77c9433725a88b1cf45ccfa5deb3e2dba3dd82b",
+      "public/app.js": "409587e63c78843ff9436376667f205ef3f0ff862250af4c80d5073c1bbd0c00"
+    },
+    "clips": [],
+    "cleanup": {
+      "mainProviderEnded": true,
+      "localRuntimeDisposed": true
+    },
+    "runtimeBundleSha256": "8f5ff97e54b10900073f57a2d5a2d37a91e566f5f75872d632b75cf6b6401bed",
+    "seed": {
+      "status": 200,
+      "body": {
+        "attached": true
+      }
+    },
+    "stopRequestedAtMs": 1793869870975,
+    "stopAcknowledgedAtMs": 1793869871274,
+    "end": {
+      "status": 200,
+      "recordStatus": "ended",
+      "endedAt": 1793869871267,
+      "settlement": {
+        "billedSeconds": 3,
+        "remainingSeconds": 297
+      },
+      "pendingAtAck": 1
+    },
+    "transcript": [
+      {
+        "role": "assistant",
+        "text": "網站到站有一百次。",
+        "interrupted": true
+      }
+    ],
+    "interruptedReply": {
+      "playedText": "網站到站有一百次。",
+      "generatedText": "網站到站有一百次，加購有十次，訂單只有一次。請先核對數字的統計期間與定義，再檢查加入購物車到付款的流",
+      "providerTruncationMs": 2660
+    },
+    "transcriptionFailures": 0,
+    "storage": {
+      "rowCount": 1,
+      "audioFieldAbsent": true,
+      "credentialFieldsAbsent": true,
+      "keyValueAbsent": true
+    },
+    "provider": {
+      "receivedRtp": 217,
+      "eventTypes": [
+        "session.created",
+        "response.created",
+        "response.output_item.added",
+        "conversation.item.added",
+        "response.content_part.added",
+        "response.output_audio_transcript.delta",
+        "output_audio_buffer.started",
+        "output_audio_buffer.cleared",
+        "error",
+        "response.output_audio.done",
+        "response.output_audio_transcript.done",
+        "response.content_part.done",
+        "conversation.item.done",
+        "response.output_item.done",
+        "response.done",
+        "conversation.item.truncated"
+      ],
+      "sidebandTruncationCount": 1
+    },
+    "checks": {
+      "providerEnded": true,
+      "playedPrefixPresent": true,
+      "unplayedTailExcluded": true,
+      "providerTruncationConfirmed": true,
+      "settlementUnchangedAfterTranscription": true,
+      "noPendingTranscription": true,
+      "audioAndCredentialsAbsent": true,
+      "receivedAudio": true
+    },
+    "ok": true
+  },
+  "helperSha256": {
+    "worker.ts": "a4a2ac0315eff639ca160abad310fca7c7cb0c798ee8805630c9d0076080a47e",
+    "run.mjs": "7b4c7cb508ae986fd440a469b220141b1d4e6d028236625edd5513abd065fbab",
+    "assertions.mjs": "f1e1a5992cef8c3d235703c54a3fff77410a1347091d273b7a96273fb5d3965e",
+    "assertions.node.test.mjs": "8b609a25e0081a26ca3a05bb78411983e7c612836bf439c2b5e5769e930b5e60"
+  },
+  "cleanup": {
+    "observedAt": "2026-11-05T09:23:08.616Z",
+    "port": 8820,
+    "closed": true
+  },
+  "validation": {
+    "typecheck": "PASS",
+    "workers": 155,
+    "frontend": 13,
+    "nativeRuntime": 3,
+    "wranglerDryRun": "PASS",
+    "speechAndOrderGuardTests": 8,
+    "secretlint": "PASS"
+  }
+}

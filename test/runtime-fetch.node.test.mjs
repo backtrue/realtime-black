@@ -114,3 +114,34 @@ test('後端控制連線在接通五秒後仍可接收提供者事件', async ()
     assert.deepEqual(await response.json(), {openAfterHandshakeTimeout:true, receivedProbe:true});
   } finally { await mf.dispose(); }
 });
+
+test('片段轉寫使用原生 Workers WebSocket，五秒後仍接收完整結果', async () => {
+  const bundle = await build({ stdin: { resolveDir: process.cwd(), contents: `
+    import { OpenAiTranscription } from './src/openai';
+    export default { async fetch() { return Response.json({ text: await new OpenAiTranscription('fixture-key').transcribe('AAAA') }); } };
+  ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022' });
+  const received = [];
+  const mf = new Miniflare(convertV4MiniflareOptions({
+    modules: true, script: bundle.outputFiles[0].text,
+    compatibilityDate: '2026-11-04', compatibilityFlags: ['nodejs_compat', 'global_fetch_strictly_public'],
+    outboundService: async request => {
+      assert.equal(request.url, 'https://api.openai.com/v1/realtime?intent=transcription');
+      assert.equal(request.headers.get('authorization'), 'Bearer fixture-key');
+      const pair = new WebSocketPair(); pair[1].accept();
+      pair[1].addEventListener('message', message => {
+        const event = JSON.parse(message.data); received.push(event);
+        if (event.type === 'session.update') pair[1].send(JSON.stringify({ type: 'session.updated' }));
+        if (event.type === 'input_audio_buffer.commit') setTimeout(() => pair[1].send(JSON.stringify({ type: 'conversation.item.input_audio_transcription.completed', transcript: '已播放的片段' })), 5300);
+      });
+      return new Response(null, { status: 101, webSocket: pair[0] });
+    },
+  }));
+  try {
+    const response = await mf.dispatchFetch('https://fixture.example.test/');
+    assert.equal(response.status, 200, await response.clone().text());
+    assert.deepEqual(await response.json(), { text: '已播放的片段' });
+    assert.equal(received[0].session.audio.input.transcription.model, 'gpt-4o-transcribe');
+    assert.equal(received[0].session.audio.input.turn_detection, null);
+    assert.equal(received.filter(event => event.type === 'input_audio_buffer.append').map(event => event.audio).join(''), 'AAAA');
+  } finally { await mf.dispose(); }
+});

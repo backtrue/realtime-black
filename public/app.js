@@ -15,6 +15,7 @@ const errors = {
   MCP_MEMBER_MISMATCH: "方法庫帳號與目前 ECCAL 帳號不同，請使用同一個帳號授權",
 };
 let peer, stream, session, channel;
+let responseGenerating = false, audioPlaying = false;
 let busy = false;
 let eligible = false;
 let starting;
@@ -46,6 +47,7 @@ function releaseAudio() {
   stopMedia();
   channel?.close(); channel = undefined;
   peer?.close(); peer = undefined;
+  responseGenerating = false; audioPlaying = false;
 }
 async function membership() {
   try {
@@ -65,6 +67,12 @@ async function membership() {
 async function end() {
   attempt += 1;
   const inFlight = starting;
+  try {
+    if (channel?.readyState === "open") {
+      if (responseGenerating) channel.send(JSON.stringify({ type: "response.cancel" }));
+      if (audioPlaying) channel.send(JSON.stringify({ type: "output_audio_buffer.clear" }));
+    }
+  } catch {}
   stopMedia();
   $("stop").disabled = true;
   $("call-status").textContent = "正在結束通話";
@@ -98,6 +106,17 @@ $("start").addEventListener("click", async () => {
       if (["failed", "disconnected", "closed"].includes(connection.connectionState)) void end();
     };
     channel = connection.createDataChannel("oai-events");
+    const ownChannel = channel;
+    ownChannel.onmessage = event => {
+      if (channel !== ownChannel) return;
+      try {
+        const message = JSON.parse(event.data);
+        if (message.type === "response.created") responseGenerating = true;
+        if (message.type === "response.done") responseGenerating = false;
+        if (message.type === "output_audio_buffer.started") audioPlaying = true;
+        if (["output_audio_buffer.stopped", "output_audio_buffer.cleared"].includes(message.type)) audioPlaying = false;
+      } catch {}
+    };
     const offer = await connection.createOffer();
     if (ownAttempt !== attempt) return;
     await connection.setLocalDescription(offer);

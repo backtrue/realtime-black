@@ -49,6 +49,50 @@ export class OpenAiRealtime implements RealtimePort {
   }
 }
 
+export class OpenAiTranscription {
+  constructor(private key: string, private fetcher: typeof fetch = fetch.bind(globalThis)) {}
+  async transcribe(audio: string): Promise<string> {
+    if (!this.key) throw new AppError("TRANSCRIPTION_NOT_CONFIGURED");
+    const controller = new AbortController();
+    const handshake = setTimeout(() => controller.abort(), 5000);
+    let response: Response;
+    try {
+      response = await this.fetcher("https://api.openai.com/v1/realtime?intent=transcription", {
+        headers: { Upgrade: "websocket", authorization: `Bearer ${this.key}` }, redirect: "manual", signal: controller.signal,
+      });
+    } finally { clearTimeout(handshake); }
+    const socket = response.webSocket;
+    if (!socket) throw new AppError("TRANSCRIPTION_UNAVAILABLE", 502);
+    return new Promise<string>((resolve, reject) => {
+      let done = false, sent = false;
+      const finish = (text?: string) => {
+        if (done) return;
+        done = true; clearTimeout(timer);
+        try { socket.close(1000, "transcription complete"); } catch {}
+        if (text?.trim()) resolve(text.trim()); else reject(new AppError("TRANSCRIPTION_FAILED", 502));
+      };
+      const timer = setTimeout(() => finish(), 20000);
+      socket.addEventListener("message", message => {
+        try {
+          if (typeof message.data !== "string" || message.data.length > 1024 * 1024) { finish(); return; }
+          const event = JSON.parse(message.data) as { type?: string; transcript?: string };
+          if (event.type === "session.updated" && !sent) {
+            sent = true;
+            for (let at = 0; at < audio.length; at += 64000) socket.send(JSON.stringify({ type: "input_audio_buffer.append", audio: audio.slice(at, at + 64000) }));
+            audio = "";
+            socket.send(JSON.stringify({ type: "input_audio_buffer.commit" }));
+          }
+          if (event.type === "conversation.item.input_audio_transcription.completed") finish(event.transcript);
+          if (["error", "conversation.item.input_audio_transcription.failed"].includes(event.type ?? "")) finish();
+        } catch { finish(); }
+      });
+      socket.addEventListener("close", () => finish()); socket.addEventListener("error", () => finish());
+      try { socket.accept(); socket.send(JSON.stringify({ type: "session.update", session: { type: "transcription", audio: { input: { format: { type: "audio/pcm", rate: 24000 }, transcription: { model: "gpt-4o-transcribe", language: "zh", prompt: "台灣行銷諮詢，使用繁體中文逐字轉寫實際音訊。詞彙：網站、到站、加入購物車、加購、訂單、結帳。" }, turn_detection: null } } } })); }
+      catch { finish(); }
+    });
+  }
+}
+
 export class OpenAiDocuments implements DocumentPort {
   constructor(private key: string, private model: string, private fetcher: typeof fetch = fetch.bind(globalThis)) {}
   async generate(kind: DocumentKind, record: CallRecord): Promise<Omit<Document, "id" | "createdAt">> {

@@ -271,6 +271,27 @@ export class MemberEngine {
     this.invalidateDocuments(record);
     await this.save(record);
   }
+  async beginAssistantTranscript(memberId: string, id: string, itemId: string) {
+    const record = await this.get(memberId, id);
+    if (record.status === "failed" || record.status === "starting") return;
+    record.pendingTranscripts ??= [];
+    if (!record.pendingTranscripts.includes(itemId)) record.pendingTranscripts.push(itemId);
+    if (record.transcript.some(line => line.itemId === itemId)) {
+      record.transcript = record.transcript.filter(line => line.itemId !== itemId);
+      record.transcriptRevision++; this.invalidateDocuments(record);
+    }
+    await this.save(record);
+  }
+  async finishAssistantTranscript(memberId: string, id: string, itemId: string, text: string | null, at: number) {
+    const record = await this.get(memberId, id);
+    record.pendingTranscripts = (record.pendingTranscripts ?? []).filter(id => id !== itemId);
+    record.transcriptionFailures = (record.transcriptionFailures ?? []).filter(id => id !== itemId);
+    record.transcript = record.transcript.filter(line => line.itemId !== itemId);
+    if (text === null) record.transcriptionFailures.push(itemId);
+    else if (text.trim()) record.transcript.push({ itemId, role: "assistant", text: text.trim(), at, interrupted: true });
+    record.transcriptRevision++; this.invalidateDocuments(record);
+    await this.save(record);
+  }
   async failPendingTranscripts(memberId: string, id: string) {
     const record = await this.get(memberId, id);
     if (!(record.pendingTranscripts ?? []).length) return;

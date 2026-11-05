@@ -22,7 +22,7 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
   class Peer {
     connectionState = "new"; remoteDescriptions = [];
     constructor() { connections.push(this); }
-    addTrack() {} createDataChannel() { return { close() {} }; }
+    addTrack() {} createDataChannel() { this.channel = { readyState: "open", sent: [], send(value) { this.sent.push(JSON.parse(value)); }, close() { this.readyState = "closed"; } }; return this.channel; }
     async createOffer() { return { type: "offer", sdp: "v=0\r\noffer" }; }
     async setLocalDescription() {}
     async setRemoteDescription(value) { this.remoteDescriptions.push(value); }
@@ -112,6 +112,26 @@ test("掛斷立即停止收音播放，等待後端確認後才關閉 WebRTC", a
   ended.resolve({ status: "ended" });
   await ending;
   assert.equal(p.connections[0].connectionState, "closed");
+  assert.equal(p.elements.get("call-status").textContent, "通話已結束");
+});
+
+test("掛斷先取消生成並清除提供者播放，保留已播放音訊的截斷點", async () => {
+  const p = await page(async () => audio()); await p.click("start");
+  const channel = p.connections[0].channel;
+  channel.onmessage({ data: JSON.stringify({ type: "response.created" }) });
+  channel.onmessage({ data: JSON.stringify({ type: "output_audio_buffer.started" }) });
+  await p.click("stop");
+  assert.deepEqual(channel.sent.map(event => event.type), ["response.cancel", "output_audio_buffer.clear"]);
+  assert.equal(p.requests.filter(request => request.path.endsWith("/end")).length, 1);
+});
+
+test("播放控制通道正在關閉時仍完成後端掛斷", async () => {
+  const p = await page(async () => audio()); await p.click("start");
+  const channel = p.connections[0].channel;
+  channel.onmessage({ data: JSON.stringify({ type: "output_audio_buffer.started" }) });
+  channel.send = () => { throw new Error("closing"); };
+  await p.click("stop");
+  assert.equal(p.requests.filter(request => request.path.endsWith("/end")).length, 1);
   assert.equal(p.elements.get("call-status").textContent, "通話已結束");
 });
 
