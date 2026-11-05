@@ -410,3 +410,13 @@ Issue #17 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，兩筆正
 實作提交 `41b7231d9ca3345d688bb41598ac3da80c7237b1` 已推送及發布，deployment `5a0c9583-4022-4449-8c16-1b33e312fbd7`、version `663f8503-6e3f-4f7b-89ee-c562b47eab66`，100% 流量、tag `41b7231`。三項正式靜態檔與提交逐位元組相同；匿名會員及紀錄端點皆 401，瀏覽器重載後的登入、0 秒額度及既有紀錄正常
 
 完整檢查通過型別、155 項 Workers、13 項前端、3 項原生連線、dry-run 及 secretlint。2026-11-05 fresh spec_evaluator 核對最終程式及兩個實際語音案例，Issue #15 判定 PASS。測試對照與發布證據見 [插話逐字稿驗收](transcript-validation-2026-11-05.md)
+
+## Issue #26 通話資料儲存抽查
+
+使用正式 source `41b7231` 重新執行 SQLite storage／retention 四個案例全數通過，核對完整 call: 生命週期、四類文件、工具與交付衍生資料、全程 writes、會員歸屬及 30 天清除。兩個同版實際 OpenAI 語音案例的 SQLite 各 1 列，均沒有原音、SDP、權杖或正式 key
+
+正式 version `663f8503-6e3f-4f7b-89ee-c562b47eab66` 設定與 Cloudflare script-settings 唯讀回應相符，logpush:false、tail_consumers:null、observability:null；原始 null 值保留。程式紀錄只含發證邊界欄位及掛斷 HTTP status，75 個已追蹤檔沒有正式 secret、正式測試會員聯絡值或影音檔
+
+MCP 的模型參數可能包含對話文字，OpenAI 的文件請求使用 store:false，Realtime application state 與預設濫用監控政策已依官方文件列出，個別組織保存覆寫未取得資料，記為 null
+
+2026-11-05 fresh spec_evaluator 核對儲存、到期、版本、原始設定與外送資料流，Issue #26 判定 PASS。欄位、位置與完整證據見 [通話資料儲存清冊](storage-inventory.md)

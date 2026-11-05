@@ -27,13 +27,13 @@
 | 位置 | 實際資料流 |
 |---|---|
 | 瀏覽器 | 麥克風直接經 WebRTC 傳至提供者；掛斷關閉音軌，程式沒有 MediaRecorder、音檔下載或 localStorage 寫入 |
-| MemberRoom 記憶體 | sideband socket、尚未確認播放完成的回答及轉寫等待狀態；結束後清理 |
+| MemberRoom 記憶體 | sideband socket、尚未確認播放完成的回答及轉寫等待狀態；插話時取回的 PCM 依可信截斷點裁切，轉寫成功、失敗或逾時即清除，未寫入 SQLite |
 | 服務呼叫記憶體 | 登入 Cookie、Authorization、OpenAI 金鑰與短效憑證供當次後端請求使用；個人 MCP bearer 只在 AuthVault 解密及呼叫，其他模組使用授權識別值 |
 | OpenAI | Realtime 音訊及設定；文件請求包含逐字稿、工具內容及缺失識別值，設定 `store: false` |
 | MCP | 個別會員 Bearer 與允許工具的參數 |
 | 交付 adapter | 該筆工作、核對證據、會員驗證後才能開啟的成果連結；資料範圍見 `src/contracts.ts` |
 
-登入與授權資料不包含通話正文，OAuth 密文使用獨立金鑰與會員／用途驗證資料。外部服務的保存與刪除設定於正式環境及 D4、D5 契約確認時核對
+登入與授權資料不包含通話正文，OAuth 密文使用獨立金鑰與會員／用途驗證資料。正式外送範圍與提供者保存政策見下方抽查紀錄
 
 ## 紀錄與測試產物抽查
 
@@ -43,4 +43,23 @@
 - `test/storage.test.ts` 於真實 SQLite DO 跑完整文字、工具、四類文件、Email 與 LINE 待交付工作；全程檢查 Store 寫入未包含測試 SDP、音訊欄位、權杖或 LINE 原碼
 - 同一測試在到期前 1 毫秒確認四類文件可讀，到期後執行 alarm，檢查清單與直接讀取拒絕，SQLite 中正文、工具副本、交付地址與碼雜湊均已移除，只留下操作重放識別值
 
-目前正式 Cloudflare 儲存與外部服務副本尚待指定測試環境抽查
+## 2026-11-05 實際儲存與正式設定抽查
+
+設定版號為正式 source `41b7231d9ca3345d688bb41598ac3da80c7237b1`、Cloudflare version `663f8503-6e3f-4f7b-89ee-c562b47eab66`，migration v2
+
+| 抽查 | 實際結果 |
+|---|---|
+| 合成會員的實際語音與插話 | Native Workers SQLite 的兩個實際 OpenAI 語音案例各留 1 筆通話，均無 audio 欄位、SDP、權杖或正式 key；A 可讀，B 與匿名拒絕 |
+| 完整資料生命週期 | 重新執行 storage 與 retention 共 4 項通過；正常通話、工具、四類文件及 Email／LINE 待交付資料集中於會員 call:，期前可讀、到期清除後全列無正文及衍生資料 |
+| 儲存查詢 | 測試以 state.storage.list() 讀取全部真實 SQLite KV 列；逐字正文只出現於該筆 call:，原音、事件 token、SDP、MCP bearer 與 LINE 原碼於全程 writes 均未出現 |
+| 正式紀錄出口 | Cloudflare script-settings 回 logpush:false、tail_consumers:null、observability:null，原值均保存；部署只有既有 DO、Assets、環境及 secret bindings |
+| 程式紀錄內容 | 瀏覽器只記錄發證欄位及型別等邊界資訊，後端掛斷拒絕只記錄 HTTP status；均不輸出通話正文或憑證 |
+| Repo 與測試產物 | 75 個 Git 追蹤檔無正式 secret 或三位正式測試會員聯絡資料的精確值，無影音檔；公開語音、文件與交接樣本均為合成測試資料 |
+
+正式紀錄設定由 [Cloudflare Get Worker Script Settings](https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/subresources/settings/methods/get/) 的 GET 端點唯讀取得，未更改設定
+
+Realtime 音訊與插話前綴轉寫交給 OpenAI，文件請求使用 store:false；依 [OpenAI Data controls](https://developers.openai.com/api/docs/guides/your-data)，Realtime 的 application state 為 None，濫用監控預設最長 30 天並有官方所列例外。組織個別保存覆寫設定記為 null，沒有已取得的覆寫證據
+
+MCP 收到會員授權與模型產生的方法參數，參數可能包含模型帶入的對話文字；ECCAL 僅收到登入與用量事件；正式版沒有 DELIVERY binding，尚未對 Email 或 LINE 寄送本產品成果
+
+設定原始值、SHA、儲存查詢及到期前後證據見 [儲存抽查 JSON](examples/storage-validation-2026-11-05.json)

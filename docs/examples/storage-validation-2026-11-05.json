@@ -1,0 +1,271 @@
+{
+  "observedDate": "2026-11-05",
+  "issue": 26,
+  "spec": "GitHub issue #26 / docs/development-plan.md M2-12",
+  "sourceCommit": "41b7231d9ca3345d688bb41598ac3da80c7237b1",
+  "environment": {
+    "sqlite": "Native Cloudflare Workers SQLite",
+    "member": "Controlled synthetic member fixtures",
+    "productionRead": "Cloudflare settings and deployed version metadata only",
+    "microphoneUsed": false,
+    "productionRecordCreated": false
+  },
+  "repositoryScan": {
+    "observedAt": "2026-11-05T09:37:40.248Z",
+    "sourceCommit": "41b7231d9ca3345d688bb41598ac3da80c7237b1",
+    "trackedFileCount": 75,
+    "productionSecretExactMatchFiles": [],
+    "productionContactExactMatchFiles": [],
+    "trackedAudioVideoFiles": [],
+    "sourceSha256": {
+      "wrangler.jsonc": "a5ffa3c3765e7749d2adf4b5781c27a63f4a0775fe657c984488c0ef7280a3a2",
+      "src/worker.ts": "627083eb0879c7d1f9d1a5c8e77c9433725a88b1cf45ccfa5deb3e2dba3dd82b",
+      "src/member-engine.ts": "c8c2149eaeb682e97f26d7f8183721e7e9c218cea5280241e63a7fbd164d5682",
+      "src/assistant-playback.ts": "d19eb30f9a48c8fa9e31bf0cfb58cc3ce535f1f729d8794ab92fa7c1d43921e3",
+      "src/openai.ts": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+      "public/app.js": "409587e63c78843ff9436376667f205ef3f0ff862250af4c80d5073c1bbd0c00",
+      "test/storage.test.ts": "7163fdd1f577749b3c6e4b41fb02c388442b03d11ba02d0bab5919600228fbe2",
+      "test/retention.test.ts": "3dbce22923929e3e527a6754bc21c87edde4cbdcde5ca40ded0384142127f82d"
+    }
+  },
+  "productionSettings": {
+    "observedAt": "2026-11-05T09:37:15.949Z",
+    "worker": "realtime-black",
+    "endpoint": "GET /accounts/{account}/workers/scripts/realtime-black/script-settings",
+    "settings": {
+      "logpush": false,
+      "tags": null,
+      "tail_consumers": null,
+      "observability": null
+    }
+  },
+  "productionVersion": {
+    "id": "663f8503-6e3f-4f7b-89ee-c562b47eab66",
+    "migrationTag": "v2",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace",
+        "class_name": "AuthVault"
+      },
+      {
+        "name": "AUTH_VAULT_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace",
+        "class_name": "CallCutoff"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ECCAL_SERVICE_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace",
+        "class_name": "MemberRoom"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text"
+      }
+    ]
+  },
+  "storageChecks": {
+    "success": true,
+    "passed": 4,
+    "failed": 0,
+    "command": "npx vitest run test/storage.test.ts test/retention.test.ts --reporter=json",
+    "cases": [
+      {
+        "name": "M2-03 兩筆紀錄的 30 天保存驗收 list 先觸發到期檢查，SQLite 只刪除到期正文與摘要",
+        "status": "passed"
+      },
+      {
+        "name": "M2-03 兩筆紀錄的 30 天保存驗收 direct 先觸發到期檢查，SQLite 只刪除到期正文與摘要",
+        "status": "passed"
+      },
+      {
+        "name": "M2-03 兩筆紀錄的 30 天保存驗收 alarm 先觸發到期檢查，SQLite 只刪除到期正文與摘要",
+        "status": "passed"
+      },
+      {
+        "name": "M2-12 通話資料儲存抽查 SQLite 內正文與衍生資料集中於會員通話，30 天到期一併清除",
+        "status": "passed"
+      }
+    ]
+  },
+  "actualVoiceSqliteReadback": {
+    "mainDialogue": {
+      "rowCount": 1,
+      "audioFieldAbsent": true,
+      "credentialFieldsAbsent": true,
+      "keyValueAbsent": true
+    },
+    "stopDuringPlayback": {
+      "rowCount": 1,
+      "audioFieldAbsent": true,
+      "credentialFieldsAbsent": true,
+      "keyValueAbsent": true
+    },
+    "source": "docs/examples/transcript-validation-2026-11-05.json"
+  },
+  "retentionReadback": [
+    {
+      "path": "list",
+      "storage": "Cloudflare Workers SQLite runtime",
+      "externalServices": "controlled fixtures",
+      "older": {
+        "createdAt": 1793865099076,
+        "endedAt": 1793865100076,
+        "expiresAt": 1796457100076
+      },
+      "newer": {
+        "createdAt": 1793951500076,
+        "endedAt": 1793951501076,
+        "expiresAt": 1796543501076
+      },
+      "before": {
+        "at": 1796457100075,
+        "listCount": 2,
+        "olderReadable": true,
+        "newerReadable": true,
+        "storedCount": 2
+      },
+      "after": {
+        "at": 1796457100076,
+        "listCount": 1,
+        "olderDirectStatus": 404,
+        "newerReadable": true,
+        "physicalBeforeCount": 2,
+        "physicalAfterCount": 1,
+        "expiredBodyAbsent": true,
+        "expiredSummaryAbsent": true,
+        "allStorageRowsChecked": true,
+        "newerUnchanged": true,
+        "nextAlarmAt": 1796457100076
+      }
+    },
+    {
+      "path": "direct",
+      "storage": "Cloudflare Workers SQLite runtime",
+      "externalServices": "controlled fixtures",
+      "older": {
+        "createdAt": 1793865099182,
+        "endedAt": 1793865100182,
+        "expiresAt": 1796457100182
+      },
+      "newer": {
+        "createdAt": 1793951500182,
+        "endedAt": 1793951501182,
+        "expiresAt": 1796543501182
+      },
+      "before": {
+        "at": 1796457100181,
+        "listCount": 2,
+        "olderReadable": true,
+        "newerReadable": true,
+        "storedCount": 2
+      },
+      "after": {
+        "at": 1796457100182,
+        "listCount": 1,
+        "olderDirectStatus": 404,
+        "newerReadable": true,
+        "physicalBeforeCount": 2,
+        "physicalAfterCount": 1,
+        "expiredBodyAbsent": true,
+        "expiredSummaryAbsent": true,
+        "allStorageRowsChecked": true,
+        "newerUnchanged": true,
+        "nextAlarmAt": 1796457100182
+      }
+    },
+    {
+      "path": "alarm",
+      "storage": "Cloudflare Workers SQLite runtime",
+      "externalServices": "controlled fixtures",
+      "older": {
+        "createdAt": 1793865099190,
+        "endedAt": 1793865100190,
+        "expiresAt": 1796457100190
+      },
+      "newer": {
+        "createdAt": 1793951500190,
+        "endedAt": 1793951501190,
+        "expiresAt": 1796543501190
+      },
+      "before": {
+        "at": 1796457100189,
+        "listCount": 2,
+        "olderReadable": true,
+        "newerReadable": true,
+        "storedCount": 2
+      },
+      "after": {
+        "at": 1796457100190,
+        "listCount": 1,
+        "olderDirectStatus": 404,
+        "newerReadable": true,
+        "physicalBeforeCount": 2,
+        "physicalAfterCount": 1,
+        "expiredBodyAbsent": true,
+        "expiredSummaryAbsent": true,
+        "allStorageRowsChecked": true,
+        "newerUnchanged": true,
+        "nextAlarmAt": 1796543501190
+      }
+    }
+  ],
+  "logPayloadAudit": {
+    "public/app.js": "call_start_response_boundary emits only status, known field names, types, SDP format boolean, cache header and absence checks",
+    "src/openai.ts": "realtime_hangup_rejected emits only HTTP status",
+    "conversationOrCredentialPayloadEmitted": false
+  },
+  "providerDataControls": {
+    "openaiResponsesStore": false,
+    "openaiRealtimeApplicationState": "None per official endpoint table",
+    "openaiAbuseMonitoringDefault": "up to 30 days, subject to documented exceptions",
+    "organizationSpecificRetentionOverride": null,
+    "source": "https://developers.openai.com/api/docs/guides/your-data"
+  },
+  "outboundDestinations": [
+    {
+      "provider": "OpenAI",
+      "data": "Realtime audio and text; Responses consultation text; Responses store:false"
+    },
+    {
+      "provider": "ThinkWithBlack MCP",
+      "data": "Individual member bearer and model-generated approved method arguments; arguments may include consultation text selected by the model"
+    },
+    {
+      "provider": "ECCAL",
+      "data": "Member authentication and quota events; no transcript or audio"
+    },
+    {
+      "provider": "Email and LINE delivery",
+      "data": "No production DELIVERY binding configured"
+    }
+  ]
+}
