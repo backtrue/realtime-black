@@ -39,6 +39,10 @@ export class OpenAiRealtime implements RealtimePort {
       method: "POST", redirect: "manual", signal: AbortSignal.timeout(10000), headers: { authorization: `Bearer ${this.key}` },
     });
     if (!response.ok) {
+      if (response.status === 404) {
+        const body = await response.json().catch(() => null) as { error?: { code?: unknown; type?: unknown } } | null;
+        if (body?.error?.code === "call_id_not_found" && body.error.type === "invalid_request_error") return;
+      }
       console.warn("realtime_hangup_rejected", { status: response.status });
       throw new AppError("REALTIME_HANGUP_FAILED", 502);
     }

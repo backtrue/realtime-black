@@ -28,6 +28,41 @@ describe("OpenAI 短效憑證與後端掛斷", () => {
     await client.hangup("rtc_fixture"); expect(fetcher.mock.calls[0]?.[0]).toBe("https://api.openai.com/v1/realtime/calls/rtc_fixture/hangup");
     await expect(client.hangup("../../other")).rejects.toThrow(); expect(fetcher).toHaveBeenCalledTimes(1);
   });
+  it("提供者明確確認既有會話不存在時，可以完成結束", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ error: { type: "invalid_request_error", code: "call_id_not_found", message: "No session found for the provided call_id" } }, { status: 404 }));
+    await expect(new OpenAiRealtime("fixture-key", "fixture-model", fetcher).hangup("rtc_fixture")).resolves.toBeUndefined();
+  });
+  it.each([
+    [404, { error: { code: "other_error", type: "invalid_request_error" } }],
+    [404, { error: { code: "call_id_not_found", type: "server_error" } }],
+    [401, { error: { code: "call_id_not_found", type: "invalid_request_error" } }],
+    [500, { error: { code: "call_id_not_found", type: "invalid_request_error" } }],
+  ] as const)("不以狀態 %s 的其他錯誤確認結束", async (status, body) => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(Response.json(body, { status }));
+    await expect(new OpenAiRealtime("fixture-key", "fixture-model", fetcher).hangup("rtc_fixture")).rejects.toMatchObject({ code: "REALTIME_HANGUP_FAILED" });
+  });
+  it("無法讀取的 404 不確認結束", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response("unreadable", { status: 404 }));
+    await expect(new OpenAiRealtime("fixture-key", "fixture-model", fetcher).hangup("rtc_fixture")).rejects.toMatchObject({ code: "REALTIME_HANGUP_FAILED" });
+  });
+  it("斷線後會話不存在的確認僅結算一次，下一通從正確餘額開始", async () => {
+    const f = fixture(); const call = await f.start();
+    await f.engine.ingest("a", call.id, { type: "output_audio_buffer.started", event_id: "actual-audio" });
+    f.advance(1250);
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ error: { type: "invalid_request_error", code: "call_id_not_found" } }, { status: 404 }));
+    f.deps.realtime = new OpenAiRealtime("fixture-key", "fixture-model", fetcher);
+    const ended = await f.engine.end("a", call.id);
+    expect(ended.status).toBe("ended");
+    expect(ended.settlement).toEqual({ billedSeconds: 2, remainingSeconds: 298 });
+    expect(ended.endedAt).toBe(f.now());
+    await f.engine.end("a", call.id); await f.engine.alarm();
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    expect(f.eccal.settle).toHaveBeenCalledTimes(1);
+    f.deps.realtime = f.realtime;
+    const next = await f.start();
+    expect((await f.record(next.id))?.reservation.seconds).toBe(298);
+    expect(await f.eccal.balance("b")).toBe(300);
+  });
 });
 
 describe("成果內容驗證", () => {
