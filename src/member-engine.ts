@@ -1,4 +1,5 @@
-import { AppError, type CallRecord, type Dependencies, type Identity, type MeterEvent, type DocumentKind, type TranscriptLine, type McpGrant, type Reservation, type Settlement, type ConfirmedEnd, type DeliveryJob } from "./contracts";
+import { AppError, type CallRecord, type Dependencies, type Identity, type MeterEvent, type DocumentKind, type TranscriptLine, type Reservation, type Settlement, type ConfirmedEnd, type DeliveryJob } from "./contracts";
+import { SHARED_METHOD_TOOLS } from "./default-methods";
 import { sendDelivery } from "./delivery";
 import { billedSeconds, callDeadline } from "./metering";
 
@@ -73,12 +74,6 @@ export class MemberEngine {
     await this.deps.store.delete(`settlement:${pending.recordId}`);
     return result;
   }
-  private async grant(memberId: string): Promise<McpGrant> {
-    const grant = await this.deps.eccal.mcpGrant(memberId);
-    const credentialValid = typeof grant.accessToken === 'string' && !!grant.accessToken && grant.authorizationId === undefined || typeof grant.authorizationId === 'string' && /^[A-Za-z0-9_-]{43}$/.test(grant.authorizationId) && grant.accessToken === undefined;
-    if (grant.memberId !== memberId || !Number.isSafeInteger(grant.expiresAt) || grant.expiresAt <= this.deps.now() || !credentialValid || !Array.isArray(grant.readOnlyTools) || grant.readOnlyTools.length === 0 || grant.readOnlyTools.some(name => !/^[A-Za-z0-9_-]{1,64}$/.test(name))) throw new AppError("MCP_AUTH_INVALID", 403);
-    return grant;
-  }
   async start(identity: Identity, operationId: string, sdp: string) {
     if (!identity.eligible) throw new AppError("MEMBER_INELIGIBLE", 403);
     if (!/^[A-Za-z0-9_-]{16,100}$/.test(operationId) || !sdp.startsWith("v=0") || sdp.length > 65536) throw new AppError("INVALID_CALL_REQUEST", 400);
@@ -93,9 +88,8 @@ export class MemberEngine {
     const balance = await this.deps.eccal.balance(identity.memberId);
     if (!Number.isSafeInteger(balance) || balance < 0) throw new AppError("BALANCE_INVALID");
     if (balance === 0) throw new AppError("QUOTA_EXHAUSTED", 403);
-    const grant = await this.grant(identity.memberId);
-    const tools = await this.deps.mcp.list(grant);
-    if (!tools.length || tools.some(tool => !grant.readOnlyTools.includes(tool.name))) throw new AppError("MCP_TOOL_LIST_INVALID", 502);
+    const tools = await this.deps.mcp.list();
+    if (!tools.length || tools.some(tool => !SHARED_METHOD_TOOLS.some(name => name === tool.name))) throw new AppError("MCP_TOOL_LIST_INVALID", 502);
     // 先保存操作識別值，未確定的 reserve 重送交由同一 id 對帳
     await this.deps.store.put(`operation:${operationId}`, { memberId: identity.memberId });
     const pending: PendingReservation = { memberId: identity.memberId, operationId, recordId: this.deps.id(), createdAt: this.deps.now(), balance };
@@ -310,12 +304,11 @@ export class MemberEngine {
     this.event(record, "tool_started", `tool-start:${callId}`, callId);
     await this.syncMeter(record);
     try {
-      const grant = await this.grant(memberId);
-      if (!grant.readOnlyTools.includes(name)) throw new AppError("TOOL_FORBIDDEN", 403);
+      if (!SHARED_METHOD_TOOLS.some(tool => tool === name)) throw new AppError("TOOL_FORBIDDEN", 403);
       if (args.length > 16384) throw new AppError("TOOL_ARGUMENTS_INVALID", 400);
       const parsed = JSON.parse(args) as unknown;
       if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new AppError("TOOL_ARGUMENTS_INVALID", 400);
-      const result = await this.deps.mcp.call(grant, name, parsed as Record<string, unknown>);
+      const result = await this.deps.mcp.call(name, parsed as Record<string, unknown>);
       output = JSON.stringify({ ok: true, result });
       record.tools.push({ id: callId, name, result });
     } catch {

@@ -10,9 +10,7 @@ const errors = {
   INVALID_DELIVERY_REQUEST: "請確認收件方式與信箱",
   RECIPIENT_INVALID: "請填寫正確的接收信箱",
   RECORD_NOT_FOUND: "找不到這筆通話紀錄，請重新整理清單",
-  MCP_AUTH_REQUIRED: "請先授權使用你的方法庫",
-  MCP_AUTH_REVOKED: "方法庫授權已失效，請重新授權",
-  MCP_MEMBER_MISMATCH: "方法庫帳號與目前 ECCAL 帳號不同，請使用同一個帳號授權",
+  METHODS_UNAVAILABLE: "小黑的行銷方法暫時無法讀取，請稍後再試",
 };
 let peer, stream, session, channel;
 let responseGenerating = false, audioPlaying = false;
@@ -54,13 +52,10 @@ async function membership() {
     const auth = await api('/auth/status');
     $("login").hidden = auth.authenticated === true;
     $("logout").hidden = auth.authenticated !== true;
-    $("mcp-connect").hidden = auth.authenticated !== true || auth.mcpAuthorized === true;
-    $("mcp-revoke").hidden = auth.mcpAuthorized !== true;
     if (auth.authenticated !== true) { eligible = false; $("start").disabled = true; $("membership").textContent = "請先登入 ECCAL 會員"; return; }
     const data = await api("/api/me");
-    eligible = data.eligible === true && data.remainingSeconds > 0 && auth.mcpAuthorized === true;
+    eligible = data.eligible === true && data.remainingSeconds > 0;
     $("membership").textContent = `剩餘通話時間：${Math.floor(data.remainingSeconds / 60)} 分 ${data.remainingSeconds % 60} 秒`;
-    if (auth.mcpAuthorized !== true) $("membership").textContent += "，請授權使用你的方法庫";
     $("start").disabled = !eligible || busy;
   } catch (error) { eligible = false; $("start").disabled = true; $("membership").textContent = error.message; }
 }
@@ -140,14 +135,6 @@ $("logout").addEventListener('click', async () => {
   try { if (busy) await end(); await api('/auth/logout', { method: 'POST' }); await membership(); $("records").replaceChildren(); }
   catch (error) { $("notice").textContent = error.message; }
 });
-$("mcp-revoke").addEventListener('click', async () => {
-  try {
-    if (busy) await end();
-    const result = await api('/auth/mcp/revoke', { method: 'POST' });
-    $("notice").textContent = result.revocationPending ? '已停止使用這項授權，正在確認方法庫端的撤銷結果' : '已解除方法庫授權';
-    await membership();
-  } catch (error) { $("notice").textContent = error.message; }
-});
 window.addEventListener("pagehide", () => {
   releaseAudio();
   if (session) void fetch(`/api/calls/${session.id}/end`, { method: "POST", credentials: "same-origin", keepalive: true }).catch(() => {});
@@ -213,6 +200,4 @@ async function records() {
 $("refresh").addEventListener("click", records);
 const authResult = new URLSearchParams(window.location?.search ?? '').get('auth');
 if (authResult === 'login-failed') $("notice").textContent = '登入未完成，請重新登入 ECCAL';
-if (authResult === 'mcp-failed') $("notice").textContent = '方法庫授權未完成，請使用目前的 ECCAL 帳號重新授權';
-if (authResult === 'mcp-connected') $("notice").textContent = '方法庫授權已完成';
 void membership(); void records();

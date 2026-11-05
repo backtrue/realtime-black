@@ -17,13 +17,13 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
     pause() {} async play() {}
     scrollIntoView() { this.scrolled = true; }
   }
-  const elements = new Map(["start", "stop", "speaker", "membership", "call-status", "notice", "records", "refresh", "login", "logout", "mcp-connect", "mcp-revoke"].map(id => [id, new Element()]));
+  const elements = new Map(["start", "stop", "speaker", "membership", "call-status", "notice", "records", "refresh", "login", "logout"].map(id => [id, new Element()]));
   const findElement = id => {
     const find = element => element.id === id ? element : element.children.map(find).find(Boolean);
     return elements.get(id) ?? [...elements.values()].map(find).find(Boolean);
   };
   const requests = [], connections = [], intervals = [], logs = [];
-  let authStatus = authOptions.status ?? { authenticated: true, mcpAuthorized: true };
+  let authStatus = authOptions.status ?? { authenticated: true };
   class Peer {
     connectionState = "new"; remoteDescriptions = [];
     constructor() { connections.push(this); }
@@ -219,20 +219,20 @@ test("LINE 領取頁顯示一次性代碼並維持待寄送狀態", async () => 
   assert.equal(JSON.parse(p.requests.find(request => request.path.endsWith("/deliveries")).init.body).recipient, "");
 });
 
-test('未登入呈現ECCAL登入入口，沒有方法庫授權時不開始通話', async () => {
+test('登入會員不需個人MCP授權即可開始通話，未登入仍拒絕', async () => {
   let mediaRequests = 0;
-  const guest = await page(async () => { mediaRequests += 1; return audio(); }, undefined, [], undefined, { status: { authenticated: false, mcpAuthorized: false } });
+  const guest = await page(async () => { mediaRequests += 1; return audio(); }, undefined, [], undefined, { status: { authenticated: false } });
   assert.equal(guest.elements.get('login').hidden, false); assert.equal(guest.elements.get('start').disabled, true);
   await guest.click('start'); assert.equal(mediaRequests, 0);
   const member = await page(async () => { mediaRequests += 1; return audio(); }, undefined, [], undefined, { status: { authenticated: true, mcpAuthorized: false } });
-  assert.equal(member.elements.get('mcp-connect').hidden, false); assert.equal(member.elements.get('start').disabled, true);
-  await member.click('start'); assert.equal(mediaRequests, 0);
+  assert.equal(member.elements.get('start').disabled, false);
+  await member.click('start'); assert.equal(mediaRequests, 1);
+  assert.equal(member.requests.filter(request => request.path.startsWith('/auth/mcp/')).length, 0);
+  assert.equal(member.elements.has('mcp-connect'), false);
+  await member.click('stop');
 });
-test('解除授權待確認時不顯示已完成，登出清理會員畫面', async () => {
-  const p = await page(async () => audio(), undefined, [], undefined, { revocationPending: true });
-  await p.click('mcp-revoke');
-  assert.match(p.elements.get('notice').textContent, /正在確認方法庫端的撤銷結果/);
-  assert.equal(p.elements.get('mcp-connect').hidden, false); assert.equal(p.elements.get('start').disabled, true);
+test('登出清理會員畫面', async () => {
+  const p = await page(async () => audio());
   await p.click('logout');
   assert.equal(p.elements.get('login').hidden, false); assert.equal(p.elements.get('logout').hidden, true);
   assert.equal(p.elements.get('records').children.length, 0);

@@ -156,20 +156,25 @@ describe("M0 會員與額度", () => {
   });
 });
 
-describe("M1 會員工具授權與失敗", () => {
-  it("拒絕取得另一會員的授權", async () => {
-    const f = fixture(); vi.mocked(f.eccal.mcpGrant).mockResolvedValueOnce({ memberId: "b", accessToken: "fixture", expiresAt: f.now() + 10000, readOnlyTools: ["read_method"] });
-    await expect(f.start()).rejects.toMatchObject({ code: "MCP_AUTH_INVALID" });
+describe("M1 內建行銷方法與失敗", () => {
+  it("已登入會員直接取得共用方法，不讀取個人 MCP 授權", async () => {
+    const f = fixture(); vi.mocked(f.eccal.mcpGrant).mockRejectedValue(failure("MCP_AUTH_REQUIRED", 403));
+    const call = await f.start();
+    const result = await f.engine.tool("a", call.id, "tool-1", "thinkwithblack_entry_catalog", "{}");
+    expect(JSON.parse(result.output).ok).toBe(true);
+    expect(f.eccal.mcpGrant).not.toHaveBeenCalled();
+    expect(f.mcp.list).toHaveBeenCalledWith();
+    expect(f.mcp.call).toHaveBeenCalledWith("thinkwithblack_entry_catalog", {});
+  });
+  it("共用方法無法讀取時不發證或占用會員額度", async () => {
+    const f = fixture(); f.mcp.list.mockRejectedValueOnce(failure("METHODS_UNAVAILABLE"));
+    await expect(f.start()).rejects.toMatchObject({ code: "METHODS_UNAVAILABLE" });
+    expect(f.realtime.create).not.toHaveBeenCalled(); expect(f.eccal.reserve).not.toHaveBeenCalled();
+  });
+  it("拒絕混入私人資料或寫入工具的服務清單", async () => {
+    const f = fixture(); f.mcp.list.mockResolvedValueOnce([{ name: "gsc_query", description: "fixture", parameters: { type: "object", properties: {} } }]);
+    await expect(f.start()).rejects.toMatchObject({ code: "MCP_TOOL_LIST_INVALID" });
     expect(f.realtime.create).not.toHaveBeenCalled();
-  });
-  it("過期授權不能開始通話", async () => {
-    const f = fixture(); vi.mocked(f.eccal.mcpGrant).mockResolvedValueOnce({ memberId: "a", accessToken: "fixture", expiresAt: f.now(), readOnlyTools: ["read_method"] });
-    await expect(f.start()).rejects.toMatchObject({ code: "MCP_AUTH_INVALID" });
-  });
-  it("每次工具呼叫重查授權，撤銷後不讀資料", async () => {
-    const f = fixture(); const call = await f.start(); vi.mocked(f.eccal.mcpGrant).mockRejectedValueOnce(failure("REVOKED"));
-    const result = await f.engine.tool("a", call.id, "tool-1", "read_method", "{}");
-    expect(JSON.parse(result.output).ok).toBe(false); expect(f.mcp.call).not.toHaveBeenCalled();
   });
   it("未授權的停廣告工具無法執行", async () => {
     const f = fixture(); const call = await f.start();
@@ -178,15 +183,15 @@ describe("M1 會員工具授權與失敗", () => {
   });
   it("同一工具事件重播只呼叫一次，續答標記保留", async () => {
     const f = fixture(); const call = await f.start();
-    const result = await f.engine.tool("a", call.id, "tool-1", "read_method", "{}");
+    const result = await f.engine.tool("a", call.id, "tool-1", "thinkwithblack_entry_catalog", "{}");
     expect(JSON.parse(result.output).ok).toBe(true);
     await f.engine.toolSent("a", call.id, "tool-1");
-    expect((await f.engine.tool("a", call.id, "tool-1", "read_method", "{}")).sent).toBe(true);
+    expect((await f.engine.tool("a", call.id, "tool-1", "thinkwithblack_entry_catalog", "{}")).sent).toBe(true);
     expect(f.mcp.call).toHaveBeenCalledTimes(1);
   });
   it("工具失敗的紀錄不填造資料", async () => {
     const f = fixture(); const call = await f.start(); f.mcp.call.mockRejectedValueOnce(new Error("fixture-secret-should-not-return"));
-    const result = await f.engine.tool("a", call.id, "tool-1", "read_method", "{}");
+    const result = await f.engine.tool("a", call.id, "tool-1", "thinkwithblack_entry_catalog", "{}");
     expect(result.output).not.toContain("fixture-secret"); expect((await f.record(call.id))?.tools).toEqual([]);
   });
 });
@@ -346,7 +351,7 @@ describe("Cloudflare 路由與實際 Durable Object 儲存", () => {
   });
   it("內部通話證據核對歸屬，只回傳工具雜湊與事件", async () => {
     const f = fixture(); const call = await f.start(); const record = (await f.record(call.id))!;
-    record.tools = ["fixture-private-tool-content", { private: "fixture-private-tool-content" }, ["fixture-private-tool-content"]].map((entry_id, index) => ({ id: `fixture-tool-${index}`, name: "read_method", result: { evidence: "fixture-private-tool-content", structuredContent: { entry: { entry_id } } } }));
+    record.tools = ["fixture-private-tool-content", { private: "fixture-private-tool-content" }, ["fixture-private-tool-content"]].map((entry_id, index) => ({ id: `fixture-tool-${index}`, name: "thinkwithblack_entry_catalog", result: { evidence: "fixture-private-tool-content", structuredContent: { entry: { entry_id } } } }));
     const stub = runtime.MEMBERS.get(runtime.MEMBERS.idFromName(crypto.randomUUID()));
     await runInDurableObject(stub, async (_instance, state) => { await state.storage.put(`call:${record.id}`, record); });
     expect(await stub.callEvidence("b", record.id)).toEqual({ ok: false, error: "RECORD_NOT_FOUND", status: 404 });
@@ -355,7 +360,7 @@ describe("Cloudflare 路由與實際 Durable Object 儲存", () => {
     if (evidence.ok) {
       expect(evidence.value.providerCallId).toBe("rtc_fixture");
       expect(evidence.value.tools).toHaveLength(3);
-      for (const tool of evidence.value.tools) expect(tool).toMatchObject({ name: "read_method", isError: false, entryId: null, resultSha256: expect.stringMatching(/^[a-f0-9]{64}$/) });
+      for (const tool of evidence.value.tools) expect(tool).toMatchObject({ name: "thinkwithblack_entry_catalog", isError: false, entryId: null, resultSha256: expect.stringMatching(/^[a-f0-9]{64}$/) });
       expect(JSON.stringify(evidence.value)).not.toContain("fixture-private-tool-content");
     }
     expect(JSON.stringify(await stub.record("a", record.id))).not.toContain("rtc_fixture");

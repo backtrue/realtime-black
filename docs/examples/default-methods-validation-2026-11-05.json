@@ -1,0 +1,203 @@
+{
+  "observedDate": "2026-11-05",
+  "requirement": "AI 小黑預設使用 ThinkWithBlack MCP 共用行銷方法，ECCAL 會員不需另外個人 MCP OAuth",
+  "voiceBaseCommit": "ff52dfc4ebf0f3bb2f8b00912d99af20459edf1b",
+  "mcpBaseCommit": "9c2c09e5298d288764db902c01a428a31d9d48a9",
+  "sourceSha256": {
+    "voice": {
+      "src/default-methods.ts": "6b3f5661360720fa7f08677e117ee53640c35040dbd50cf30aee68c897a9c74e",
+      "src/contracts.ts": "dd503a0b094615b9b7fc243726f1628f6777a75690f1995f7947145f716982a8",
+      "src/member-engine.ts": "1f7804de29d6d4b609bfa1a2238906ed96a6a92ba169ac074df01bf2ccf2b7bf",
+      "src/worker.ts": "420683854a7ae6ec84fe4b851fcf955263c2b00b19847fc2f4d8851494cb1158",
+      "src/auth-routes.ts": "5722333c661ed25ceddadd2ab3dcf7ff719197a62c7a16e93510093da4df1f5e",
+      "src/consultant.ts": "5f24b79f66c0e29f048c1522cc5cb6604071b93a11626e3e8363b0917b74a3f1",
+      "public/app.js": "d67ac14d77269d1ef59b517c0bed71ce6c628234cab2cc9d94a8d18ac488e7f9",
+      "public/index.html": "f0b68215ba0970123cc23bb8703d2fb2ce574a029ccdcc293ae240618c48d0e5",
+      "wrangler.jsonc": "4d7b0d5b1e0208e38a678a309cb0b50e48c28be92cba3e8e3f11e1b1932d08b2"
+    },
+    "mcp": {
+      "src/mcp/call-methods.ts": "e15d6e6e73c6e193651cd582466004a894972d71aea51a703445fcfc05f739c4",
+      "src/index.ts": "19e017992dfb3123a047354b3ca66083965e473f239477c64a6800adc623edc6",
+      "src/marketing/entry-tools.ts": "59856889087b59f93f7a09824ce588d43cf958c75db052973f607062d25bd6ed",
+      "src/marketing/runtime-tools.ts": "642d22d54e8dafdff60f8118cd569e4e68bd714cf9506e42f1a9b7389791b566"
+    }
+  },
+  "native": {
+    "observedAt": "2026-11-05T11:00:09.698Z",
+    "purpose": "Default ThinkWithBlack methods without individual MCP OAuth",
+    "environment": "Two actual native workerd Workers connected through the named CallMethods RPC entrypoint; voice MemberRoom and SQLite are actual, ECCAL and Realtime provider are controlled fixtures",
+    "productionRecordCreated": false,
+    "productionQuotaUsed": false,
+    "personalOAuthUsed": false,
+    "cases": [
+      {
+        "member": "A",
+        "startStatus": 201,
+        "catalogEntries": 31,
+        "entry": "E03",
+        "method": {
+          "id": "MK-453",
+          "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+          "bytes": 18972,
+          "textDigestVerified": true
+        },
+        "denied": [
+          {
+            "name": "gsc_query",
+            "rejected": true
+          },
+          {
+            "name": "pause_ad",
+            "rejected": true
+          },
+          {
+            "name": "thinkwithblack_marketing_skill_read",
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "member": "B",
+        "startStatus": 201,
+        "catalogEntries": 31,
+        "entry": "E03",
+        "method": {
+          "id": "MK-453",
+          "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+          "bytes": 18972,
+          "textDigestVerified": true
+        },
+        "denied": [
+          {
+            "name": "gsc_query",
+            "rejected": true
+          },
+          {
+            "name": "pause_ad",
+            "rejected": true
+          },
+          {
+            "name": "thinkwithblack_marketing_skill_read",
+            "rejected": true
+          }
+        ]
+      }
+    ],
+    "toolDefinitions": [
+      {
+        "name": "thinkwithblack_entry_catalog",
+        "description": "先讀行銷工作入口，依問題選擇入口及分支，再讀取適用方法全文",
+        "parameters": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "thinkwithblack_entry_read",
+        "description": "依 entry_id 讀取入口、分支、最低證據及適用方法 ID，接著讀取方法全文",
+        "parameters": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "entry_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "entry_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_search",
+        "description": "搜尋已確認但尚未被方法覆蓋的工作缺口，候選仍須讀取全文",
+        "parameters": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "query": {
+              "default": "",
+              "type": "string"
+            },
+            "cursor": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "thinkwithblack_marketing_skill_read",
+        "description": "讀取指定 Skill 或核准參考文件的全文，核對適用範圍、最低證據及執行規則",
+        "parameters": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sharedMethodSameAcrossMembers": true,
+    "recordAccess": {
+      "owner": 200,
+      "otherMember": 404,
+      "anonymous": 401
+    },
+    "personalGrantCalls": 0,
+    "ok": true,
+    "runtimeDisposed": true,
+    "voiceBundleSha256": "7a7113d61199d8640df0152cadb2ebd8889c9bdc145dd61429d4c26027ba0006",
+    "mcpBundleSha256": "b277b15a492e3951b5cf33cfba2d312c09f5bfe18cccde1f7aaeddfb7c017eb0"
+  },
+  "openaiSchema": {
+    "observedAt": "2026-11-05T11:00:13.335Z",
+    "purpose": "Actual OpenAI acceptance of the new default MCP tool schemas built by OpenAiRealtime.create",
+    "model": "gpt-realtime-2.1",
+    "toolNames": [
+      "thinkwithblack_entry_catalog",
+      "thinkwithblack_entry_read",
+      "thinkwithblack_marketing_skill_search",
+      "thinkwithblack_marketing_skill_read"
+    ],
+    "httpStatus": 200,
+    "providerCallCreated": false,
+    "clientSecretPersisted": false,
+    "audioGenerated": false
+  },
+  "checks": {
+    "voice": {
+      "workers": 169,
+      "frontend": 14,
+      "nativeRuntime": 3,
+      "typecheck": "PASS",
+      "dryRun": "PASS"
+    },
+    "mcp": {
+      "vitest": 2438,
+      "python": 46,
+      "typecheck": "PASS",
+      "scope": "PASS",
+      "securityScan": "PASS",
+      "dryRun": "PASS"
+    }
+  },
+  "helperSha256": {
+    "worker.ts": "51ec402827cbdbbdcfb59d1ca1801dc1b5a5425495999103bfb1a2191636082f",
+    "run.mjs": "d660f0805c8c73932a21688a59fb97ad546d71df2859ec909be88f9ac9f4e390"
+  }
+}

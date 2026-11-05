@@ -3,6 +3,7 @@ import { AppError, type CallRecord, type EccalPort, type Identity, type Document
 import { MemberEngine } from "./member-engine";
 import { ThinkWithBlackMcp } from "./mcp";
 import { OpenAiRealtime, OpenAiDocuments, OpenAiTranscription } from "./openai";
+import { DefaultMethods, type MethodService } from "./default-methods";
 import { AssistantPlayback, MAX_ASSISTANT_AUDIO_CHARS } from "./assistant-playback";
 import { boundedEccal } from "./eccal";
 import { boundedDelivery } from "./delivery";
@@ -14,6 +15,7 @@ import { McpOAuth } from './mcp-oauth';
 
 export interface Env {
   ASSETS: Fetcher;
+  MCP_METHODS?: MethodService;
   MEMBERS: DurableObjectNamespace<MemberRoom>;
   CUTOFFS: DurableObjectNamespace<CallCutoff>;
   AUTH: DurableObjectNamespace<AuthVault>;
@@ -171,10 +173,7 @@ export class MemberRoom extends DurableObject<Env> {
     this.engine = new MemberEngine({
       store, eccal: boundedEccal(eccalPort(env)),
       realtime: new OpenAiRealtime(env.OPENAI_API_KEY ?? "", env.REALTIME_MODEL ?? ""),
-      mcp: {
-        list: async grant => grant.authorizationId ? unwrap(await env.AUTH.get(env.AUTH.idFromName(await memberKey(grant.memberId))).list(grant.memberId, grant.authorizationId)) : new ThinkWithBlackMcp().list(grant),
-        call: async (grant, name, args) => grant.authorizationId ? unwrap(await env.AUTH.get(env.AUTH.idFromName(await memberKey(grant.memberId))).call(grant.memberId, grant.authorizationId, name, args)) : new ThinkWithBlackMcp().call(grant, name, args),
-      }, documents: new OpenAiDocuments(env.OPENAI_API_KEY ?? "", env.TEXT_MODEL ?? ""),
+      mcp: new DefaultMethods(env.MCP_METHODS), documents: new OpenAiDocuments(env.OPENAI_API_KEY ?? "", env.TEXT_MODEL ?? ""),
       onMeterChange: async record => { unwrap(await env.CUTOFFS.get(env.CUTOFFS.idFromName(record.id)).updateDeadline(callDeadline(record, Date.now()), record.events.length)); },
       now: Date.now, id: () => crypto.randomUUID(),
       delivery: env.DELIVERY ? boundedDelivery(env.DELIVERY) : undefined, appOrigin: env.APP_ORIGIN,

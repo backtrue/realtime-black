@@ -28,7 +28,7 @@ describe("M2-12 通話資料儲存抽查", () => {
           type: "conversation.item.input_audio_transcription.completed", item_id: "fixture-u1", transcript: "fixture-private-consultation",
           audio: "fixture-private-raw-audio", accessToken: "fixture-private-event-token",
         });
-        await engine.tool("a", call.id, "fixture-tool-1", "read_method", "{}");
+        await engine.tool("a", call.id, "fixture-tool-1", "thinkwithblack_entry_catalog", "{}");
         await engine.end("a", call.id);
         for (const kind of ["summary", "report", "copy", "plan"] as const) await engine.document("a", call.id, kind);
         const record = await engine.get("a", call.id);

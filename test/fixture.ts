@@ -36,10 +36,10 @@ export function fixture() {
       settlements.set(reservationId, settlement);
       return settlement;
     }),
-    mcpGrant: vi.fn(async memberId => ({ memberId, accessToken: `fixture-token-${memberId}`, expiresAt: now + 60000, readOnlyTools: ["read_method"] })),
+    mcpGrant: vi.fn(async memberId => ({ memberId, accessToken: `fixture-token-${memberId}`, expiresAt: now + 60000, readOnlyTools: ["thinkwithblack_entry_catalog"] })),
   };
   const realtime = { create: vi.fn(async () => ({ callId: "rtc_fixture", sdp: "v=0\r\nanswer" })), hangup: vi.fn(async () => {}) };
-  const mcp = { list: vi.fn(async () => [{ name: "read_method", description: "讀取方法", parameters: { type: "object", properties: {} } }]), call: vi.fn(async () => ({ method: "fixture-only", evidence: "source-1" })) };
+  const mcp = { list: vi.fn(async () => [{ name: "thinkwithblack_entry_catalog", description: "讀取方法", parameters: { type: "object", properties: {} } }]), call: vi.fn(async () => ({ method: "fixture-only", evidence: "source-1" })) };
   const documents: Dependencies["documents"] = { generate: vi.fn<Dependencies["documents"]["generate"]>(async (kind, record) => ({ kind, title: "測試諮詢", findings: [{ kind: "member", text: "測試會員提供的問題", sourceIds: [record.transcript[0]!.itemId] }] })) };
   const deps: Dependencies = { eccal, realtime, mcp, documents, store, now: () => now, id: () => crypto.randomUUID() };
   const engine = new MemberEngine(deps);

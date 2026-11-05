@@ -5,7 +5,7 @@
 ## 專案邊界
 
 - 本 repository：網頁通話體驗、OpenAI Realtime 連線、ECCAL 會員驗證與使用額度、通話成果及交付流程。
-- [thinkwithblack-mcp](https://github.com/backtrue/thinkwithblack-mcp)：既有行銷 Skills、MCP 工具與會員授權邏輯。語音產品以受權會員身分呼叫，**不在此複製既有行銷方法**。
+- [thinkwithblack-mcp](https://github.com/backtrue/thinkwithblack-mcp)：既有行銷 Skills 與 MCP 工具。AI 小黑透過後端服務綁定預設讀取共用行銷方法，會員登入 ECCAL 即可使用；方法原文持續由 MCP 提供
 
 ## 產品決策
 
@@ -19,7 +19,7 @@
 
 ## 第一階段架構方向
 
-瀏覽器 WebRTC ↔ OpenAI Realtime API；Cloudflare Worker 負責驗證 ECCAL 會員、控管分鐘數、發放短效 Realtime 憑證及協調工具授權；行銷方法由現有 ThinkWithBlack MCP 提供。永久 API 金鑰與個別會員的 MCP 授權資料不得放入瀏覽器程式。
+瀏覽器 WebRTC ↔ OpenAI Realtime API；Cloudflare Worker 負責驗證 ECCAL 會員、控管分鐘數、發放短效 Realtime 憑證及協調工具；行銷方法由 ThinkWithBlack MCP 的內部 CallMethods 入口提供，語音站不要求會員另行授權 MCP，永久金鑰留在後端
 
 詳見 [產品規格](docs/product-spec.md) 與 [架構及整合邊界](docs/architecture.md)。
 
@@ -29,7 +29,7 @@
 
 ## 目前狀態
 
-已新增 Cloudflare Worker、WebRTC 通話頁、會員通話協調、獨立後端掛斷、MCP 工具呼叫、紀錄保存與成果產出程式，以及 Workers runtime 測試。跨站 ECCAL 登入、本站會話、個人 MCP OAuth、方法庫專用 scope、換發與撤銷已在三個 repo 完成本機實作與整合測試
+已新增 Cloudflare Worker、WebRTC 通話頁、會員通話協調、獨立後端掛斷、MCP 工具呼叫、紀錄保存與成果產出程式，以及 Workers runtime 測試。跨站 ECCAL 登入與本站會話已實作。2026-11-05 依使用者確認，AI 小黑預設使用 ThinkWithBlack MCP，共用方法改由內部服務提供，會員流程只有 ECCAL 登入；原個人 OAuth 實作與驗收列於歷史紀錄
 
 三個 repo 已提交並推上 GitHub，ECCAL 已同步發布，MCP 方法庫 scope 已正式發布。[正式語音入口](https://call.thinkwithblack.com) 已部署，ECCAL 正式 migration、語音設定與兩位真實會員的 Google 跨站登入通過；個別 MCP 同意、方法讀取、跨會員拒絕及撤銷隔離均已實測，Issue #10 正式驗收完成。OpenAI 專用受限金鑰與語音／文字模型已部署，使用者已確認語音回覆、插話及追問正常；真實同通 MK-453 全文、語音應用與正常掛斷均已對照，正式發證憑證邊界已通過 Issue #2 驗收。拒絕麥克風的人工實測依使用者指示取消；交付通路與本人音色待驗證，實際版本與入口讀回見 [正式環境驗證](docs/release-validation-2026-11-05.md)。逐項進度見 [Issue 實作與驗證紀錄](docs/implementation-status.md)，執行與設定見 [本機執行與串接](docs/runtime-integration.md)
 

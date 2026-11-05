@@ -13,6 +13,7 @@
     "REALTIME_MODEL": "gpt-realtime-2.1",
     "TEXT_MODEL": "gpt-6.1-sol"
   },
+  "services": [{ "binding": "MCP_METHODS", "service": "thinkwithblack-mcp", "entrypoint": "CallMethods" }],
   "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
   "durable_objects": {
     "bindings": [{ "name": "MEMBERS", "class_name": "MemberRoom" }, { "name": "CUTOFFS", "class_name": "CallCutoff" }, { "name": "AUTH", "class_name": "AuthVault" }]

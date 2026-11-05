@@ -33,6 +33,10 @@ export interface McpPort {
   list(grant: McpGrant): Promise<Tool[]>;
   call(grant: McpGrant, name: string, args: Record<string, unknown>): Promise<unknown>;
 }
+export interface SharedMethodsPort {
+  list(): Promise<Tool[]>;
+  call(name: string, args: Record<string, unknown>): Promise<unknown>;
+}
 export interface RealtimePort {
   create(sdp: string, tools: Tool[]): Promise<{ callId: string; sdp: string }>;
   hangup(callId: string): Promise<void>;
@@ -89,7 +93,7 @@ export interface DeliveryPort {
 export type Dependencies = {
   eccal: EccalPort;
   realtime: RealtimePort;
-  mcp: McpPort;
+  mcp: SharedMethodsPort;
   documents: DocumentPort;
   store: Store;
   onMeterChange?: (record: CallRecord) => Promise<void>;

@@ -42,12 +42,7 @@ export async function authRoutes(request: Request, settings: AuthSettings, vault
   }
   if (path === '/auth/status' && request.method === 'GET') {
     const member = await quota.authenticate({ cookie: request.headers.get('cookie') ?? '', authorization: request.headers.get('authorization') ?? '' });
-    if (!member) return Response.json({ authenticated: false, mcpAuthorized: false });
-    try { await vault(member.memberId).grant(member.memberId); return Response.json({ authenticated: true, mcpAuthorized: true }); }
-    catch (error) {
-      if (error instanceof AppError && error.status === 403) return Response.json({ authenticated: true, mcpAuthorized: false });
-      throw error;
-    }
+    return Response.json({ authenticated: member !== null });
   }
   if (path === '/auth/mcp/connect' && request.method === 'GET') {
     const member = await identity();
