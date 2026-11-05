@@ -478,3 +478,9 @@ ECCAL 測試提交 `4ea45881d8e99651361415ef12d3c247fc7f0b89` 已推上 codex/th
 依使用者核准的本次 Replit Shell 例外，套用本機完成且通過 7 項測試與獨立驗收的補表工具。開發庫新增四張語音表，原有 59 張表資料不變；正式庫全庫備份與本機還原通過，發布前後 63 張 public 表的筆數及逐列內容摘要完全相同
 
 Republish 已成功，發布提交為 059dd26，parent 為 2e841c4，0 changed files，build ID 為 90c09a5f-6346-46bd-9470-d1f26fe37b93。GitHub、Replit 與本機已同步。完整重新整理正式語音站後，會員登入、0 秒餘額、12 筆紀錄與既有 MK-453 摘要可讀，見 [發布刪表修正與資料保留](eccal-schema-preservation-2026-11-05.md)
+
+## 2026-11-06 Email 正式發布與實收
+
+語音站 source `11197d0` 已推上 GitHub main，Cloudflare version `ac2518ba-4681-4111-ab28-46d71f1293a2` 為 100% 流量，正式 app.js 與來源相同。ECCAL 原分支發布提交為 `17020ce`，parent `e081d99`、0 changed files，build `10ddb496-0e38-497a-bc9e-155cc77634e0`，GitHub、Replit 與本機同步，Republish 顯示 Live，提供者為 success
+
+發布前後正式 63 張表的筆數及逐列內容摘要完全相同。指定會員的既有 MK-453 對話產生新報告後，Email 工作為 succeeded，Resend Delivered、Gmail 收件匣實收與原成果連結吻合；未登入無法讀取，原會員重新登入後可開啟報告。完整檢查與四類失敗工作快照見 [Email 驗收](email-validation-2026-11-06.md)

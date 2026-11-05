@@ -1,0 +1,164 @@
+{
+  "acceptedAtTaipei": "2026-11-06",
+  "issue": 23,
+  "release": {
+    "voiceCommit": "11197d0724703a1a614b52a10b07325c06b94ad8",
+    "cloudflareDeployment": "65ce0d31-59ba-4aa8-a467-f6e2f00735bd",
+    "cloudflareVersion": "ac2518ba-4681-4111-ab28-46d71f1293a2",
+    "cloudflareTrafficPercent": 100,
+    "eccalSource": "e081d9987cb13120e17a57e33d9a6d9090eb64ba",
+    "eccalPublishedCommit": "17020ceff127dec9ab4d773d2705878888b80b91",
+    "eccalPublishedTree": "c679ad0267bf83cd03f922d43f82c1b384f0b442",
+    "eccalBuildId": "10ddb496-0e38-497a-bc9e-155cc77634e0",
+    "eccalStatus": "success",
+    "app": {
+      "observedAt": "2026-11-05T16:24:08.771Z",
+      "status": 200,
+      "cacheControl": "no-store",
+      "sha256": "3481e96df0eb5868d2e0d5d068fd8a16eeda85792ac440697e9cbf5a1a9eb750",
+      "matchesSource": true,
+      "emailLoginRecipientCopy": true
+    }
+  },
+  "preservation": {
+    "tableCount": 63,
+    "changedTables": [],
+    "allExistingDataUnchanged": true,
+    "dataSha256": "1661b393b7f6e169d4e82751d6d3f328cc6e78d62f7db1362353378cf6bbf0e3"
+  },
+  "recipientEndpoint": {
+    "observedAt": "2026-11-05T16:23:04.220Z",
+    "status": 200,
+    "contract": "eccal-voice-v1",
+    "cacheControl": "no-store",
+    "recipientMatchesApprovedMember": true,
+    "responseKeys": [
+      "memberId",
+      "recipient"
+    ]
+  },
+  "realDelivery": {
+    "recipient": "b***@gmail.com",
+    "from": "\"AI 小黑\" <call@toldyou.co>",
+    "subject": "AI 小黑諮詢成果",
+    "receivedAt": "2026-11-05T16:25:42.000Z",
+    "inInbox": true,
+    "recipientMatchesApproved": true,
+    "exactResultLink": true,
+    "noResultBody": true,
+    "dkimPass": true,
+    "spfPass": true,
+    "gmailMessageSha256": "424f812ff294d3220a34c6ab384cf12c5fd18b4c340082f987cabbbe281384c3",
+    "recordSha256": "3b87f14acad0ac1f2349e7517467ff20fcb34f6796144d89bfe4f77a08638c20",
+    "documentSha256": "e7ef27741e3eb1225ea5fe31a6104a11a455e0da0437dc7bd7d0c1351937ce20",
+    "jobSha256": "7784bf05dc50aebe363843d3bd22db613dff651a5689e03784ae1e81dbe2848d",
+    "resultLinkSha256": "486a3c12f17c51292e262e0cfffe00d735814b805b05bf2e0ef87a79db4130fc",
+    "reportTitle": "轉換率診斷方法與首要查核數字",
+    "jobState": "succeeded",
+    "jobCreatedAt": "2026-11-05T16:25:40.170Z",
+    "resend": {
+      "receiptSha256": "d20f3620ad9fac2b792d64119cd521994e99c5daaa46fc6d38dc1c2bed6787f9",
+      "status": "Delivered",
+      "sentAtTaipei": "2026-11-06T00:25:42+08:00",
+      "observedInProviderDashboard": true,
+      "exactRecipientAndResultLinkMatched": true
+    },
+    "access": {
+      "anonymousBlocked": true,
+      "eccalRelogin": true,
+      "originalEmailLinkReopened": true,
+      "matchingReportExpanded": true,
+      "deliveryStillSucceeded": true
+    }
+  },
+  "localNegativeCases": [
+    {
+      "environment": "local-random-PostgreSQL-schema",
+      "providerMode": "rejected",
+      "job": {
+        "id": "3dc301ed-ae96-4179-a7a0-8b00c59a68fc",
+        "recordId": "cdd631a7-b99e-4f85-9c76-b12867af2633",
+        "documentId": "f175d599-9df3-489a-9de4-e20c2b40114b",
+        "channel": "email",
+        "recipient": "member-a@example.invalid",
+        "state": "failed",
+        "failureCode": "RESEND_REJECTED",
+        "providerStatus": 422,
+        "providerReceipt": null
+      },
+      "providerRequests": 1,
+      "replayPreventedDuplicate": true
+    },
+    {
+      "environment": "local-random-PostgreSQL-schema",
+      "providerMode": "server",
+      "job": {
+        "id": "1a8f3b91-4768-4f06-b8a0-8e43f7529fe2",
+        "recordId": "f8e95a33-797e-4fc8-b67e-ad040dfc8d25",
+        "documentId": "b252211a-e9f6-4cd5-923e-c9dd084ac048",
+        "channel": "email",
+        "recipient": "member-a@example.invalid",
+        "state": "unknown",
+        "failureCode": "RESEND_UNAVAILABLE",
+        "providerStatus": 503,
+        "providerReceipt": null
+      },
+      "providerRequests": 1,
+      "replayPreventedDuplicate": true
+    },
+    {
+      "environment": "local-random-PostgreSQL-schema",
+      "providerMode": "network",
+      "job": {
+        "id": "e5e5cd38-4009-451e-8f59-e5171031b49c",
+        "recordId": "9342763e-499e-49b3-97e7-8ef42b72aed6",
+        "documentId": "70be68f2-16c0-4a05-86b1-d5d162010adc",
+        "channel": "email",
+        "recipient": "member-a@example.invalid",
+        "state": "unknown",
+        "failureCode": "RESEND_UNAVAILABLE",
+        "providerStatus": null,
+        "providerReceipt": null
+      },
+      "providerRequests": 1,
+      "replayPreventedDuplicate": true
+    },
+    {
+      "environment": "local-random-PostgreSQL-schema",
+      "providerMode": "malformed",
+      "job": {
+        "id": "efb4404d-0186-49b0-9de8-6c3b49452325",
+        "recordId": "cb671070-a9ea-48f7-891d-39a1f298707e",
+        "documentId": "11ddfdf3-50e7-438e-b5b3-2761a068eb70",
+        "channel": "email",
+        "recipient": "member-a@example.invalid",
+        "state": "unknown",
+        "failureCode": "RESEND_UNAVAILABLE",
+        "providerStatus": null,
+        "providerReceipt": null
+      },
+      "providerRequests": 1,
+      "replayPreventedDuplicate": true
+    }
+  ],
+  "checks": {
+    "workers": 177,
+    "frontend": 15,
+    "native": 3,
+    "eccalEmail": 7,
+    "eccalQuota": 17,
+    "eccalCrossRepoContract": 1,
+    "eccalLogin": 8,
+    "typecheck": true,
+    "dryRun": true,
+    "eccalBuild": true,
+    "negativeJobCapturePassed": 4
+  },
+  "evidence": {
+    "gmail": "email-delivery-2026-11-06/gmail-received.png",
+    "resend": "email-delivery-2026-11-06/resend-delivered.png",
+    "login": "email-delivery-2026-11-06/login-required.png",
+    "owner": "email-delivery-2026-11-06/owner-result.png",
+    "negativeLog": "email-delivery-2026-11-06/negative-capture.tap"
+  }
+}

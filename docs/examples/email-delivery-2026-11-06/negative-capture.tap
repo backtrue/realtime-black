@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: 內部端點驗證服務身分、嚴格欄位與會員登入信箱，不寄到其他會員
+ok 1 - 內部端點驗證服務身分、嚴格欄位與會員登入信箱，不寄到其他會員
+  ---
+  duration_ms: 144.495084
+  type: 'test'
+  ...
+# Subtest: 真實 HTTP／PostgreSQL 與語音引擎只寄登入信箱，保存收據且重送不重寄
+ok 2 - 真實 HTTP／PostgreSQL 與語音引擎只寄登入信箱，保存收據且重送不重寄
+  ---
+  duration_ms: 55.968834
+  type: 'test'
+  ...
+# Subtest: 寄件回應 rejected 保存 failed，不標成功、不自動重送
+ok 3 - 寄件回應 rejected 保存 failed，不標成功、不自動重送
+  ---
+  duration_ms: 34.31525
+  type: 'test'
+  ...
+# Subtest: 寄件回應 server 保存 unknown，不標成功、不自動重送
+ok 4 - 寄件回應 server 保存 unknown，不標成功、不自動重送
+  ---
+  duration_ms: 30.876875
+  type: 'test'
+  ...
+# Subtest: 寄件回應 network 保存 unknown，不標成功、不自動重送
+ok 5 - 寄件回應 network 保存 unknown，不標成功、不自動重送
+  ---
+  duration_ms: 29.99075
+  type: 'test'
+  ...
+# Subtest: 寄件回應 malformed 保存 unknown，不標成功、不自動重送
+ok 6 - 寄件回應 malformed 保存 unknown，不標成功、不自動重送
+  ---
+  duration_ms: 28.055375
+  type: 'test'
+  ...
+# Subtest: 寄送設定缺少時明確失敗，信箱變更、結果網址遭替換均不發送
+ok 7 - 寄送設定缺少時明確失敗，信箱變更、結果網址遭替換均不發送
+  ---
+  duration_ms: 41.077167
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 808.602708
