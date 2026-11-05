@@ -1,0 +1,161 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "docs/product-spec.md V0.3",
+  "issue": 2,
+  "commit": "46c0164111ae39d4d0d9fa137372e36cffec27bf",
+  "deployment": {
+    "versionId": "24344d38-9a9a-40d0-9e26-4be28fd588c2",
+    "deploymentId": "007fe466-751f-45fe-ae46-b46b2dd310c6",
+    "createdOn": "2026-11-05T04:35:44.420317Z",
+    "versions": [
+      {
+        "version_id": "24344d38-9a9a-40d0-9e26-4be28fd588c2",
+        "percentage": 100
+      }
+    ],
+    "tag": "46c0164",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text",
+        "value": "https://call.thinkwithblack.com"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "AUTH_VAULT_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text",
+        "value": "https://eccal.thinkwithblack.com"
+      },
+      {
+        "name": "ECCAL_SERVICE_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text",
+        "value": "gpt-realtime-2.1"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text",
+        "value": "gpt-6.1-sol"
+      }
+    ]
+  },
+  "publicHttp": {
+    "observedAt": "2026-11-05T04:36:13.663Z",
+    "requests": [
+      {
+        "path": "/",
+        "status": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/app.js",
+        "status": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true,
+        "boundaryDiagnosticPresent": true
+      },
+      {
+        "path": "/oauth/client-metadata.json",
+        "status": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/auth/status",
+        "status": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/.dev.vars.example",
+        "status": 404,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/api/calls",
+        "status": 401,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      }
+    ]
+  },
+  "localValidation": {
+    "frontendTests": 10,
+    "frontend": "PASSED",
+    "dryRunBuild": "PASSED",
+    "secretlint": "PASSED",
+    "freshCandidateReview": "PASS"
+  },
+  "memberReauthorization": {
+    "authenticated": true,
+    "methodGrantPresent": true,
+    "remainingSeconds": 300,
+    "startEnabled": true,
+    "source": "In-app browser rendered call page"
+  },
+  "successfulCallResponse": {
+    "timestamp": "2026-11-05T04:37:45.501Z",
+    "status": 201,
+    "fields": [
+      "deadline",
+      "id",
+      "sdp"
+    ],
+    "unexpectedFieldCount": 0,
+    "types": {
+      "deadline": "number",
+      "id": "string",
+      "sdp": "string"
+    },
+    "sdpValid": true,
+    "cacheControl": "no-store",
+    "credentialFieldsAbsent": true
+  },
+  "actualMemberCall": {
+    "humanHeardMethodAndAnswer": true,
+    "status": "ended",
+    "endedAt": 1793853544330,
+    "expiresAt": 1796445544330,
+    "settlement": {
+      "billedSeconds": 68,
+      "remainingSeconds": 232
+    },
+    "transcriptItems": 6,
+    "userItems": 2,
+    "assistantItems": 4,
+    "pending": 0,
+    "failures": 0,
+    "summaryPresent": true,
+    "transcriptSha256": "a816bd74c2a8b1a53d37d2f04a07d293a26b91aece1a20389b5e0191cfba1d53",
+    "spokenMethodId": "MK-453"
+  }
+}

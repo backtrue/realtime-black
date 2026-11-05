@@ -212,3 +212,20 @@ fresh spec_evaluator 核對修正候選通過，提交 `2bef275e34ebc280c9a1f1fd
 結算、ECCAL 本通扣秒、剩餘額度、事件摘要、30 天期限、確認時間、累計扣秒及原始授予額度八項讀回全數一致。瀏覽器已顯示通話結束與摘要，保留 5 筆逐字項目。臨時 broker／preview 已停止，兩個連接埠及臨時憑證已清理
 
 新通話的正常掛斷與拒絕麥克風驗收接續 Issue #4；斷線及掛斷 404 的一般服務恢復接續 Issue #8、#9。去識別工具事件、雜湊、帳目及實際版本見 [正式語音證據](examples/production-voice-2026-11-05.json)
+
+## 重新授權與發證回應驗證
+
+第一位測試會員已重新完成個人方法庫授權，語音站顯示授權完成、剩餘 300 秒、開始通話按鈕可用
+
+提交 `46c0164111ae39d4d0d9fa137372e36cffec27bf` 已推送 main 並發布，新增成功發證回應的去識別 console 紀錄：固定允許的欄位名稱與型別、HTTP 狀態、cache-control、SDP 格式布林、未知欄位數及憑證欄位不存在布林。識別值、SDP 原文、deadline 數值及未知欄位名稱與值均排除
+
+新增測試注入識別值、SDP、時間、token 與未知欄位並確認未寫入紀錄，10 項前端測試、dry-run 建置、secretlint 及 fresh spec_evaluator 候選驗收通過
+
+- Deployment：`007fe466-751f-45fe-ae46-b46b2dd310c6`
+- Version：`24344d38-9a9a-40d0-9e26-4be28fd588c2`，100% 流量，tag `46c0164`
+- 正式 app.js 已包含此項驗證；三項後端 secret binding、兩項 origin 與模型設定均已核對
+- 首頁等四項公開入口回 200／no-store，私密設定範例回 404，匿名通話紀錄回 401；回應不含後端 secret
+
+真實成功通話已讀回 HTTP 201，欄位精確為 `deadline`、`id`、`sdp`，型別分別為 number、string、string；未知欄位為 0，SDP 格式與憑證欄位不存在檢查均為 true，cache-control 為 no-store，證據見 [發證回應驗證](examples/production-call-boundary-2026-11-05.json)
+
+使用者確認聽見方法與回答；語音逐字中說出 MK-453 並說明第一個檢查數字。此通正常掛斷後為 ended，扣 68 秒、剩餘 232 秒，6 筆逐字項目包含 2 筆會員與 4 筆助理，待轉寫及辨識失敗均為 0，摘要已產生；保存期限從服務端確認結束起 30 天。方法工具實際全文讀取與 ECCAL 帳目接續後端核對
