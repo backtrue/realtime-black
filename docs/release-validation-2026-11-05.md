@@ -384,3 +384,11 @@ Issue #17 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，兩筆正
 重新執行 `npm run example:handoff`，樣本與既有提交逐位元組相同。會員、問題摘要、已確認事實、AI 診斷、產出文件及待處理事項六欄，均已回對同次合成通話、目前版本摘要及三類成果，所有 sourceIds 可追溯
 
 2026-11-05 fresh spec_evaluator 獨立重算六欄、核對 SHA 與原始 JSON，重跑三項交接測試通過，Issue #25 判定 PASS。格式與樣本見 [真人顧問交接格式](handoff-format.md)
+
+## Issue #12 工具限制與失敗自動驗收
+
+實際 MemberEngine／ThinkWithBlackMcp 以受控會員及 MCP 傳輸模擬四種失敗，OpenAiRealtime 使用實際 gpt-realtime-2.1 產生完整語音答覆。工具 calls 逾時實測 10,007ms 後 abort；授權拒絕、pause_ad 及 gsc_query 均在外送前攔截
+
+逾時及授權拒絕後，模型明說未取得方法資料；停廣告答覆未完成，未授權 GSC／Meta 資料答覆拒絕讀取。四段皆有 RTP、completed 狀態、無錯誤事件，四通均確認結束；產品程式與公開 MCP 契約未變
+
+2026-11-05 fresh spec_evaluator 核對原始 JSON、實際類別、來源 SHA、四段完整答覆、拒絕與掛斷結果，Issue #12 判定 PASS。測試題與完整證據見 [工具限制與失敗驗收](tool-failure-validation-2026-11-05.md)
