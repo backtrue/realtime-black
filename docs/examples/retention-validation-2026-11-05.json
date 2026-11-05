@@ -1,0 +1,138 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #17 / docs/development-plan.md M2-03",
+  "productSpec": "docs/product-spec.md V0.3 / D10",
+  "issue": 17,
+  "productSourceCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+  "environment": {
+    "storage": "Cloudflare Workers runtime SQLite via runInDurableObject",
+    "externalServices": "controlled ECCAL, Realtime and document fixtures",
+    "clock": "MemberEngine dependencies.now controlled by fixture; record expiry derived from normal end flow",
+    "productionDataUsed": false
+  },
+  "validation": {
+    "commands": [
+      "npm run typecheck",
+      "npx --no-install vitest run test/retention.test.ts test/storage.test.ts --reporter=verbose"
+    ],
+    "targetedTestsPassed": 4,
+    "typecheck": "PASS",
+    "testFileSha256": "3dbce22923929e3e527a6754bc21c87edde4cbdcde5ca40ded0384142127f82d",
+    "fullCheck": {
+      "command": "npm run check",
+      "typecheck": "PASS",
+      "workersTestsPassed": 146,
+      "frontendTestsPassed": 11,
+      "nativeRuntimeTestsPassed": 2,
+      "wranglerDryRun": "PASS"
+    }
+  },
+  "cases": [
+    {
+      "path": "list",
+      "storage": "Cloudflare Workers SQLite runtime",
+      "externalServices": "controlled fixtures",
+      "older": {
+        "createdAt": 1793865099076,
+        "endedAt": 1793865100076,
+        "expiresAt": 1796457100076
+      },
+      "newer": {
+        "createdAt": 1793951500076,
+        "endedAt": 1793951501076,
+        "expiresAt": 1796543501076
+      },
+      "before": {
+        "at": 1796457100075,
+        "listCount": 2,
+        "olderReadable": true,
+        "newerReadable": true,
+        "storedCount": 2
+      },
+      "after": {
+        "at": 1796457100076,
+        "listCount": 1,
+        "olderDirectStatus": 404,
+        "newerReadable": true,
+        "physicalBeforeCount": 2,
+        "physicalAfterCount": 1,
+        "expiredBodyAbsent": true,
+        "expiredSummaryAbsent": true,
+        "allStorageRowsChecked": true,
+        "newerUnchanged": true,
+        "nextAlarmAt": 1796457100076
+      }
+    },
+    {
+      "path": "direct",
+      "storage": "Cloudflare Workers SQLite runtime",
+      "externalServices": "controlled fixtures",
+      "older": {
+        "createdAt": 1793865099182,
+        "endedAt": 1793865100182,
+        "expiresAt": 1796457100182
+      },
+      "newer": {
+        "createdAt": 1793951500182,
+        "endedAt": 1793951501182,
+        "expiresAt": 1796543501182
+      },
+      "before": {
+        "at": 1796457100181,
+        "listCount": 2,
+        "olderReadable": true,
+        "newerReadable": true,
+        "storedCount": 2
+      },
+      "after": {
+        "at": 1796457100182,
+        "listCount": 1,
+        "olderDirectStatus": 404,
+        "newerReadable": true,
+        "physicalBeforeCount": 2,
+        "physicalAfterCount": 1,
+        "expiredBodyAbsent": true,
+        "expiredSummaryAbsent": true,
+        "allStorageRowsChecked": true,
+        "newerUnchanged": true,
+        "nextAlarmAt": 1796457100182
+      }
+    },
+    {
+      "path": "alarm",
+      "storage": "Cloudflare Workers SQLite runtime",
+      "externalServices": "controlled fixtures",
+      "older": {
+        "createdAt": 1793865099190,
+        "endedAt": 1793865100190,
+        "expiresAt": 1796457100190
+      },
+      "newer": {
+        "createdAt": 1793951500190,
+        "endedAt": 1793951501190,
+        "expiresAt": 1796543501190
+      },
+      "before": {
+        "at": 1796457100189,
+        "listCount": 2,
+        "olderReadable": true,
+        "newerReadable": true,
+        "storedCount": 2
+      },
+      "after": {
+        "at": 1796457100190,
+        "listCount": 1,
+        "olderDirectStatus": 404,
+        "newerReadable": true,
+        "physicalBeforeCount": 2,
+        "physicalAfterCount": 1,
+        "expiredBodyAbsent": true,
+        "expiredSummaryAbsent": true,
+        "allStorageRowsChecked": true,
+        "newerUnchanged": true,
+        "nextAlarmAt": 1796543501190
+      }
+    }
+  ]
+}

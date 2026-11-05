@@ -352,3 +352,21 @@ Issue #8 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，逐項核�
 臨時 preview、broker、8806／8807 連接埠、FIFO 與暫存憑證皆已清理。實際事件、截止後探測、帳目、新憑證拒絕與瀏覽器證據見 [後端截止正式證據](examples/production-cutoff-2026-11-05.json)
 
 Issue #7 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，截止、額度公式、原連線、新憑證拒絕、正式帳目、瀏覽器與清理逐項核對，判定 PASS
+
+## Issue #17 逐字稿與摘要 30 天保存自動驗收
+
+使用與正式 source `4d9d3a934b56da003c53b9e5d4c23143af13d726` 相同的 MemberEngine，在 Cloudflare Workers SQLite runtime 內執行；ECCAL、Realtime 與文件產出使用受控測試回應，時間由 MemberEngine 的時鐘注入控制
+
+每個案例均經正常開始、音訊事件、服務端確認結束及產生摘要，建立間隔一天的兩筆紀錄。保存期限由各筆 endedAt 加 30 天產生，未直接改寫 expiresAt；在舊紀錄到期前 1ms，兩筆逐字稿及摘要均可讀取，儲存端有兩筆紀錄
+
+| 到期時先執行的路徑 | 到期紀錄 | 未到期紀錄 | SQLite 清除結果 |
+|---|---|---|---|
+| 清單讀取 | 清單移除，直接讀取 404 | 仍可讀取，內容完全相同 | 紀錄數 2 → 1，全部儲存列無到期正文及摘要 ID |
+| 直接讀取 | 回 404，清單移除 | 仍可讀取，內容完全相同 | 紀錄數 2 → 1，全部儲存列無到期正文及摘要 ID |
+| 排程清除 alarm | 清單移除，直接讀取 404 | 仍可讀取，內容完全相同 | 紀錄數 2 → 1，下次 alarm 對準未到期紀錄 |
+
+三個新案例及既有 SQLite 儲存抽查共 4 項通過。完整 `npm run check` 通過型別、146 項 Workers、11 項前端、2 項原生服務連線及 dry-run 建置；未修改產品程式與正式資料
+
+測試位於 [retention.test.ts](../test/retention.test.ts)，原始輸出擷取的時間、存取與清除結果見 [30 天保存驗收證據](examples/retention-validation-2026-11-05.json)
+
+Issue #17 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，兩筆正常建立紀錄、期前與到期邊界、三條清除路徑、儲存列及未到期紀錄逐項核對，判定 PASS
