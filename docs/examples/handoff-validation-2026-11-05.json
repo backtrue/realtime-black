@@ -1,0 +1,26 @@
+{
+  "observedDate": "2026-11-05",
+  "spec": "GitHub issue #25 / M2-11",
+  "sourceCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+  "caseType": "synthetic",
+  "command": "npm run example:handoff",
+  "sampleFile": "docs/examples/handoff-consultation.json",
+  "sampleSha256": "7a6d7801eb96ccf15561be15880250977125534326fc5768ae3e48571b6e187a",
+  "checks": {
+    "sixFields": true,
+    "memberMatches": true,
+    "problemMatchesCurrentSummary": true,
+    "confirmedFactsMatch": true,
+    "aiDiagnosisMatches": true,
+    "currentDocumentsMatch": true,
+    "pendingQuestionsMatch": true,
+    "allSourceIdsTraceable": true
+  },
+  "fullCheck": {
+    "workers": 146,
+    "frontend": 11,
+    "nativeRuntime": 2,
+    "typecheck": "PASS",
+    "dryRunBuild": "PASS"
+  }
+}
