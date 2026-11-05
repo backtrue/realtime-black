@@ -23,6 +23,19 @@ async function api(path, init = {}) {
   const response = await fetch(path, { ...init, credentials: "same-origin", cache: "no-store" });
   const data = await response.json();
   if (!response.ok) throw new Error(errors[data.error] ?? "目前無法完成操作，請稍後再試");
+  if (path === "/api/calls" && init.method === "POST") {
+    const expected = ["deadline", "id", "sdp"];
+    const fields = data && typeof data === "object" ? Object.keys(data) : [];
+    console.info("call_start_response_boundary", JSON.stringify({
+      status: response.status,
+      fields: fields.filter(field => expected.includes(field)).sort(),
+      unexpectedFieldCount: fields.filter(field => !expected.includes(field)).length,
+      types: Object.fromEntries(expected.map(field => [field, typeof data?.[field]])),
+      sdpValid: typeof data?.sdp === "string" && data.sdp.startsWith("v=0"),
+      cacheControl: response.headers.get("cache-control"),
+      credentialFieldsAbsent: !fields.some(field => /key|secret|token|authoriz|callid/i.test(field)),
+    }));
+  }
   return data;
 }
 function stopMedia() {

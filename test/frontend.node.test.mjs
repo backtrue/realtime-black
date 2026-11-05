@@ -17,7 +17,7 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
     pause() {} async play() {}
   }
   const elements = new Map(["start", "stop", "speaker", "membership", "call-status", "notice", "records", "refresh", "login", "logout", "mcp-connect", "mcp-revoke"].map(id => [id, new Element()]));
-  const requests = [], connections = [], intervals = [];
+  const requests = [], connections = [], intervals = [], logs = [];
   let authStatus = authOptions.status ?? { authenticated: true, mcpAuthorized: true };
   class Peer {
     connectionState = "new"; remoteDescriptions = [];
@@ -29,6 +29,7 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
     close() { this.connectionState = "closed"; }
   }
   const context = vm.createContext({
+    console: { info: (...args) => logs.push(args) },
     document: { getElementById: id => elements.get(id), createElement: () => new Element() },
     navigator: { mediaDevices: { getUserMedia } }, RTCPeerConnection: Peer, crypto: { randomUUID },
     window: { addEventListener() {}, location: { hash: "" } }, URLSearchParams, Date, setInterval: callback => { intervals.push(callback); return intervals.length; }, clearInterval() {},
@@ -43,13 +44,34 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
       else if (path.endsWith("/end")) data = authOptions.endResponse ? await authOptions.endResponse() : { status: "ended" };
       else if (path.endsWith("/deliveries")) data = deliveryResponse ?? { job: { state: "pending" } };
       else data = recordsResponse;
-      return { ok: true, json: async () => data };
+      return { ok: true, status: path === "/api/calls" && init?.method === "POST" ? 201 : 200, headers: new Headers({ "cache-control": "no-store" }), json: async () => data };
     },
   });
   vm.runInContext(source, context);
   await flush();
-  return { elements, requests, connections, click: id => elements.get(id).listeners.get("click")(), tick: () => { for (const callback of intervals) callback(); } };
+  return { elements, requests, connections, logs, click: id => elements.get(id).listeners.get("click")(), tick: () => { for (const callback of intervals) callback(); } };
 }
+
+test("發證回應只記錄欄位統計，識別值、SDP、未知欄位與憑證不進紀錄", async () => {
+  for (const extra of [{}, { access_token: "private-token-value", "private-field-name": "private-field-value" }]) {
+    const p = await page(async () => audio(), async () => ({ id: "private-call-identifier", sdp: "v=0\r\nprivate-sdp-value", deadline: 1790000000123, ...extra }));
+    assert.equal(p.logs.length, 0);
+    await p.click("start");
+    assert.equal(p.logs.length, 1);
+    assert.equal(p.logs[0][0], "call_start_response_boundary");
+    const audit = JSON.parse(p.logs[0][1]);
+    assert.deepEqual(audit.fields, ["deadline", "id", "sdp"]);
+    assert.deepEqual(audit.types, { deadline: "number", id: "string", sdp: "string" });
+    assert.equal(audit.status, 201);
+    assert.equal(audit.cacheControl, "no-store");
+    assert.equal(audit.sdpValid, true);
+    assert.equal(audit.unexpectedFieldCount, Object.keys(extra).length);
+    assert.equal(audit.credentialFieldsAbsent, !Object.keys(extra).length);
+    assert.doesNotMatch(JSON.stringify(p.logs), /private-|1790000000123|access_token/);
+    await p.click("stop");
+    assert.equal(p.logs.length, 1);
+  }
+});
 
 test("取消等待中的麥克風後重撥，舊授權不建立通話或關掉新麥克風", async () => {
   const first = deferred(), second = deferred();
