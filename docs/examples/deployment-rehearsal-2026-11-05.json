@@ -1,0 +1,331 @@
+{
+  "observedAt": "2026-11-05T09:52:39.899Z",
+  "issue": 29,
+  "environment": "Isolated temporary Cloudflare Workers test service",
+  "sourceCommit": "41b7231d9ca3345d688bb41598ac3da80c7237b1",
+  "testWorker": "realtime-black-check-0ac3a484",
+  "productionWorker": "realtime-black",
+  "productionBindingsReused": false,
+  "productionSecretsUsed": false,
+  "productionCallsCreated": false,
+  "productionChanges": false,
+  "steps": [
+    {
+      "name": "candidate-public-readback",
+      "assets": [
+        {
+          "asset": "index.html",
+          "status": 200,
+          "sha256": "4731bdb0e2f14586b2813277bd5db34ff92297b793dbbda39539bc517baa3f4c",
+          "matchesSource": true
+        },
+        {
+          "asset": "app.js",
+          "status": 200,
+          "sha256": "409587e63c78843ff9436376667f205ef3f0ff862250af4c80d5073c1bbd0c00",
+          "matchesSource": true
+        },
+        {
+          "asset": "style.css",
+          "status": 200,
+          "sha256": "84eec0bcefa60574db0aef54c247b7bce9db7b29f360f71a258b9eb13f135bcd",
+          "matchesSource": true
+        }
+      ],
+      "isolatedEccalRequest": {
+        "status": 503,
+        "error": "ECCAL_NOT_CONFIGURED"
+      }
+    },
+    {
+      "name": "alternate-public-readback",
+      "assets": [
+        {
+          "asset": "index.html",
+          "status": 200,
+          "sha256": "4731bdb0e2f14586b2813277bd5db34ff92297b793dbbda39539bc517baa3f4c",
+          "matchesSource": true
+        },
+        {
+          "asset": "app.js",
+          "status": 200,
+          "sha256": "3d8bd51ba8ab3a5d54e781999283b04778559ca51608eb2f81d157f65a1b3be8",
+          "matchesSource": true
+        },
+        {
+          "asset": "style.css",
+          "status": 200,
+          "sha256": "84eec0bcefa60574db0aef54c247b7bce9db7b29f360f71a258b9eb13f135bcd",
+          "matchesSource": true
+        }
+      ],
+      "isolatedEccalRequest": {
+        "status": 503,
+        "error": "ECCAL_NOT_CONFIGURED"
+      }
+    },
+    {
+      "name": "restored-public-readback",
+      "assets": [
+        {
+          "asset": "index.html",
+          "status": 200,
+          "sha256": "4731bdb0e2f14586b2813277bd5db34ff92297b793dbbda39539bc517baa3f4c",
+          "matchesSource": true
+        },
+        {
+          "asset": "app.js",
+          "status": 200,
+          "sha256": "409587e63c78843ff9436376667f205ef3f0ff862250af4c80d5073c1bbd0c00",
+          "matchesSource": true
+        },
+        {
+          "asset": "style.css",
+          "status": 200,
+          "sha256": "84eec0bcefa60574db0aef54c247b7bce9db7b29f360f71a258b9eb13f135bcd",
+          "matchesSource": true
+        }
+      ],
+      "isolatedEccalRequest": {
+        "status": 503,
+        "error": "ECCAL_NOT_CONFIGURED"
+      }
+    }
+  ],
+  "productionBefore": {
+    "deploymentId": "5a0c9583-4022-4449-8c16-1b33e312fbd7",
+    "versions": [
+      {
+        "version_id": "663f8503-6e3f-4f7b-89ee-c562b47eab66",
+        "percentage": 100
+      }
+    ]
+  },
+  "packageLockSha256": "191f51f3af0107d9eaeb58ffbf67c07fbac8ab4a13aa1733d062c229d0874375",
+  "npmCi": "PASS",
+  "wranglerVersion": "4.157.0",
+  "reproducibleBuild": {
+    "sha256": "1ffb15a10e3b2d7fc26a95264f4a718d4960892d731343bf6c692c03028c9199",
+    "attempts": 2,
+    "equal": true
+  },
+  "testOrigin": "https://realtime-black-check-0ac3a484.backtrue.workers.dev",
+  "candidate": {
+    "deploymentId": "51a70709-2af4-493f-ab4f-e4a064571cf9",
+    "id": "52f79541-5133-4a5c-836d-5ae555e73925",
+    "tag": "41b7231",
+    "scriptEtag": "187d1c3d4bd626bab303c4112b1b2309c9545730bc0eb60a725a560ce697cc7d",
+    "migrationTag": "v2",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace",
+        "className": "AuthVault"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace",
+        "className": "CallCutoff"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace",
+        "className": "MemberRoom"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text"
+      }
+    ],
+    "trafficPercentage": 100
+  },
+  "alternate": {
+    "sourceCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+    "deploymentId": "17c6bb21-5c01-4af7-bbcd-9b67fee9f553",
+    "id": "5fa70901-330f-4b13-b75a-98b03e3a4bc1",
+    "tag": "4d9d3a9",
+    "scriptEtag": "be0d91de42f6cefba152cb9106cd8a4e190db9fb3e2b634be9aee2d92195a743",
+    "migrationTag": "v2",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace",
+        "className": "AuthVault"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace",
+        "className": "CallCutoff"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace",
+        "className": "MemberRoom"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text"
+      }
+    ],
+    "trafficPercentage": 100
+  },
+  "restored": {
+    "deploymentId": "2ae35d5e-25e4-452f-830c-5c68f95df677",
+    "id": "52f79541-5133-4a5c-836d-5ae555e73925",
+    "tag": "41b7231",
+    "scriptEtag": "187d1c3d4bd626bab303c4112b1b2309c9545730bc0eb60a725a560ce697cc7d",
+    "migrationTag": "v2",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace",
+        "className": "AuthVault"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace",
+        "className": "CallCutoff"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace",
+        "className": "MemberRoom"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text"
+      }
+    ],
+    "trafficPercentage": 100,
+    "matchesCandidate": true
+  },
+  "testEnvironmentPassed": true,
+  "testWorkerRemoved": true,
+  "productionAfter": {
+    "deploymentId": "5a0c9583-4022-4449-8c16-1b33e312fbd7",
+    "versions": [
+      {
+        "version_id": "663f8503-6e3f-4f7b-89ee-c562b47eab66",
+        "percentage": 100
+      }
+    ]
+  },
+  "productionUnchanged": true,
+  "issueComplete": false,
+  "remaining": "Production short web call and artifact spot-check on the same final release require an authorized member with available quota; existing three test members have zero seconds",
+  "productionScriptEtag": "187d1c3d4bd626bab303c4112b1b2309c9545730bc0eb60a725a560ce697cc7d",
+  "testAndProductionScriptEtagMatch": true,
+  "testConfiguration": {
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "realtime-black-check-0ac3a484",
+    "main": "src/worker.ts",
+    "compatibility_date": "2026-11-04",
+    "compatibility_flags": [
+      "nodejs_compat",
+      "global_fetch_strictly_public"
+    ],
+    "workers_dev": true,
+    "preview_urls": false,
+    "routes": [],
+    "vars": {
+      "APP_ORIGIN": "https://fixture.invalid",
+      "ECCAL_ORIGIN": "",
+      "REALTIME_MODEL": "gpt-realtime-2.1",
+      "TEXT_MODEL": "gpt-6.1-sol"
+    },
+    "assets": {
+      "directory": "./public",
+      "binding": "ASSETS",
+      "run_worker_first": true
+    },
+    "durable_objects": {
+      "bindings": [
+        {
+          "name": "MEMBERS",
+          "class_name": "MemberRoom"
+        },
+        {
+          "name": "CUTOFFS",
+          "class_name": "CallCutoff"
+        },
+        {
+          "name": "AUTH",
+          "class_name": "AuthVault"
+        }
+      ]
+    },
+    "migrations": [
+      {
+        "tag": "v1",
+        "new_sqlite_classes": [
+          "MemberRoom",
+          "CallCutoff"
+        ]
+      },
+      {
+        "tag": "v2",
+        "new_sqlite_classes": [
+          "AuthVault"
+        ]
+      }
+    ],
+    "observability": {
+      "enabled": false
+    }
+  },
+  "helperSha256": "6df1c7d750aa768bb1ad22ece4e0b980c350080e64ecf51e854f495cda5748e8",
+  "temporaryCheckoutRemoved": true,
+  "doNamespaceIsolation": {
+    "testNamespaceCount": 3,
+    "productionNamespaceOverlap": 0,
+    "verifiedAgainstProductionVersion": "663f8503-6e3f-4f7b-89ee-c562b47eab66"
+  }
+}

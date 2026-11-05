@@ -436,3 +436,11 @@ A 的 1000／200／2 推得加購至訂單 1%，先驗證追蹤再查結帳；B 
 實際 app.js 的前端測試逐一開啟三類 hash，只展開目前會員回應中的指定文件；竄改文件 ID 無內容並提示錯誤，竄改通話 ID 後端回 404。讀取使用 same-origin、no-store，三次登入交換與一次撤銷的存取矩陣由 toMatchFileSnapshot 直接寫出
 
 完整 npm run check 通過型別、156 Workers、14 前端、3 原生連線及 dry-run。2026-11-05 fresh spec_evaluator 依 Issue #21 獨立重跑受控 HTTP／SQLite、前端、型別與 secretlint，判定 PASS。版本、環境與三類存取紀錄見 [成果連結驗收](result-links-validation-2026-11-05.md)
+
+## Issue #29 Cloudflare 自動發布與回復演練
+
+使用 source 41b7231 的獨立 git archive 與 npm ci，Wrangler 4.157.0 連續兩次建置的 bundle SHA 完全相同。在新建且無正式 secret／route 的測試 Worker 發布候選、改發已知 4d9d3a9，再以 wrangler rollback 指定候選 version；三階段共九個公開檔案讀回皆 200／no-store 且與各自 source 完全相符
+
+候選與回復後為同一 version 52f79541-5133-4a5c-836d-5ae555e73925，script ETag 亦與正式 version 663f8503 相同。三個測試 DO namespace 與正式交集為 0，測試服務已移除並讀回 404，臨時目錄已清理；正式 deployment 5a0c9583 與版本流量於演練前後完全不變
+
+Issue #29 保持開啟，待有可用測試額度的已授權會員，在同一正式版完成網頁短通話、額度及成果存取抽查。完整環境、命令與版本見 [測試發布與回復演練](deployment-rehearsal-2026-11-05.md)
