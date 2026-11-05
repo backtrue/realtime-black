@@ -1,0 +1,343 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #5 / docs/development-plan.md M0-05",
+  "productSpec": "docs/product-spec.md V0.3",
+  "issue": 5,
+  "environment": {
+    "appOrigin": "https://call.thinkwithblack.com",
+    "eccalOrigin": "https://eccal.thinkwithblack.com",
+    "productionCommit": "46c0164111ae39d4d0d9fa137372e36cffec27bf",
+    "versionId": "24344d38-9a9a-40d0-9e26-4be28fd588c2",
+    "deploymentId": "007fe466-751f-45fe-ae46-b46b2dd310c6",
+    "trafficPercent": 100
+  },
+  "execution": {
+    "operatorInitiated": true,
+    "memberLabels": [
+      "A",
+      "B",
+      "C"
+    ],
+    "testedMember": "C",
+    "transport": "Node WebRTC peer, werift 0.26.0",
+    "actualProviderAudio": true,
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "clock": "actual server and provider event timestamps",
+    "firstEnd": "normal MemberRoom.stop after actual billable duration reaches 119100ms",
+    "secondEnd": "existing production CallCutoff, without client countdown or operator stop",
+    "databaseQueries": "SELECT only; service performs normal reservations and settlements",
+    "quotaReset": false,
+    "eventInjection": false
+  },
+  "helperValidation": {
+    "freshPreflightReview": "PASS",
+    "isolatedTestsPassed": 9,
+    "helperSha256": {
+      "worker.js": "0a40760527d449c185e424c0276f0ec03cd3d7abd2c6b738aeb662927f174e50",
+      "broker.mjs": "05b8315144cd122a8160016618c115354b93b4d5d1f0a5502b40ede65535cd5f",
+      "math.mjs": "50916c055b43182aabcdd95d6197d473b81704191adbd2ddc3e7f39ef06f0fed",
+      "peer.mjs": "19b567a29f22a83f430f252a5eadc194d331cb1c35290a0ac1293e6597364583"
+    }
+  },
+  "productionResult": {
+    "observedAt": "2026-11-05T05:58:14.370Z",
+    "baseline": {
+      "members": {
+        "A": {
+          "grantedSeconds": 300,
+          "billedSeconds": 68,
+          "reservedSeconds": 0,
+          "remainingSeconds": 232
+        },
+        "B": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        },
+        "C": {
+          "grantedSeconds": 300,
+          "billedSeconds": 0,
+          "reservedSeconds": 0,
+          "remainingSeconds": 300
+        }
+      },
+      "session": {
+        "active": 1,
+        "newestCreatedAt": "2026-11-05T05:12:00.600Z"
+      },
+      "unsettled": 0
+    },
+    "afterRelogin": {
+      "members": {
+        "A": {
+          "grantedSeconds": 300,
+          "billedSeconds": 68,
+          "reservedSeconds": 0,
+          "remainingSeconds": 232
+        },
+        "B": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        },
+        "C": {
+          "grantedSeconds": 300,
+          "billedSeconds": 120,
+          "reservedSeconds": 0,
+          "remainingSeconds": 180
+        }
+      },
+      "session": {
+        "active": 1,
+        "newestCreatedAt": "2026-11-05T05:54:18.775Z"
+      },
+      "unsettled": 0
+    },
+    "first": {
+      "observedAt": "2026-11-05T05:53:06.381Z",
+      "index": 1,
+      "operatorInitiated": true,
+      "client": "werift 0.26.0",
+      "microphoneUsed": false,
+      "audioPersisted": false,
+      "audioSource": "Realtime model-generated output over connected WebRTC",
+      "status": "ended",
+      "createdAt": 1793857846664,
+      "endedAt": 1793857972626,
+      "expiresAt": 1796449972626,
+      "settlement": {
+        "billedSeconds": 120,
+        "remainingSeconds": 180
+      },
+      "ledger": {
+        "reserved_seconds": 300,
+        "settled_at": "2026-11-05T05:52:54.047Z",
+        "billed_seconds": 120,
+        "remaining_seconds": 180,
+        "events_digest": "71bde7e3c43d6a100862b0cb393352f2ba1b46f009489fd8138d2039dd2b5500"
+      },
+      "math": {
+        "elapsedMs": 119320,
+        "toolWaitMs": 0,
+        "billableMs": 119320,
+        "expectedBilledSeconds": 120,
+        "connected": true
+      },
+      "peer": {
+        "state": "connected",
+        "rtpPackets": 6027,
+        "dataChannelOpened": true,
+        "outputAudioStarted": true
+      },
+      "events": [
+        {
+          "type": "reserved",
+          "at": 1793857846664
+        },
+        {
+          "type": "connected",
+          "at": 1793857853306
+        },
+        {
+          "type": "ended",
+          "at": 1793857972626
+        }
+      ],
+      "tools": [],
+      "after": {
+        "members": {
+          "A": {
+            "grantedSeconds": 300,
+            "billedSeconds": 68,
+            "reservedSeconds": 0,
+            "remainingSeconds": 232
+          },
+          "B": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          },
+          "C": {
+            "grantedSeconds": 300,
+            "billedSeconds": 120,
+            "reservedSeconds": 0,
+            "remainingSeconds": 180
+          }
+        },
+        "session": {
+          "active": 1,
+          "newestCreatedAt": "2026-11-05T05:12:00.600Z"
+        },
+        "unsettled": 0
+      },
+      "checks": {
+        "ended": true,
+        "actualAudioStarted": true,
+        "actualWebRtcMedia": true,
+        "targetBilled": true,
+        "mathMatches": true,
+        "eccalBilledMatches": true,
+        "eccalRemainingMatches": true,
+        "lifetimeMatches": true,
+        "grantUnchanged": true,
+        "otherMembersUnchanged": true,
+        "eventDigestMatches": true,
+        "retentionFromEnd": true
+      },
+      "ok": true
+    },
+    "second": {
+      "observedAt": "2026-11-05T05:58:14.368Z",
+      "index": 2,
+      "operatorInitiated": true,
+      "client": "werift 0.26.0",
+      "microphoneUsed": false,
+      "audioPersisted": false,
+      "audioSource": "Realtime model-generated output over connected WebRTC",
+      "status": "ended",
+      "createdAt": 1793858096400,
+      "endedAt": 1793858281939,
+      "expiresAt": 1796450281939,
+      "settlement": {
+        "billedSeconds": 180,
+        "remainingSeconds": 0
+      },
+      "ledger": {
+        "reserved_seconds": 180,
+        "settled_at": "2026-11-05T05:58:02.619Z",
+        "billed_seconds": 180,
+        "remaining_seconds": 0,
+        "events_digest": "d69e3959482fb07ed1a2cd5a19b9084802a9b99d1932af19b4b400e2c17f2f3c"
+      },
+      "math": {
+        "elapsedMs": 180154,
+        "toolWaitMs": 0,
+        "billableMs": 180154,
+        "expectedBilledSeconds": 180,
+        "connected": true
+      },
+      "peer": {
+        "state": "connected",
+        "rtpPackets": 9067,
+        "dataChannelOpened": true,
+        "outputAudioStarted": true
+      },
+      "events": [
+        {
+          "type": "reserved",
+          "at": 1793858096400
+        },
+        {
+          "type": "connected",
+          "at": 1793858101785
+        },
+        {
+          "type": "ended",
+          "at": 1793858281939
+        }
+      ],
+      "tools": [],
+      "after": {
+        "members": {
+          "A": {
+            "grantedSeconds": 300,
+            "billedSeconds": 68,
+            "reservedSeconds": 0,
+            "remainingSeconds": 232
+          },
+          "B": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          },
+          "C": {
+            "grantedSeconds": 300,
+            "billedSeconds": 300,
+            "reservedSeconds": 0,
+            "remainingSeconds": 0
+          }
+        },
+        "session": {
+          "active": 1,
+          "newestCreatedAt": "2026-11-05T05:54:18.775Z"
+        },
+        "unsettled": 0
+      },
+      "checks": {
+        "ended": true,
+        "actualAudioStarted": true,
+        "actualWebRtcMedia": true,
+        "targetBilled": true,
+        "mathMatches": true,
+        "eccalBilledMatches": true,
+        "eccalRemainingMatches": true,
+        "lifetimeMatches": true,
+        "grantUnchanged": true,
+        "otherMembersUnchanged": true,
+        "eventDigestMatches": true,
+        "retentionFromEnd": true,
+        "reloginVerified": true
+      },
+      "ok": true
+    },
+    "ok": true
+  },
+  "browserReadbacks": {
+    "baseline": {
+      "observedAt": "2026-11-05T05:46:42.215Z",
+      "source": "IAB live membership refresh",
+      "remainingSeconds": 300,
+      "methodGrantPresent": true,
+      "startEnabled": true,
+      "noCallRecords": true
+    },
+    "relogin": {
+      "observedAt": "2026-11-05T05:54:35.980Z",
+      "source": "IAB logout, SSO login and full reload",
+      "remainingSeconds": 180,
+      "methodGrantPresent": true,
+      "startEnabled": true
+    },
+    "zero": {
+      "observedAt": "2026-11-05T05:58:42.526Z",
+      "source": "IAB full reload AX readback and saved screenshot before logout",
+      "remainingSeconds": 0,
+      "methodGrantPresent": true,
+      "startDisabled": true,
+      "endedRecords": 2
+    },
+    "other": {
+      "observedAt": "2026-11-05T06:00:21.538Z",
+      "source": "IAB member A SSO login after C completed both calls",
+      "remainingSeconds": 232,
+      "methodGrantPresent": true,
+      "startEnabled": true
+    }
+  },
+  "cleanup": {
+    "temporarySecretFilesAbsent": true,
+    "fifoAbsent": true,
+    "previewListenerClosed": true,
+    "brokerListenerClosed": true
+  },
+  "independentAcceptance": {
+    "status": "PASS",
+    "date": "2026-11-05",
+    "reviewer": "fresh spec_evaluator",
+    "issueCompletionAllowed": true,
+    "requirements": [
+      "120 and 180 seconds debited across two calls",
+      "300 to 180 to 0 balance",
+      "logout, SSO login and full reload between calls",
+      "other members unchanged",
+      "each usage maps to its call and ECCAL ledger",
+      "versioned de-identified evidence"
+    ]
+  }
+}
