@@ -444,3 +444,13 @@ A 的 1000／200／2 推得加購至訂單 1%，先驗證追蹤再查結帳；B 
 候選與回復後為同一 version 52f79541-5133-4a5c-836d-5ae555e73925，script ETag 亦與正式 version 663f8503 相同。三個測試 DO namespace 與正式交集為 0，測試服務已移除並讀回 404，臨時目錄已清理；正式 deployment 5a0c9583 與版本流量於演練前後完全不變
 
 Issue #29 保持開啟，待有可用測試額度的已授權會員，在同一正式版完成網頁短通話、額度及成果存取抽查。完整環境、命令與版本見 [測試發布與回復演練](deployment-rehearsal-2026-11-05.md)
+
+## AI 小黑預設使用 ThinkWithBlack 方法
+
+依使用者更新，ECCAL 會員使用 AI 小黑時，預設由後端讀取 ThinkWithBlack MCP 的共用行銷方法，取消個人 MCP 同意與綁定步驟
+
+語音站提交 `de8ebf83d1fb71e347a67248f808e48f60f4cfa9`、MCP 提交 `5a3d5113c083e993f838c57264ba19853a7a7e51` 已推上 GitHub main 並正式發布。語音站 version `b8de17f6-35f5-4289-b406-41b12fb8ac17`、MCP version `3492642b-9bd0-41db-8013-22f38cf27d1e` 均讀回 100% 流量
+
+正式 `MCP_METHODS` 綁定與 `CallMethods` named handler 已核對，未使用會員憑證的正式 RPC 讀到四個工具、31 個入口、E03 與 MK-453 全文，私人工具、寫入與額外品牌欄位均拒絕。首頁及 app.js 與提交原檔一致，內建瀏覽器讀回既有登入、0 秒餘額與通話紀錄，MCP 授權及解除按鈕已移除
+
+語音站 169 Workers、14 前端、3 原生連線、型別及 dry-run；MCP 2,438 Vitest、46 Python、型別、scope、安全掃描及建置通過，fresh spec_evaluator 候選與證據驗收 PASS。本輪未使用正式額度、改動 ECCAL 或 migration，完整版本、資料流及去識別證據見 [內建方法驗證](default-methods-validation-2026-11-05.md)

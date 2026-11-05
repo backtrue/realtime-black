@@ -199,5 +199,148 @@
   "helperSha256": {
     "worker.ts": "51ec402827cbdbbdcfb59d1ca1801dc1b5a5425495999103bfb1a2191636082f",
     "run.mjs": "d660f0805c8c73932a21688a59fb97ad546d71df2859ec909be88f9ac9f4e390"
+  },
+  "production": {
+    "observedAt": "2026-11-05T11:16:26.956Z",
+    "voice": {
+      "commit": "de8ebf83d1fb71e347a67248f808e48f60f4cfa9",
+      "deploymentId": "14a421c2-d455-437f-a43a-e621f9c2a57e",
+      "versionId": "b8de17f6-35f5-4289-b406-41b12fb8ac17",
+      "percentage": 100,
+      "tag": "de8ebf8",
+      "scriptEtag": "2f801a6fb3e767bc25af3421a8a1a32e834f357baf694cd74fce3950774c1571",
+      "serviceBinding": {
+        "name": "MCP_METHODS",
+        "service": "thinkwithblack-mcp",
+        "entrypoint": "CallMethods"
+      },
+      "secretNames": [
+        "AUTH_VAULT_KEY",
+        "ECCAL_SERVICE_TOKEN",
+        "OPENAI_API_KEY"
+      ],
+      "migration": "v2 unchanged"
+    },
+    "mcp": {
+      "commit": "5a3d5113c083e993f838c57264ba19853a7a7e51",
+      "deploymentId": "53a12ce6-076d-4ed9-ba39-ee3fb49efbd5",
+      "versionId": "3492642b-9bd0-41db-8013-22f38cf27d1e",
+      "percentage": 100,
+      "scriptEtag": "777bf92bc755c7496b3bc66a395c581b6e9c46a0ca0a6468fb44fbb7886bdac6",
+      "namedHandler": {
+        "name": "CallMethods",
+        "handlers": [
+          "list",
+          "call"
+        ]
+      }
+    },
+    "rpc": {
+      "observedAt": "2026-11-05T11:11:35.256Z",
+      "destination": "Production thinkwithblack-mcp#CallMethods over Cloudflare Service Binding",
+      "productionMcpVersion": "3492642b-9bd0-41db-8013-22f38cf27d1e",
+      "httpStatus": 200,
+      "result": {
+        "tools": [
+          "thinkwithblack_entry_catalog",
+          "thinkwithblack_entry_read",
+          "thinkwithblack_marketing_skill_search",
+          "thinkwithblack_marketing_skill_read"
+        ],
+        "catalogEntries": 31,
+        "entry": "E03",
+        "method": {
+          "id": "MK-453",
+          "bytes": 18972,
+          "sha256": "6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe",
+          "digestVerified": true
+        },
+        "privateRejected": true,
+        "writeRejected": true,
+        "brandRejected": true,
+        "ok": true
+      },
+      "memberCredentialUsed": false,
+      "productionRecordCreated": false
+    },
+    "publicReadback": {
+      "observedAt": "2026-11-05T11:15:30.381Z",
+      "assets": [
+        {
+          "url": "/",
+          "status": 200,
+          "bytes": 1421,
+          "sha256": "f0b68215ba0970123cc23bb8703d2fb2ce574a029ccdcc293ae240618c48d0e5",
+          "matchesSource": true
+        },
+        {
+          "url": "/app.js",
+          "status": 200,
+          "bytes": 13087,
+          "sha256": "d67ac14d77269d1ef59b517c0bed71ce6c628234cab2cc9d94a8d18ac488e7f9",
+          "matchesSource": true
+        },
+        {
+          "url": "/style.css",
+          "status": 200,
+          "bytes": 1572,
+          "sha256": "84eec0bcefa60574db0aef54c247b7bce9db7b29f360f71a258b9eb13f135bcd",
+          "matchesSource": true
+        },
+        {
+          "url": "/auth/status",
+          "status": 200,
+          "cacheControl": "no-store",
+          "body": {
+            "authenticated": false
+          }
+        },
+        {
+          "url": "/api/calls",
+          "status": 401,
+          "cacheControl": "no-store"
+        }
+      ]
+    },
+    "additionalHttpChecks": [
+      {
+        "url": "https://call.thinkwithblack.com/oauth/client-metadata.json",
+        "status": 200,
+        "cacheControl": "no-store"
+      },
+      {
+        "url": "https://call.thinkwithblack.com/api/me",
+        "status": 401,
+        "cacheControl": "no-store"
+      },
+      {
+        "url": "https://mcp.thinkwithblack.com/.well-known/oauth-protected-resource/mcp",
+        "status": 200,
+        "cacheControl": null
+      },
+      {
+        "url": "https://mcp.thinkwithblack.com/mcp",
+        "status": 401,
+        "cacheControl": "no-store",
+        "oauthChallengePresent": true
+      }
+    ],
+    "browser": {
+      "observedAt": "2026-11-05T11:15:11.398Z",
+      "url": "https://call.thinkwithblack.com/",
+      "individualMcpControls": [],
+      "logoutVisible": true,
+      "balanceText": "剩餘通話時間：0 分 0 秒",
+      "recordSummaryVisible": true,
+      "existingBalanceUnchanged": true
+    },
+    "cleanup": {
+      "remotePreviewStopped": true,
+      "port8825Closed": true,
+      "ephemeralGateRemoved": true
+    },
+    "productionVoiceCallCreated": false,
+    "productionQuotaUsed": false,
+    "eccalModified": false
   }
 }

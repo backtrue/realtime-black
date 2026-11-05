@@ -22,15 +22,17 @@
 
 `MemberEngine.get`、`list`、`alarm` 都檢查到期時間，清除 `call:` 即涵蓋逐字稿、摘要、成果、工具副本與交付資訊。程式位置為 `src/member-engine.ts`、`src/worker.ts`；型別位於 `src/contracts.ts`
 
+2026-11-05 內建方法更新後，通話與工具呼叫不再讀取個人 MCP grant。AUTH 儲存及舊 OAuth 端點保留相容與既有到期清理，未新增或刪除正式會員憑證
+
 ## 記憶體與對外傳遞
 
 | 位置 | 實際資料流 |
 |---|---|
 | 瀏覽器 | 麥克風直接經 WebRTC 傳至提供者；掛斷關閉音軌，程式沒有 MediaRecorder、音檔下載或 localStorage 寫入 |
 | MemberRoom 記憶體 | sideband socket、尚未確認播放完成的回答及轉寫等待狀態；插話時取回的 PCM 依可信截斷點裁切，轉寫成功、失敗或逾時即清除，未寫入 SQLite |
-| 服務呼叫記憶體 | 登入 Cookie、Authorization、OpenAI 金鑰與短效憑證供當次後端請求使用；個人 MCP bearer 只在 AuthVault 解密及呼叫，其他模組使用授權識別值 |
+| 服務呼叫記憶體 | 登入 Cookie、Authorization、OpenAI 金鑰與短效憑證供當次後端請求使用；共用方法透過私有 Service Binding 呼叫，不傳會員 MCP bearer；舊 OAuth 相容端點由 AuthVault 管理原憑證 |
 | OpenAI | Realtime 音訊及設定；文件請求包含逐字稿、工具內容及缺失識別值，設定 `store: false` |
-| MCP | 個別會員 Bearer 與允許工具的參數 |
+| MCP | 共用方法透過 `MCP_METHODS` 傳遞四個允許工具名稱及方法參數，不傳會員憑證；拒絕私人品牌、帳戶、GSC／廣告及寫入參數 |
 | 交付 adapter | 該筆工作、核對證據、會員驗證後才能開啟的成果連結；資料範圍見 `src/contracts.ts` |
 
 登入與授權資料不包含通話正文，OAuth 密文使用獨立金鑰與會員／用途驗證資料。正式外送範圍與提供者保存政策見下方抽查紀錄
@@ -60,6 +62,12 @@
 
 Realtime 音訊與插話前綴轉寫交給 OpenAI，文件請求使用 store:false；依 [OpenAI Data controls](https://developers.openai.com/api/docs/guides/your-data)，Realtime 的 application state 為 None，濫用監控預設最長 30 天並有官方所列例外。組織個別保存覆寫設定記為 null，沒有已取得的覆寫證據
 
-MCP 收到會員授權與模型產生的方法參數，參數可能包含模型帶入的對話文字；ECCAL 僅收到登入與用量事件；正式版沒有 DELIVERY binding，尚未對 Email 或 LINE 寄送本產品成果
+本次儲存抽查版本的 MCP 收到會員授權與模型產生的方法參數，參數可能包含模型帶入的對話文字；ECCAL 僅收到登入與用量事件；該版本沒有 DELIVERY binding，尚未對 Email 或 LINE 寄送本產品成果
 
 設定原始值、SHA、儲存查詢及到期前後證據見 [儲存抽查 JSON](examples/storage-validation-2026-11-05.json)
+
+## 2026-11-05 內建方法正式設定更新
+
+語音站 source `de8ebf8`、Cloudflare version `b8de17f6-35f5-4289-b406-41b12fb8ac17` 已讀回私有 `MCP_METHODS → thinkwithblack-mcp#CallMethods`，其餘 DO、secret binding 與 migration v2 保留。共用方法參數可能含模型從對話取得的搜尋文字；方法服務不接收會員身分或私人資料來源設定，也不寫入帳戶、品牌或 OAuth 儲存
+
+實際兩服務 SQLite／RPC 與正式 MCP 讀回證據見 [內建行銷方法驗證](default-methods-validation-2026-11-05.md)

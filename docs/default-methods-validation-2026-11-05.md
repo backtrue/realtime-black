@@ -28,3 +28,18 @@
 兩服務原生驗證載入實際語音及 MCP bundle，ECCAL 身分／額度與 Realtime 提供者使用受控 fixture。OpenAI 配置查核不建立提供者通話、不保存短效憑證、不產生音訊。正式會員額度與紀錄未改動
 
 完整回應、模型、版本基準、source／bundle SHA 及 runtime 清理見 [驗證 JSON](examples/default-methods-validation-2026-11-05.json)
+
+## 正式發布與讀回
+
+| 服務 | Git main 提交 | Cloudflare version | Deployment／流量 |
+|---|---|---|---|
+| 語音站 | `de8ebf83d1fb71e347a67248f808e48f60f4cfa9` | `b8de17f6-35f5-4289-b406-41b12fb8ac17` | `14a421c2-d455-437f-a43a-e621f9c2a57e`／100% |
+| ThinkWithBlack MCP | `5a3d5113c083e993f838c57264ba19853a7a7e51` | `3492642b-9bd0-41db-8013-22f38cf27d1e` | `53a12ce6-076d-4ed9-ba39-ee3fb49efbd5`／100% |
+
+MCP 依既有 `scripts/deploy-production.mjs` 完成安裝、scope、來源、型別、完整測試、安全掃描與建置後發布。正式 named handler 已讀回 `CallMethods.list`／`call`；語音站正式設定已讀回 `MCP_METHODS → thinkwithblack-mcp#CallMethods`，三個既有後端 secret binding 與 migration v2 保留
+
+Cloudflare remote preview 透過 Service Binding 呼叫已發布的 MCP，未使用會員憑證，實際讀回四個工具、31 個入口、E03 與 MK-453 全文。全文 18,972 bytes、SHA-256 `6e778afe85d29536369790d80aedec25392a5563d4290716839816e9b81b6cfe`，重新計算相符；私人工具、寫入及 `brand_key` 均拒絕。preview 已停止，8825 埠關閉，臨時 gate 已清除
+
+正式首頁、app.js、style.css 與提交原檔逐位元組相同。匿名 `/auth/status` 為 200／authenticated=false，會員及通話 API 為 401；公開 MCP metadata 為 200，匿名 `/mcp` 維持 401 與 OAuth challenge
+
+內建瀏覽器重新整理後，會員仍登入、餘額維持 0 秒、既有通話紀錄可讀，頁面沒有個人 MCP 授權、綁定或解除按鈕。本輪未建立正式語音通話、使用正式額度或改動 ECCAL

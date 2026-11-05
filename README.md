@@ -31,6 +31,8 @@
 
 已新增 Cloudflare Worker、WebRTC 通話頁、會員通話協調、獨立後端掛斷、MCP 工具呼叫、紀錄保存與成果產出程式，以及 Workers runtime 測試。跨站 ECCAL 登入與本站會話已實作。2026-11-05 依使用者確認，AI 小黑預設使用 ThinkWithBlack MCP，共用方法改由內部服務提供，會員流程只有 ECCAL 登入；原個人 OAuth 實作與驗收列於歷史紀錄
 
-三個 repo 已提交並推上 GitHub，ECCAL 已同步發布，MCP 方法庫 scope 已正式發布。[正式語音入口](https://call.thinkwithblack.com) 已部署，ECCAL 正式 migration、語音設定與兩位真實會員的 Google 跨站登入通過；個別 MCP 同意、方法讀取、跨會員拒絕及撤銷隔離均已實測，Issue #10 正式驗收完成。OpenAI 專用受限金鑰與語音／文字模型已部署，使用者已確認語音回覆、插話及追問正常；真實同通 MK-453 全文、語音應用與正常掛斷均已對照，正式發證憑證邊界已通過 Issue #2 驗收。拒絕麥克風的人工實測依使用者指示取消；交付通路與本人音色待驗證，實際版本與入口讀回見 [正式環境驗證](docs/release-validation-2026-11-05.md)。逐項進度見 [Issue 實作與驗證紀錄](docs/implementation-status.md)，執行與設定見 [本機執行與串接](docs/runtime-integration.md)
+語音站與 MCP 的內建共用方法更新已提交、推上 GitHub 並正式發布。[正式語音入口](https://call.thinkwithblack.com) 的會員登入後直接使用方法，首頁已移除個人 MCP 授權及解除按鈕；正式 Service Binding、方法全文與私人工具拒絕已核對，見 [內建方法驗證](docs/default-methods-validation-2026-11-05.md)
+
+ECCAL 正式 migration、語音設定與 Google 跨站登入已通過。OpenAI 專用受限金鑰與語音／文字模型已部署，使用者已確認語音回覆、插話及追問正常；先前真實同通 MK-453 全文、語音應用與正常掛斷均已對照，正式發證憑證邊界已通過 Issue #2 驗收。拒絕麥克風的人工實測依使用者指示取消；交付通路與本人音色待驗證，歷次版本與讀回見 [正式環境驗證](docs/release-validation-2026-11-05.md)。逐項進度見 [Issue 實作與驗證紀錄](docs/implementation-status.md)，執行與設定見 [本機執行與串接](docs/runtime-integration.md)
 
 **安全注意：此 repository 是 Public。禁止提交 API Key、OAuth Token、Email、LINE 使用者資訊、諮詢內容及其他會員資料。**
