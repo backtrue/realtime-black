@@ -71,8 +71,10 @@ async function end() {
   try {
     await inFlight;
     const current = session;
-    if (current) { await api(`/api/calls/${current.id}/end`, { method: "POST" }); session = undefined; }
-    $("call-status").textContent = "通話已結束";
+    if (current) {
+      const ended = await api(`/api/calls/${current.id}/end`, { method: "POST" }); session = undefined;
+      $("call-status").textContent = ended.status === "failed" ? "未接通" : "通話已結束";
+    } else $("call-status").textContent = "未接通";
   } catch (error) { $("notice").textContent = error.message; $("call-status").textContent = "正在確認通話結束狀態"; }
   finally { releaseAudio(); if (starting === inFlight) starting = undefined; busy = false; await membership(); await records(); }
 }

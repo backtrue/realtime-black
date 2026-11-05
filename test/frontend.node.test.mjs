@@ -115,6 +115,19 @@ test("掛斷立即停止收音播放，等待後端確認後才關閉 WebRTC", a
   assert.equal(p.elements.get("call-status").textContent, "通話已結束");
 });
 
+test("接通前中斷依後端未接通結果顯示，關閉音訊並重新讀取額度", async () => {
+  const stream = audio();
+  const p = await page(async () => stream, undefined, [], undefined, { endResponse: async () => ({ status: "failed", settlement: { billedSeconds: 0, remainingSeconds: 300 } }) });
+  await p.click("start");
+  p.connections[0].connectionState = "failed";
+  p.connections[0].onconnectionstatechange();
+  await flush(); await flush();
+  assert.equal(p.elements.get("call-status").textContent, "未接通");
+  assert.equal(p.connections[0].connectionState, "closed");
+  assert.equal(stream.stops(), 1);
+  assert.ok(p.requests.filter(request => request.path === "/api/me").length >= 2);
+});
+
 test("發證請求尚未回來就取消，回應抵達後結束伺服器會話且不播放", async () => {
   const response = deferred(), stream = audio();
   const p = await page(async () => stream, () => response.promise);

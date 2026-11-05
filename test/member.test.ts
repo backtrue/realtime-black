@@ -55,7 +55,7 @@ describe("M0 會員與額度", () => {
     expect(f.eccal.settle).not.toHaveBeenCalled();
     await expect(f.start()).rejects.toMatchObject({ code: "CALL_ALREADY_ACTIVE" });
     await f.engine.alarm();
-    expect((await f.record(call.id))?.status).toBe("ended");
+    expect((await f.record(call.id))?.status).toBe("failed");
     expect(f.eccal.settle).toHaveBeenCalledTimes(1);
   });
   it("結算失敗可重試，已確認的掛斷不重送", async () => {
@@ -80,13 +80,33 @@ describe("M0 會員與額度", () => {
     expect(f.realtime.hangup).not.toHaveBeenCalled();
     expect(f.eccal.settle).toHaveBeenCalledTimes(1);
   });
+  it("提供者已建會話但接通前中斷，結算為未接通且不扣秒", async () => {
+    const f = fixture(); const call = await f.start();
+    f.advance(5000);
+    const ended = await f.engine.end("a", call.id);
+    expect(ended.status).toBe("failed");
+    expect(ended.settlement).toEqual({ billedSeconds: 0, remainingSeconds: 300 });
+    expect(f.realtime.hangup).toHaveBeenCalledWith("rtc_fixture");
+    expect(await f.store.get("active")).toBeUndefined();
+    await f.engine.end("a", call.id);
+    expect(f.eccal.settle).toHaveBeenCalledTimes(1);
+    expect(await f.eccal.balance("b")).toBe(300);
+  });
+  it("已有實際音訊的通話正常結束仍標示已結束", async () => {
+    const f = fixture(); const call = await f.start();
+    await f.engine.ingest("a", call.id, { type: "output_audio_buffer.started", event_id: "actual-audio" });
+    f.advance(5000);
+    const ended = await f.engine.end("a", call.id);
+    expect(ended.status).toBe("ended");
+    expect(ended.settlement).toEqual({ billedSeconds: 5, remainingSeconds: 295 });
+  });
   it("提供者已確認結束後直接結算，不重送掛斷", async () => {
     const f = fixture(); const call = await f.start();
     await f.engine.providerEnded("a", call.id, f.now());
     expect(f.eccal.settle).not.toHaveBeenCalled();
     await f.engine.alarm();
     expect(f.realtime.hangup).not.toHaveBeenCalled();
-    expect((await f.record(call.id))?.status).toBe("ended");
+    expect((await f.record(call.id))?.status).toBe("failed");
   });
   it("占用請求逾時保留原操作，alarm 以同一操作對帳後釋放", async () => {
     const f = fixture(); const original = f.eccal.reserve;
@@ -131,7 +151,7 @@ describe("M0 會員與額度", () => {
     expect((await f.record(call.id))?.status).toBe("starting");
     expect(vi.mocked(f.store.alarm).mock.lastCall?.[0]).toBe(f.now() + 1000);
     await f.engine.alarm();
-    expect((await f.record(call.id))?.status).toBe("ended");
+    expect((await f.record(call.id))?.status).toBe("failed");
     expect(f.balances.get("a")).toBe(300);
   });
 });
@@ -195,6 +215,7 @@ describe("M2 紀錄與成果", () => {
   });
   it("最後一段語音仍在辨識時不生成摘要，結束後收到轉寫才解除", async () => {
     const f = fixture(); const call = await f.start();
+    await f.engine.ingest("a", call.id, { type: "input_audio_buffer.speech_started", event_id: "actual-audio" });
     await f.engine.ingest("a", call.id, { type: "conversation.item.input_audio_transcription.completed", item_id: "u1", transcript: "第一段" });
     await f.engine.ingest("a", call.id, { type: "input_audio_buffer.committed", item_id: "u2", previous_item_id: "u1" });
     await f.engine.end("a", call.id);
@@ -206,6 +227,7 @@ describe("M2 紀錄與成果", () => {
   });
   it("舊摘要生成後晚到轉寫，清除舊摘要並依新逐字稿重建", async () => {
     const f = fixture(); const call = await f.start();
+    await f.engine.ingest("a", call.id, { type: "input_audio_buffer.speech_started", event_id: "actual-audio" });
     await f.engine.ingest("a", call.id, { type: "conversation.item.input_audio_transcription.completed", item_id: "u1", transcript: "第一段" });
     await f.engine.end("a", call.id); const first = await f.engine.document("a", call.id, "summary");
     await f.engine.ingest("a", call.id, { type: "conversation.item.input_audio_transcription.completed", item_id: "u2", transcript: "晚到的重要條件" });
@@ -216,6 +238,7 @@ describe("M2 紀錄與成果", () => {
   });
   it.each(["report", "copy", "plan"] as const)("晚到條件使舊 %s 作廢", async kind => {
     const f = fixture(); const call = await f.start();
+    await f.engine.ingest("a", call.id, { type: "input_audio_buffer.speech_started", event_id: "actual-audio" });
     await f.engine.ingest("a", call.id, { type: "conversation.item.input_audio_transcription.completed", item_id: "u1", transcript: "初始條件" });
     await f.engine.end("a", call.id); await f.engine.document("a", call.id, kind);
     await f.engine.ingest("a", call.id, { type: "conversation.item.input_audio_transcription.completed", item_id: "u2", transcript: "晚到的重要限制" });
@@ -223,6 +246,7 @@ describe("M2 紀錄與成果", () => {
   });
   it("等待辨識逾期後保留明確缺口，仍可產出有缺口註記的摘要", async () => {
     const f = fixture(); const call = await f.start();
+    await f.engine.ingest("a", call.id, { type: "input_audio_buffer.speech_started", event_id: "actual-audio" });
     await f.engine.ingest("a", call.id, { type: "conversation.item.input_audio_transcription.completed", item_id: "u1", transcript: "已知問題" });
     await f.engine.ingest("a", call.id, { type: "input_audio_buffer.committed", item_id: "u2" });
     await f.engine.end("a", call.id); f.advance(10000); await f.engine.failPendingTranscripts("a", call.id);

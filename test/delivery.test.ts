@@ -7,6 +7,7 @@ import type { DeliveryPort } from "../src/contracts";
 
 async function prepared() {
   const f = fixture(); const call = await f.start();
+  await f.engine.ingest("a", call.id, { type: "input_audio_buffer.speech_started", event_id: "actual-audio" });
   await f.engine.ingest("a", call.id, { type: "conversation.item.input_audio_transcription.completed", item_id: "u1", transcript: "合成諮詢內容" });
   await f.engine.end("a", call.id); const document = await f.engine.document("a", call.id, "report");
   const verify = vi.fn<DeliveryPort["verify"]>(async job => ({ memberId: job.memberId, jobId: job.id, documentId: job.documentId, recipient: job.channel === "email" ? job.recipient : "fixture-chatroom", verifiedAt: f.now(), supervised: true }));

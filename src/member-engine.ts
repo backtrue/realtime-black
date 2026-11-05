@@ -66,7 +66,7 @@ export class MemberEngine {
     const record = await this.deps.store.get<CallRecord>(`call:${pending.recordId}`);
     if (record && (record.expiresAt === undefined || record.expiresAt > this.deps.now())) {
       record.settlement = result;
-      record.status = record.callId ? "ended" : "failed";
+      record.status = record.callId && record.events.some(event => event.type === "connected") ? "ended" : "failed";
       await this.save(record);
     } else if (record) await this.deps.store.delete(`call:${record.id}`);
     if (await this.deps.store.get<string>("active") === pending.recordId) await this.deps.store.delete("active");
