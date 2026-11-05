@@ -1,0 +1,1023 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #8 / docs/development-plan.md M0-08",
+  "productSpec": "docs/product-spec.md V0.3",
+  "issue": 8,
+  "productionCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+  "environment": {
+    "deploymentId": "cdeafb09-64f3-434a-a022-fbd8ed4e6d99",
+    "versions": [
+      {
+        "version_id": "5a03a65f-5dd6-4183-8d73-78b90c5edbc0",
+        "percentage": 100
+      }
+    ],
+    "versionId": "5a03a65f-5dd6-4183-8d73-78b90c5edbc0",
+    "tag": "4d9d3a9",
+    "createdOn": "2026-11-05T06:44:32.6609Z",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text",
+        "value": "https://call.thinkwithblack.com"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "AUTH_VAULT_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text",
+        "value": "https://eccal.thinkwithblack.com"
+      },
+      {
+        "name": "ECCAL_SERVICE_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text",
+        "value": "gpt-realtime-2.1"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text",
+        "value": "gpt-6.1-sol"
+      }
+    ]
+  },
+  "providerDisconnectDiagnostic": {
+    "observedAt": "2026-11-05T06:31:32.702Z",
+    "client": "werift 0.26.0",
+    "memberAccountUsed": false,
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "createStatus": 201,
+    "audioPacketsBeforeDisconnect": 273,
+    "primaryClosedAt": "2026-11-05T06:31:40.826Z",
+    "providerSidebandClose": {
+      "code": 1006,
+      "reason": ""
+    },
+    "peerState": "closed",
+    "dataChannelOpen": false,
+    "sidebandOpen": false,
+    "rtpPackets": 273,
+    "primaryOutputAudioStarted": true,
+    "sidebandOutputAudioStarted": true,
+    "primaryTypes": [
+      "session.created",
+      "response.created",
+      "response.output_item.added",
+      "conversation.item.added",
+      "response.content_part.added",
+      "response.output_audio_transcript.delta",
+      "output_audio_buffer.started",
+      "response.output_audio.done",
+      "response.output_audio_transcript.done",
+      "response.content_part.done",
+      "conversation.item.done",
+      "response.output_item.done",
+      "response.done",
+      "rate_limits.updated",
+      "output_audio_buffer.stopped"
+    ],
+    "sidebandTypes": [
+      "response.created",
+      "response.output_item.added",
+      "conversation.item.added",
+      "response.content_part.added",
+      "response.output_audio_transcript.delta",
+      "output_audio_buffer.started",
+      "response.output_audio.done",
+      "response.output_audio_transcript.done",
+      "response.content_part.done",
+      "conversation.item.done",
+      "response.output_item.done",
+      "response.done",
+      "rate_limits.updated",
+      "output_audio_buffer.stopped"
+    ],
+    "hangupStatus": 404,
+    "hangupError": {
+      "code": "call_id_not_found",
+      "type": "invalid_request_error",
+      "message": "No session found for the provided call_id"
+    }
+  },
+  "localValidation": {
+    "typecheck": "PASS",
+    "workersTests": 143,
+    "frontendTests": 11,
+    "nativeRuntimeTests": 2,
+    "dryRunBuild": "PASS",
+    "secretlint": "PASS",
+    "freshCandidateReview": "PASS",
+    "regressionsFailedBeforeFix": 2
+  },
+  "execution": {
+    "memberLabel": "A",
+    "operatorInitiated": true,
+    "transport": "werift 0.26.0 Node WebRTC",
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "databaseQueries": "SELECT only; normal production service reserves and settles",
+    "quotaReset": false,
+    "endEventReplay": "only duplicate same record confirmed server endedAt",
+    "helperPreflightReview": "PASS",
+    "helperTestsPassed": 15,
+    "helperSha256": {
+      "broker.mjs": "183584766ab441e018dd8e839b37825bb32113fbc0a56ad2fefa2ef79aea114d",
+      "worker.js": "ac0b857420bb8955179c22f93714026683d9cac8fa51efe667a29cd2a1aa7fa0",
+      "assertions.mjs": "2616ede20a06e345004cc9ed3b7e66981834a29878d2513607bc4f4668acd129",
+      "wrangler.json": "7fbd2696f79861cc3be1e7ee8b9367a19941419b399ca2a93f3e087422a03b50"
+    }
+  },
+  "controllerAttempts": [
+    {
+      "label": "first controller attempt",
+      "outcome": {
+        "observedAt": "2026-11-05T06:55:41.245Z",
+        "purpose": "Issue #8 tool waits, abrupt close, reconnect, pagehide order, network interruption and repeated confirmed ends",
+        "memberLabel": "A",
+        "baseline": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 68,
+              "reservedSeconds": 0,
+              "remainingSeconds": 232
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+          },
+          "unsettled": 0
+        },
+        "microphoneUsed": false,
+        "audioPersisted": false,
+        "sqlMode": "SELECT_ONLY",
+        "cases": [],
+        "ok": false,
+        "error": "METHOD_AUDIO_NOT_READY"
+      },
+      "reason": "Checker required entry_catalog; actual successful list_modules and tool wait were later independently read back",
+      "cleanup": {
+        "varsAbsent": true,
+        "portsClosed": true
+      },
+      "browser": {
+        "observedAt": "2026-11-05T07:00:19.634Z",
+        "remainingSeconds": 111,
+        "latestRecordEnded": true
+      }
+    },
+    {
+      "label": "second controller attempt",
+      "outcome": {
+        "observedAt": "2026-11-05T07:08:10.389Z",
+        "purpose": "Issue #8 tool waits, abrupt close, reconnect, pagehide order, network interruption and repeated confirmed ends",
+        "memberLabel": "A",
+        "baseline": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 189,
+              "reservedSeconds": 0,
+              "remainingSeconds": 111
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+          },
+          "unsettled": 0
+        },
+        "microphoneUsed": false,
+        "audioPersisted": false,
+        "sqlMode": "SELECT_ONLY",
+        "cases": [],
+        "priorAttemptReadback": {
+          "status": "ended",
+          "createdAt": 1793861750756,
+          "endedAt": 1793861881238,
+          "expiresAt": 1796453881238,
+          "settlement": {
+            "billedSeconds": 121,
+            "remainingSeconds": 111
+          },
+          "ledger": {
+            "reserved_seconds": 232,
+            "settled_at": "2026-11-05T06:58:02.909Z",
+            "billed_seconds": 121,
+            "remaining_seconds": 111,
+            "events_digest": "0bb9d0d4c03a1a54b4f6e3308aecdf96bad648d16ed6260ce4dd616a7915fadd"
+          },
+          "math": {
+            "elapsedMs": 124031,
+            "toolWaitMs": 3349,
+            "billableMs": 120682,
+            "expectedBilledSeconds": 121,
+            "connected": true
+          },
+          "events": [
+            {
+              "type": "reserved",
+              "at": 1793861750756
+            },
+            {
+              "type": "connected",
+              "at": 1793861757207
+            },
+            {
+              "type": "tool_started",
+              "at": 1793861763642,
+              "toolRef": "tool-1"
+            },
+            {
+              "type": "tool_finished",
+              "at": 1793861766991,
+              "toolRef": "tool-1"
+            },
+            {
+              "type": "ended",
+              "at": 1793861881238
+            }
+          ],
+          "tools": [
+            {
+              "name": "thinkwithblack_list_modules",
+              "isError": false,
+              "entryId": null,
+              "resultBytes": 6210,
+              "resultSha256": "9b9e7bcf07b89efa7bbc0b3efd7497a9bb3f154062d9267df72b2da9fbabfc07"
+            }
+          ],
+          "checks": {
+            "ended": true,
+            "billedMatches": true,
+            "remainingMatches": true,
+            "eventDigestMatches": true
+          }
+        },
+        "ok": false,
+        "error": "METHOD_AUDIO_NOT_READY"
+      },
+      "reason": "No successful tool call observed before watchdog; confirmed end and later ledger readback retained as supplemental accounting",
+      "cleanup": {
+        "varsAbsent": true,
+        "portsClosed": true
+      },
+      "browser": {
+        "observedAt": "2026-11-05T07:12:30.826Z",
+        "remainingSeconds": 72,
+        "latestRecordEnded": true
+      }
+    }
+  ],
+  "productionResult": {
+    "observedAt": "2026-11-05T07:19:47.998Z",
+    "purpose": "Issue #8 tool waits, abrupt close, reconnect, pagehide order, network interruption and repeated confirmed ends",
+    "memberLabel": "A",
+    "baseline": {
+      "members": {
+        "A": {
+          "grantedSeconds": 300,
+          "billedSeconds": 228,
+          "reservedSeconds": 0,
+          "remainingSeconds": 72
+        },
+        "B": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        },
+        "C": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        }
+      },
+      "session": {
+        "active": 2,
+        "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+      },
+      "unsettled": 0
+    },
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "sqlMode": "SELECT_ONLY",
+    "cases": [
+      {
+        "observedAt": "2026-11-05T07:19:53.846Z",
+        "status": "ended",
+        "createdAt": 1793861750756,
+        "endedAt": 1793861881238,
+        "expiresAt": 1796453881238,
+        "settlement": {
+          "billedSeconds": 121,
+          "remainingSeconds": 111
+        },
+        "ledger": {
+          "reserved_seconds": 232,
+          "settled_at": "2026-11-05T06:58:02.909Z",
+          "billed_seconds": 121,
+          "remaining_seconds": 111,
+          "events_digest": "0bb9d0d4c03a1a54b4f6e3308aecdf96bad648d16ed6260ce4dd616a7915fadd"
+        },
+        "math": {
+          "elapsedMs": 124031,
+          "toolWaitMs": 3349,
+          "billableMs": 120682,
+          "expectedBilledSeconds": 121,
+          "connected": true
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793861750756
+          },
+          {
+            "type": "connected",
+            "at": 1793861757207
+          },
+          {
+            "type": "tool_started",
+            "at": 1793861763642,
+            "toolRef": "tool-1"
+          },
+          {
+            "type": "tool_finished",
+            "at": 1793861766991,
+            "toolRef": "tool-1"
+          },
+          {
+            "type": "ended",
+            "at": 1793861881238
+          }
+        ],
+        "tools": [
+          {
+            "name": "thinkwithblack_list_modules",
+            "isError": false,
+            "entryId": null,
+            "resultBytes": 6210,
+            "resultSha256": "9b9e7bcf07b89efa7bbc0b3efd7497a9bb3f154062d9267df72b2da9fbabfc07"
+          }
+        ],
+        "checks": {
+          "ended": true,
+          "billedMatches": true,
+          "remainingMatches": true,
+          "eventDigestMatches": true,
+          "retentionFromEnd": true,
+          "actualToolWait": true
+        },
+        "ok": true,
+        "label": "tool wait excluded, readback of actual first attempt"
+      },
+      {
+        "label": "transport disconnect, backend closes automatically",
+        "observedAt": "2026-11-05T07:20:30.069Z",
+        "status": "ended",
+        "createdAt": 1793863201401,
+        "endedAt": 1793863217954,
+        "expiresAt": 1796455217954,
+        "settlement": {
+          "billedSeconds": 12,
+          "remainingSeconds": 60
+        },
+        "ledger": {
+          "reserved_seconds": 72,
+          "settled_at": "2026-11-05T07:20:18.500Z",
+          "billed_seconds": 12,
+          "remaining_seconds": 60,
+          "events_digest": "78327d341723476c4960c1cc895b8f2c193161ae8f3bbcf91e65342155041393"
+        },
+        "math": {
+          "elapsedMs": 11200,
+          "toolWaitMs": 0,
+          "billableMs": 11200,
+          "expectedBilledSeconds": 12,
+          "connected": true
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793863201401
+          },
+          {
+            "type": "connected",
+            "at": 1793863206754
+          },
+          {
+            "type": "ended",
+            "at": 1793863217954
+          }
+        ],
+        "tools": [],
+        "peer": {
+          "rtpPackets": 238,
+          "dataChannelOpened": true
+        },
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 240,
+              "reservedSeconds": 0,
+              "remainingSeconds": 60
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "ended": true,
+          "actualAudio": true,
+          "mathMatches": true,
+          "eccalBilledMatches": true,
+          "eccalRemainingMatches": true,
+          "lifetimeMatches": true,
+          "grantUnchanged": true,
+          "otherMembersUnchanged": true,
+          "noPendingReservation": true,
+          "eventDigestMatches": true,
+          "retentionFromEnd": true,
+          "endedAfterTransportInterruption": true,
+          "disconnectUntilEndIncluded": true,
+          "minimumFaultDurationObserved": true
+        },
+        "ok": true,
+        "transportInterruptedAtMs": 1793863210397,
+        "operatorStopOnSuccess": false
+      },
+      {
+        "label": "new connection after disconnect uses remaining quota",
+        "observedAt": "2026-11-05T07:21:04.429Z",
+        "status": "ended",
+        "createdAt": 1793863241561,
+        "endedAt": 1793863251182,
+        "expiresAt": 1796455251182,
+        "settlement": {
+          "billedSeconds": 5,
+          "remainingSeconds": 55
+        },
+        "ledger": {
+          "reserved_seconds": 60,
+          "settled_at": "2026-11-05T07:20:51.508Z",
+          "billed_seconds": 5,
+          "remaining_seconds": 55,
+          "events_digest": "17cea58714ffb8721c8f3bcaac545db4513fb75d2dfa4ae5647c675ca740a358"
+        },
+        "math": {
+          "elapsedMs": 4781,
+          "toolWaitMs": 0,
+          "billableMs": 4781,
+          "expectedBilledSeconds": 5,
+          "connected": true
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793863241561
+          },
+          {
+            "type": "connected",
+            "at": 1793863246401
+          },
+          {
+            "type": "ended",
+            "at": 1793863251182
+          }
+        ],
+        "tools": [],
+        "peer": {
+          "rtpPackets": 293,
+          "dataChannelOpened": true
+        },
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 245,
+              "reservedSeconds": 0,
+              "remainingSeconds": 55
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "ended": true,
+          "actualAudio": true,
+          "mathMatches": true,
+          "eccalBilledMatches": true,
+          "eccalRemainingMatches": true,
+          "lifetimeMatches": true,
+          "grantUnchanged": true,
+          "otherMembersUnchanged": true,
+          "noPendingReservation": true,
+          "eventDigestMatches": true,
+          "retentionFromEnd": true
+        },
+        "ok": true
+      },
+      {
+        "label": "pagehide order reproduction: transport closes before end request",
+        "observedAt": "2026-11-05T07:21:26.511Z",
+        "status": "ended",
+        "createdAt": 1793863268523,
+        "endedAt": 1793863277387,
+        "expiresAt": 1796455277387,
+        "settlement": {
+          "billedSeconds": 5,
+          "remainingSeconds": 50
+        },
+        "ledger": {
+          "reserved_seconds": 55,
+          "settled_at": "2026-11-05T07:21:17.711Z",
+          "billed_seconds": 5,
+          "remaining_seconds": 50,
+          "events_digest": "e940748562ca2d55dedd8c3860925dab55693549afb37151daf53d39da4f1199"
+        },
+        "math": {
+          "elapsedMs": 4176,
+          "toolWaitMs": 0,
+          "billableMs": 4176,
+          "expectedBilledSeconds": 5,
+          "connected": true
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793863268523
+          },
+          {
+            "type": "connected",
+            "at": 1793863273211
+          },
+          {
+            "type": "ended",
+            "at": 1793863277387
+          }
+        ],
+        "tools": [],
+        "peer": {
+          "rtpPackets": 236,
+          "dataChannelOpened": true
+        },
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 250,
+              "reservedSeconds": 0,
+              "remainingSeconds": 50
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "ended": true,
+          "actualAudio": true,
+          "mathMatches": true,
+          "eccalBilledMatches": true,
+          "eccalRemainingMatches": true,
+          "lifetimeMatches": true,
+          "grantUnchanged": true,
+          "otherMembersUnchanged": true,
+          "noPendingReservation": true,
+          "eventDigestMatches": true,
+          "retentionFromEnd": true,
+          "endedAfterTransportInterruption": true,
+          "disconnectUntilEndIncluded": true,
+          "minimumFaultDurationObserved": true
+        },
+        "ok": true,
+        "transportInterruptedAtMs": 1793863276799,
+        "method": "native peer reproduces public/app.js pagehide close-then-end order"
+      },
+      {
+        "label": "network interruption by stopping ICE sockets, then control end",
+        "observedAt": "2026-11-05T07:21:55.926Z",
+        "status": "ended",
+        "createdAt": 1793863289988,
+        "endedAt": 1793863304506,
+        "expiresAt": 1796455304506,
+        "settlement": {
+          "billedSeconds": 9,
+          "remainingSeconds": 41
+        },
+        "ledger": {
+          "reserved_seconds": 50,
+          "settled_at": "2026-11-05T07:21:44.842Z",
+          "billed_seconds": 9,
+          "remaining_seconds": 41,
+          "events_digest": "19fa557eedc430e9e2a13aed82f961c92476399cbf22b82859a29c4a29210eef"
+        },
+        "math": {
+          "elapsedMs": 8733,
+          "toolWaitMs": 0,
+          "billableMs": 8733,
+          "expectedBilledSeconds": 9,
+          "connected": true
+        },
+        "events": [
+          {
+            "type": "reserved",
+            "at": 1793863289988
+          },
+          {
+            "type": "connected",
+            "at": 1793863295773
+          },
+          {
+            "type": "ended",
+            "at": 1793863304506
+          }
+        ],
+        "tools": [],
+        "peer": {
+          "rtpPackets": 233,
+          "dataChannelOpened": true
+        },
+        "after": {
+          "members": {
+            "A": {
+              "grantedSeconds": 300,
+              "billedSeconds": 259,
+              "reservedSeconds": 0,
+              "remainingSeconds": 41
+            },
+            "B": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            },
+            "C": {
+              "grantedSeconds": 300,
+              "billedSeconds": 300,
+              "reservedSeconds": 0,
+              "remainingSeconds": 0
+            }
+          },
+          "session": {
+            "active": 2,
+            "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+          },
+          "unsettled": 0
+        },
+        "checks": {
+          "ended": true,
+          "actualAudio": true,
+          "mathMatches": true,
+          "eccalBilledMatches": true,
+          "eccalRemainingMatches": true,
+          "lifetimeMatches": true,
+          "grantUnchanged": true,
+          "otherMembersUnchanged": true,
+          "noPendingReservation": true,
+          "eventDigestMatches": true,
+          "retentionFromEnd": true,
+          "endedAfterTransportInterruption": true,
+          "disconnectUntilEndIncluded": true,
+          "minimumFaultDurationObserved": true,
+          "iceSocketStopped": true
+        },
+        "ok": true,
+        "transportInterruptedAtMs": 1793863298832,
+        "controlEndRequestedAfterOfflineMs": 5002,
+        "method": "RTCIceTransport.stop, no RTCPeerConnection.close until confirmed end",
+        "stoppedIceTransportCount": 1,
+        "iceTransportsClosed": true,
+        "rtpPacketsWhileOffline": 0
+      }
+    ],
+    "priorAttemptReadback": {
+      "observedAt": "2026-11-05T07:19:53.846Z",
+      "status": "ended",
+      "createdAt": 1793861750756,
+      "endedAt": 1793861881238,
+      "expiresAt": 1796453881238,
+      "settlement": {
+        "billedSeconds": 121,
+        "remainingSeconds": 111
+      },
+      "ledger": {
+        "reserved_seconds": 232,
+        "settled_at": "2026-11-05T06:58:02.909Z",
+        "billed_seconds": 121,
+        "remaining_seconds": 111,
+        "events_digest": "0bb9d0d4c03a1a54b4f6e3308aecdf96bad648d16ed6260ce4dd616a7915fadd"
+      },
+      "math": {
+        "elapsedMs": 124031,
+        "toolWaitMs": 3349,
+        "billableMs": 120682,
+        "expectedBilledSeconds": 121,
+        "connected": true
+      },
+      "events": [
+        {
+          "type": "reserved",
+          "at": 1793861750756
+        },
+        {
+          "type": "connected",
+          "at": 1793861757207
+        },
+        {
+          "type": "tool_started",
+          "at": 1793861763642,
+          "toolRef": "tool-1"
+        },
+        {
+          "type": "tool_finished",
+          "at": 1793861766991,
+          "toolRef": "tool-1"
+        },
+        {
+          "type": "ended",
+          "at": 1793861881238
+        }
+      ],
+      "tools": [
+        {
+          "name": "thinkwithblack_list_modules",
+          "isError": false,
+          "entryId": null,
+          "resultBytes": 6210,
+          "resultSha256": "9b9e7bcf07b89efa7bbc0b3efd7497a9bb3f154062d9267df72b2da9fbabfc07"
+        }
+      ],
+      "checks": {
+        "ended": true,
+        "billedMatches": true,
+        "remainingMatches": true,
+        "eventDigestMatches": true,
+        "retentionFromEnd": true,
+        "actualToolWait": true
+      },
+      "ok": true,
+      "label": "tool wait excluded, readback of actual first attempt"
+    },
+    "supplementalAttemptReadback": {
+      "observedAt": "2026-11-05T07:19:55.772Z",
+      "status": "ended",
+      "createdAt": 1793862500815,
+      "endedAt": 1793862546945,
+      "expiresAt": 1796454546945,
+      "settlement": {
+        "billedSeconds": 39,
+        "remainingSeconds": 72
+      },
+      "ledger": {
+        "reserved_seconds": 111,
+        "settled_at": "2026-11-05T07:09:07.481Z",
+        "billed_seconds": 39,
+        "remaining_seconds": 72,
+        "events_digest": "194a21dacedc6cbacbd55503eed2d2f02c67bba98bf43fd4096163445ed6ad5a"
+      },
+      "math": {
+        "elapsedMs": 38968,
+        "toolWaitMs": 0,
+        "billableMs": 38968,
+        "expectedBilledSeconds": 39,
+        "connected": true
+      },
+      "events": [
+        {
+          "type": "reserved",
+          "at": 1793862500815
+        },
+        {
+          "type": "connected",
+          "at": 1793862507977
+        },
+        {
+          "type": "ended",
+          "at": 1793862546945
+        }
+      ],
+      "tools": [],
+      "checks": {
+        "ended": true,
+        "billedMatches": true,
+        "remainingMatches": true,
+        "eventDigestMatches": true,
+        "retentionFromEnd": true
+      },
+      "ok": true
+    },
+    "priorAccountingChecks": {
+      "firstToSecondReservation": true,
+      "secondToCurrentBalance": true,
+      "chronological": true,
+      "previousLifetimeBilledMatches": true
+    },
+    "replayedEnd": {
+      "providerEndReplayCount": 2,
+      "normalEndReplayCount": 2,
+      "confirmedEndTimestampSource": "same record server endedAt",
+      "checks": {
+        "settlementUnchanged": true,
+        "endedAtUnchanged": true,
+        "eventDigestUnchanged": true,
+        "allBalancesUnchanged": true,
+        "noPendingReservation": true
+      },
+      "ok": true
+    },
+    "final": {
+      "members": {
+        "A": {
+          "grantedSeconds": 300,
+          "billedSeconds": 259,
+          "reservedSeconds": 0,
+          "remainingSeconds": 41
+        },
+        "B": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        },
+        "C": {
+          "grantedSeconds": 300,
+          "billedSeconds": 300,
+          "reservedSeconds": 0,
+          "remainingSeconds": 0
+        }
+      },
+      "session": {
+        "active": 2,
+        "newestCreatedAt": "2026-11-05T06:28:12.930Z"
+      },
+      "unsettled": 0
+    },
+    "newRunBilledSeconds": 31,
+    "totalTestBilledSeconds": 191,
+    "ok": true
+  },
+  "browserFinal": {
+    "observedAt": "2026-11-05T07:23:09.723Z",
+    "remainingSeconds": 41,
+    "latestFourEnded": true,
+    "startEnabled": true,
+    "methodGrantPresent": true
+  },
+  "cleanup": {
+    "temporaryFilesAbsent": true,
+    "portsClosed": true
+  },
+  "publicHttp": {
+    "observedAt": "2026-11-05T06:52:23.379Z",
+    "rows": [
+      {
+        "path": "/",
+        "status": 200,
+        "expected": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/app.js",
+        "status": 200,
+        "expected": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/oauth/client-metadata.json",
+        "status": 200,
+        "expected": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/auth/status",
+        "status": 200,
+        "expected": 200,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/.dev.vars.example",
+        "status": 404,
+        "expected": 404,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      },
+      {
+        "path": "/api/calls",
+        "status": 401,
+        "expected": 401,
+        "cacheControl": "no-store",
+        "backendSecretsAbsent": true
+      }
+    ],
+    "ok": true
+  },
+  "independentAcceptance": {
+    "status": "PASS",
+    "date": "2026-11-05",
+    "reviewer": "fresh spec_evaluator",
+    "issueCompletionAllowed": true
+  }
+}
