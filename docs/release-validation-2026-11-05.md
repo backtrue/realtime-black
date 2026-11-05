@@ -392,3 +392,9 @@ Issue #17 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，兩筆正
 逾時及授權拒絕後，模型明說未取得方法資料；停廣告答覆未完成，未授權 GSC／Meta 資料答覆拒絕讀取。四段皆有 RTP、completed 狀態、無錯誤事件，四通均確認結束；產品程式與公開 MCP 契約未變
 
 2026-11-05 fresh spec_evaluator 核對原始 JSON、實際類別、來源 SHA、四段完整答覆、拒絕與掛斷結果，Issue #12 判定 PASS。測試題與完整證據見 [工具限制與失敗驗收](tool-failure-validation-2026-11-05.md)
+
+## Issue #16 本次諮詢摘要自動驗收
+
+使用實際 MemberEngine.document／OpenAiDocuments 與 gpt-6.1-sol，將包含會員數字、受控方法、AI 建議與未解問題的合成通話產生摘要。回應 HTTP 200／completed、store:false，耗時 19,070ms；五種分類及所有 sourceIds 可核對，已知數字、推論比例、1＋2＋1 小時建議與未知原因均與輸入相符
+
+摘要保存於原通話、sourceRevision 4，A 讀回與產出完全一致，B 讀取及要求產生均回 404。2026-11-05 fresh spec_evaluator 核對輸入、完整摘要、來源分類、數字、保存與跨會員結果，Issue #16 判定 PASS。完整對照見 [本次諮詢摘要驗收](summary-validation-2026-11-05.md)

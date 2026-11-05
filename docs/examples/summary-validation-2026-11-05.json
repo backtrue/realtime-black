@@ -1,0 +1,251 @@
+{
+  "observedDate": "2026-11-05",
+  "timezone": "Asia/Taipei",
+  "spec": "GitHub issue #16 / docs/development-plan.md M2-02",
+  "issue": 16,
+  "result": {
+    "observedAt": "2026-11-05T08:11:49.922Z",
+    "spec": "GitHub issue #16 / M2-02",
+    "sourceCommit": "4d9d3a934b56da003c53b9e5d4c23143af13d726",
+    "environment": {
+      "backend": "Actual MemberEngine with controlled ended consultation and memory store",
+      "documentAdapter": "Actual OpenAiDocuments",
+      "provider": "OpenAI Responses API",
+      "model": "gpt-6.1-sol",
+      "memberAccountUsed": false,
+      "productionRecordCreated": false
+    },
+    "input": {
+      "transcript": [
+        {
+          "itemId": "fixture-user-1",
+          "role": "user",
+          "text": "測試商品 A 是單口 65W USB-C 桌面充電座，售價 1500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，我想知道要先改善哪裡",
+          "at": 1793764805000
+        },
+        {
+          "itemId": "fixture-assistant-1",
+          "role": "assistant",
+          "text": "我先核對漏斗各階段，還需要知道你能投入的時間，以及運費和結帳流程的情況",
+          "at": 1793764835000
+        },
+        {
+          "itemId": "fixture-user-2",
+          "role": "user",
+          "text": "目前只有我執行，每週能投入 4 小時，運費呈現方式與放棄結帳原因還不知道",
+          "at": 1793764865000
+        },
+        {
+          "itemId": "fixture-assistant-2",
+          "role": "assistant",
+          "text": "先用 1 小時核對同期間的到站、加購及訂單定義，再用 2 小時走查加購至付款前流程，最後用 1 小時整理一個下一輪優先查核的問題。運費呈現與放棄結帳原因仍不知道，先記為待釐清事項，不能認定為流失原因。",
+          "at": 1793764895000
+        }
+      ],
+      "tools": [
+        {
+          "id": "fixture-tool-1",
+          "name": "fixture_read_funnel_method",
+          "result": {
+            "source": "受控測試回應",
+            "text": "受控測試方法要求分開核對到站、加入購物車與結帳階段，並保留資料缺口"
+          }
+        }
+      ],
+      "transcriptRevision": 4
+    },
+    "bundleSha256": "34c0bb3761514d6ebac471bace58e9a03cc76f7eed9842cf607f3fabad7f4c9c",
+    "result": {
+      "document": {
+        "kind": "summary",
+        "title": "測試商品 A：優先核對加購後至付款流程",
+        "findings": [
+          {
+            "kind": "member",
+            "text": "商品為單口 65W USB-C 桌面充電座，售價 1,500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，目標是判斷先改善哪裡。",
+            "sourceIds": [
+              "fixture-user-1"
+            ]
+          },
+          {
+            "kind": "member",
+            "text": "目前由會員一人執行，每週可投入 4 小時；尚不清楚運費呈現方式與放棄結帳原因。",
+            "sourceIds": [
+              "fixture-user-2"
+            ]
+          },
+          {
+            "kind": "tool",
+            "text": "受控測試工具回應要求分開核對到站、加入購物車與結帳階段，並保留資料缺口。",
+            "sourceIds": [
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "inference",
+            "text": "依會員提供的數字粗算，到站至加購比率為 10%，加購至訂單比率為 10%，到站至訂單比率為 1%。這些比率尚待核對統計定義與期間，也不能直接視為同一批使用者的完整轉換漏斗。",
+            "sourceIds": [
+              "fixture-user-1"
+            ]
+          },
+          {
+            "kind": "inference",
+            "text": "目前優先查核加購後至付款流程，而非直接改價格或促銷：已有加購紀錄，但訂單較少，值得先找出這段流程是否有阻礙。現有資料不足以認定運費、結帳設計或價格就是流失原因，也不足以判斷轉換率是否異常。",
+            "sourceIds": [
+              "fixture-user-1",
+              "fixture-user-2"
+            ]
+          },
+          {
+            "kind": "recommendation",
+            "text": "第一步，投入 1 小時核對數據。先確認到站、加購、訂單是否為同一統計期間，各自以人次、事件次數或訂單數計算，以及訂單是否代表付款成功。理由是先避免口徑差異造成誤判；核對方式是整理三個指標的來源、期間與定義，無法確認的部分保留為待查。",
+            "sourceIds": [
+              "fixture-user-1",
+              "fixture-assistant-2",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "recommendation",
+            "text": "第二步，投入 2 小時走查加入購物車到付款前的流程，不實際付款或修改外部服務。理由是優先確認加購後是否存在可觀察的阻礙；核對方式是逐步記錄運費何時出現、總金額是否清楚、是否強制註冊、付款選項及有無錯誤訊息。走查發現只能列為待驗證問題，不能直接當作顧客放棄原因。",
+            "sourceIds": [
+              "fixture-user-2",
+              "fixture-assistant-2"
+            ]
+          },
+          {
+            "kind": "recommendation",
+            "text": "第三步，投入 1 小時整理下一輪唯一優先查核的問題。理由是每週只有 4 小時，先集中處理一個有證據的問題；核對方式是記錄觀察證據、尚缺資料及確認方法。若走查沒有發現明確阻礙，下一輪先補結帳階段資料，不急著更改售價或推出促銷。",
+            "sourceIds": [
+              "fixture-user-2",
+              "fixture-assistant-2",
+              "fixture-tool-1"
+            ]
+          },
+          {
+            "kind": "unknown",
+            "text": "目前缺少各指標的統計口徑、開始結帳與付款失敗資料、運費呈現方式，以及顧客實際放棄原因；尚無法定位流失發生在哪個結帳步驟或確認其原因。",
+            "sourceIds": [
+              "fixture-user-1",
+              "fixture-user-2",
+              "fixture-tool-1"
+            ]
+          }
+        ],
+        "id": "9347ead9-04ca-4973-9a9c-17cc72f79792",
+        "createdAt": 1793866328992,
+        "sourceRevision": 4
+      },
+      "storedDocuments": [
+        {
+          "kind": "summary",
+          "title": "測試商品 A：優先核對加購後至付款流程",
+          "findings": [
+            {
+              "kind": "member",
+              "text": "商品為單口 65W USB-C 桌面充電座，售價 1,500 元。測試期間有 100 次到站、10 次加入購物車、1 筆訂單，目標是判斷先改善哪裡。",
+              "sourceIds": [
+                "fixture-user-1"
+              ]
+            },
+            {
+              "kind": "member",
+              "text": "目前由會員一人執行，每週可投入 4 小時；尚不清楚運費呈現方式與放棄結帳原因。",
+              "sourceIds": [
+                "fixture-user-2"
+              ]
+            },
+            {
+              "kind": "tool",
+              "text": "受控測試工具回應要求分開核對到站、加入購物車與結帳階段，並保留資料缺口。",
+              "sourceIds": [
+                "fixture-tool-1"
+              ]
+            },
+            {
+              "kind": "inference",
+              "text": "依會員提供的數字粗算，到站至加購比率為 10%，加購至訂單比率為 10%，到站至訂單比率為 1%。這些比率尚待核對統計定義與期間，也不能直接視為同一批使用者的完整轉換漏斗。",
+              "sourceIds": [
+                "fixture-user-1"
+              ]
+            },
+            {
+              "kind": "inference",
+              "text": "目前優先查核加購後至付款流程，而非直接改價格或促銷：已有加購紀錄，但訂單較少，值得先找出這段流程是否有阻礙。現有資料不足以認定運費、結帳設計或價格就是流失原因，也不足以判斷轉換率是否異常。",
+              "sourceIds": [
+                "fixture-user-1",
+                "fixture-user-2"
+              ]
+            },
+            {
+              "kind": "recommendation",
+              "text": "第一步，投入 1 小時核對數據。先確認到站、加購、訂單是否為同一統計期間，各自以人次、事件次數或訂單數計算，以及訂單是否代表付款成功。理由是先避免口徑差異造成誤判；核對方式是整理三個指標的來源、期間與定義，無法確認的部分保留為待查。",
+              "sourceIds": [
+                "fixture-user-1",
+                "fixture-assistant-2",
+                "fixture-tool-1"
+              ]
+            },
+            {
+              "kind": "recommendation",
+              "text": "第二步，投入 2 小時走查加入購物車到付款前的流程，不實際付款或修改外部服務。理由是優先確認加購後是否存在可觀察的阻礙；核對方式是逐步記錄運費何時出現、總金額是否清楚、是否強制註冊、付款選項及有無錯誤訊息。走查發現只能列為待驗證問題，不能直接當作顧客放棄原因。",
+              "sourceIds": [
+                "fixture-user-2",
+                "fixture-assistant-2"
+              ]
+            },
+            {
+              "kind": "recommendation",
+              "text": "第三步，投入 1 小時整理下一輪唯一優先查核的問題。理由是每週只有 4 小時，先集中處理一個有證據的問題；核對方式是記錄觀察證據、尚缺資料及確認方法。若走查沒有發現明確阻礙，下一輪先補結帳階段資料，不急著更改售價或推出促銷。",
+              "sourceIds": [
+                "fixture-user-2",
+                "fixture-assistant-2",
+                "fixture-tool-1"
+              ]
+            },
+            {
+              "kind": "unknown",
+              "text": "目前缺少各指標的統計口徑、開始結帳與付款失敗資料、運費呈現方式，以及顧客實際放棄原因；尚無法定位流失發生在哪個結帳步驟或確認其原因。",
+              "sourceIds": [
+                "fixture-user-1",
+                "fixture-user-2",
+                "fixture-tool-1"
+              ]
+            }
+          ],
+          "id": "9347ead9-04ca-4973-9a9c-17cc72f79792",
+          "createdAt": 1793866328992,
+          "sourceRevision": 4
+        }
+      ],
+      "memberReadMatches": true,
+      "otherReadStatus": 404,
+      "otherGenerateStatus": 404,
+      "writeKeys": [
+        "same-consultation"
+      ]
+    },
+    "ok": true,
+    "receipt": {
+      "requestModel": "gpt-6.1-sol",
+      "store": false,
+      "httpStatus": 200,
+      "responseStatus": "completed"
+    },
+    "elapsedMs": 19070
+  },
+  "helperSha256": "47b23582396ddf9389bcfe4264d43bb9a46e0d08d43df5d21b9e5aad221b4d86",
+  "validation": {
+    "sourceIds": "PASS",
+    "sameMemberStoredReadback": "PASS",
+    "otherMemberRead": 404,
+    "otherMemberGenerate": 404,
+    "fullCheck": {
+      "workers": 146,
+      "frontend": 11,
+      "nativeRuntime": 2,
+      "typecheck": "PASS",
+      "dryRunBuild": "PASS"
+    }
+  }
+}
