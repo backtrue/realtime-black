@@ -1,0 +1,103 @@
+{
+  "observedAt": "2026-11-05T14:56:04.300Z",
+  "app": {
+    "id": "629e49c6-8dc3-42cd-b86c-d35b18e038dd",
+    "url": "https://eccal.thinkwithblack.com",
+    "repository": "backtrue/eccal-new",
+    "branch": "codex/thinkwithblack-mcp-auth"
+  },
+  "authorization": {
+    "connectionInfoReadApproved": true,
+    "oneTimeDevelopmentShellApproved": true,
+    "productionWritesPerformed": false
+  },
+  "source": {
+    "helperCommit": "2e841c427d63053b87be999275740bbcb58ae1f2",
+    "publishedCommit": "059dd26d4963b5e2afed2a6573fd35a8efe3657c",
+    "publishedParent": "2e841c427d63053b87be999275740bbcb58ae1f2",
+    "publishedTreeMatchesHelper": true,
+    "buildId": "90c09a5f-6346-46bd-9470-d1f26fe37b93",
+    "publishCommitTime": "2026-11-05T14:46:47Z",
+    "githubAndReplitSynced": true
+  },
+  "backup": {
+    "bytes": 3777878,
+    "sha256": "94487852932422b75288da097fbf61518cff2e4764534d6ce2e9ab27e142f2a3",
+    "fileMode": "0600",
+    "restorePassed": true,
+    "restoredPublicTables": 63,
+    "voiceCounts": {
+      "voice_quotas": 3,
+      "voice_reservations": 17,
+      "voice_login_codes": 1,
+      "voice_sessions": 4
+    },
+    "voiceCountsMatch": true
+  },
+  "development": {
+    "internalConnectionOnly": true,
+    "existingTables": 59,
+    "addedTables": [
+      "voice_quotas",
+      "voice_reservations",
+      "voice_login_codes",
+      "voice_sessions"
+    ],
+    "applied": true,
+    "backupCreated": true,
+    "existingDataUnchanged": true,
+    "beforeSha256": "79435c60ee9e1b8d3e70d0a9bbd5fe10f90db395bc4c4d7cba583576f7381d15",
+    "afterSha256": "79435c60ee9e1b8d3e70d0a9bbd5fe10f90db395bc4c4d7cba583576f7381d15",
+    "schemaMatchesProductionManifest": true,
+    "migrationSha256": "06270354ff625298266c870b7a137357172df573ab62a0aaedf27de0c8246f7c"
+  },
+  "production": {
+    "beforeObservedAt": "2026-11-05T14:42:12.166Z",
+    "afterObservedAt": "2026-11-05T14:48:06.633Z",
+    "readOnly": true,
+    "publicTables": 63,
+    "allExistingTablesPreserved": true,
+    "allExistingRowsUnchanged": true,
+    "missingTables": [],
+    "changedTables": [],
+    "voiceDataUnchanged": true,
+    "beforeSha256": "1661b393b7f6e169d4e82751d6d3f328cc6e78d62f7db1362353378cf6bbf0e3",
+    "afterSha256": "1661b393b7f6e169d4e82751d6d3f328cc6e78d62f7db1362353378cf6bbf0e3",
+    "voiceCounts": {
+      "voice_login_codes": "1",
+      "voice_quotas": "3",
+      "voice_reservations": "17",
+      "voice_sessions": "4"
+    }
+  },
+  "publish": {
+    "status": "success",
+    "deploymentId": "03b7e1a3-4217-445c-abab-8ac828d50890",
+    "websiteStatus": "Live",
+    "websitePublishedAgo": "2 minutes ago",
+    "destructiveMigrationApprovalGiven": false
+  },
+  "validation": {
+    "localTestsPassed": 7,
+    "actualProductionManifestMatchedInLocalScratch": true,
+    "independentHelperReview": "PASS",
+    "liveService": {
+      "observedAt": "2026-11-05T14:50:27.126Z",
+      "eccalRootStatus": 200,
+      "anonymousAuthenticateStatus": 200,
+      "contract": "eccal-voice-v1",
+      "noStore": "no-store",
+      "anonymousIdentityNull": true
+    },
+    "callSite": {
+      "observedAt": "2026-11-05T14:52:18.631Z",
+      "url": "https://call.thinkwithblack.com/",
+      "signedIn": true,
+      "balanceText": "剩餘通話時間：0 分 0 秒",
+      "recordCount": 12,
+      "existingSummaryExpanded": true,
+      "existingMethodReadback": true,
+      "individualMcpControlsPresent": false
+    }
+  }
+}

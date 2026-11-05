@@ -14,7 +14,7 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 
 本輪補完交付狀態八情境、ECCAL 原生發證與最後一秒搶用、顧問追問與完整案例實際模型對照，以及同版五類異常矩陣。ECCAL 測試合計 17 額度、1 跨 repo 額度、8 登入、2 舊 OAuth 相容與 2 原生 gate／搶用通過，本機測試 schema 與提供者測試通話均已清理
 
-#1、#3、#22 已完成 GitHub 驗收紀錄並結案。ECCAL 測試已推送並由 Replit Git 拉取；Republish 產生刪除四張語音資料表的差異，已取消，既有正式服務維持 Live，詳見 [ECCAL 同步與發布結果](replit-sync-validation-2026-11-05.md)
+#1、#3、#22 已完成 GitHub 驗收紀錄並結案。ECCAL 開發庫已補齊四張語音表，重新發布成功，發布前後正式庫 63 張 public 表資料完全相同；GitHub、Replit 與本機發布紀錄為 059dd26，詳見 [ECCAL 發布刪表修正與資料保留](eccal-schema-preservation-2026-11-05.md)
 
 `npm audit --omit=dev` 回報 0 個弱點。詳細案例與本機 HTTP 讀回見 [2026-11-04 驗證紀錄](validation-2026-11-04.md)
 

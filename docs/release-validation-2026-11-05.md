@@ -471,4 +471,10 @@ Issue #13 以實際 gpt-realtime-2.1 與目前內建 MCP 方法完成不足資�
 
 ECCAL 測試提交 `4ea45881d8e99651361415ef12d3c247fc7f0b89` 已推上 codex/thinkwithblack-mcp-auth。Replit Git 拉取後保留原發布紀錄，形成同 tree 的 `351b2e56bf05da6b03c946b0eb0408ae3db51248`，已推送並由本機讀回
 
-Republish 預覽要刪除 voice_reservations、voice_quotas、voice_login_codes、voice_sessions，已於核准 migration 前取消。頁面讀回 Build canceled／Current status Live；既有會員登入、0 秒餘額與 12 筆通話紀錄仍可讀。Git 同步完成，這次發布取消，來源與後續資料庫連線缺口見 [ECCAL 同步與發布結果](replit-sync-validation-2026-11-05.md)
+第一次 Republish 預覽要刪除 voice_reservations、voice_quotas、voice_login_codes、voice_sessions，已於核准 migration 前取消。頁面讀回 Build canceled／Current status Live；既有會員登入、0 秒餘額與 12 筆通話紀錄仍可讀，見 [ECCAL 同步與發布結果](replit-sync-validation-2026-11-05.md)
+
+### ECCAL 補齊開發庫並重新發布
+
+依使用者核准的本次 Replit Shell 例外，套用本機完成且通過 7 項測試與獨立驗收的補表工具。開發庫新增四張語音表，原有 59 張表資料不變；正式庫全庫備份與本機還原通過，發布前後 63 張 public 表的筆數及逐列內容摘要完全相同
+
+Republish 已成功，發布提交為 059dd26，parent 為 2e841c4，0 changed files，build ID 為 90c09a5f-6346-46bd-9470-d1f26fe37b93。GitHub、Replit 與本機已同步。完整重新整理正式語音站後，會員登入、0 秒餘額、12 筆紀錄與既有 MK-453 摘要可讀，見 [發布刪表修正與資料保留](eccal-schema-preservation-2026-11-05.md)

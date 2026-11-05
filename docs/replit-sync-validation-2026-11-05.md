@@ -2,6 +2,8 @@
 
 日期：2026-11-05
 
+第二次 Republish 已於台灣時間 2026-11-05 22:46 完成，四張語音表及全庫資料均保留，詳見 [發布刪表修正與資料保留](eccal-schema-preservation-2026-11-05.md)
+
 App 為 [eccal](https://replit.com/@backtrue/eccal)，ID `629e49c6-8dc3-42cd-b86c-d35b18e038dd`，repository 為 backtrue/eccal-new，分支 codex/thinkwithblack-mcp-auth
 
 ## Git 同步
@@ -10,7 +12,7 @@ App 為 [eccal](https://replit.com/@backtrue/eccal)，ID `629e49c6-8dc3-42cd-b86
 
 經 Git 控制項推送後，GitHub 與本機讀回同一 351b2e5，tree 與 4ea4588 完全相同。正式程式及 schema 沿用原檔，增量為發證／並行驗收與舊工具 fixture 更新
 
-## 本次 Republish 已取消
+## 第一次 Republish 已取消
 
 Replit 發布工具回傳 INVALID_ARGUMENT，要求從網站確認資料庫差異。網站 Republish 在 Provision 階段停下，準備執行以下 DROP：
 
@@ -31,6 +33,6 @@ Replit 發布工具回傳 INVALID_ARGUMENT，要求從網站確認資料庫差�
 
 Git、發布取消與正式讀回的去識別結果見 [驗證 JSON](examples/replit-sync-validation-2026-11-05.json)
 
-## 發布阻礙
+## 第一次發布的連線缺口
 
 本機目前可用的專案設定未提供該 Replit 開發資料庫連線。依 [replit-project-work](/Users/backtrue/.codex/skills/replit-project-work/SKILL.md)「Do project work locally」，資料庫差異須在 Replit 外核對；取得開發資料庫的受控連線後，核對既有 0004／0005 語音表，再讓發布差異保留這四張表
