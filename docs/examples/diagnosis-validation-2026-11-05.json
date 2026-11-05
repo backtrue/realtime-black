@@ -1,0 +1,350 @@
+{
+  "observedDate": "2026-11-05",
+  "spec": "GitHub issue #14 / docs/development-plan.md M1-05",
+  "issue": 14,
+  "environment": {
+    "input": "Controlled synthetic member text and method responses",
+    "runtime": "Actual OpenAiRealtime and MemberEngine with native WebRTC peer",
+    "provider": "Actual OpenAI gpt-realtime-2.1 with deployed consultant instructions",
+    "productionRecordCreated": false,
+    "microphoneUsed": false,
+    "audioPersisted": false
+  },
+  "result": {
+    "observedAt": "2026-11-05T09:34:17.520Z",
+    "purpose": "Issue #14 two controlled funnels and their missing-denominator variants with actual Realtime replies",
+    "sourceCommit": "41b7231d9ca3345d688bb41598ac3da80c7237b1",
+    "sourceSha256": {
+      "src/openai.ts": "9144944cc39695caae94d6a4b2b21be283df1e9f305965b7ea75b96c14124a01",
+      "src/member-engine.ts": "c8c2149eaeb682e97f26d7f8183721e7e9c218cea5280241e63a7fbd164d5682",
+      "src/consultant.ts": "1eb1c4de91c39b5e0c076abd09fe56e533606eeda55b6030d896dbe19ff9e6c6"
+    },
+    "model": "gpt-realtime-2.1",
+    "quota": "controlled fixture only",
+    "productionRecordCreated": false,
+    "microphoneUsed": false,
+    "audioPersisted": false,
+    "method": {
+      "id": "fixture-funnel-method",
+      "name": "受控測試：分段漏斗查核",
+      "source": "synthetic acceptance fixture",
+      "fullText": "先核對同期間、相同事件定義的到站、加入購物車及訂單。到站至加購比率為加購除以到站，加購至訂單比率為訂單除以加購。比例只能描述流失，不能證明原因。第一步驗證追蹤與分母，第二步依主要流失階段檢查。到站至加購弱時檢查廣告承諾與商品頁資訊一致性；加購至下單弱時檢查運費、付款及結帳步驟。這些都是待驗證方向，不是已確認原因。缺少關鍵分母時不得代填或確定優先階段，先索取缺少的數字，再依相同定義比較。"
+    },
+    "cases": [
+      {
+        "id": "cart-to-order",
+        "input": "商品是單口65W USB-C桌面充電座，單價1500元，廣告目標是下單；只有我執行，每週4小時。數字都是同一週同一事件定義，但還沒有驗證追蹤正確性；運費呈現與放棄原因未知。我口述到站1000次、加購200次、訂單2筆。請先讀取方法庫全文，再告訴我先改善哪一段、依據、先做後做與核對方式。請用五到六句話回答，分清會員口述、工具資料、推論、建議與未知。",
+        "toolResults": [
+          {
+            "name": "thinkwithblack_entry_catalog",
+            "args": {},
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entries": [
+                {
+                  "id": "E03",
+                  "name": "網站轉換漏斗診斷"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_entry_read",
+            "args": {
+              "entry_id": "E03"
+            },
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entry_id": "E03",
+              "methods": [
+                {
+                  "id": "fixture-funnel-method",
+                  "name": "受控測試：分段漏斗查核"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "fixture-funnel-method"
+            },
+            "result": {
+              "id": "fixture-funnel-method",
+              "name": "受控測試：分段漏斗查核",
+              "source": "synthetic acceptance fixture",
+              "fullText": "先核對同期間、相同事件定義的到站、加入購物車及訂單。到站至加購比率為加購除以到站，加購至訂單比率為訂單除以加購。比例只能描述流失，不能證明原因。第一步驗證追蹤與分母，第二步依主要流失階段檢查。到站至加購弱時檢查廣告承諾與商品頁資訊一致性；加購至下單弱時檢查運費、付款及結帳步驟。這些都是待驗證方向，不是已確認原因。缺少關鍵分母時不得代填或確定優先階段，先索取缺少的數字，再依相同定義比較。"
+            }
+          }
+        ],
+        "replies": [
+          "好，我先整理你提供的數據，再讀方法庫，然後用清楚的先後順序說明。",
+          "會員口述的事實是：單口 65W USB-C 桌面充電座，單價 1500 元，只有你一個人操作，每週 4 小時；同週同定義下的數字是到站 1000、加購 200、訂單 2，但追蹤還沒驗證正確性。工具資料（方法全文）指出，第一步是核對追蹤與分母，比例只能描述流失，不能證明原因；到站到加購弱時看廣告承諾與商品頁一致性，加購到下單弱時看運費、付款與結帳步驟。推論是：在未驗證追蹤前，只能暫時看出加購到訂單的比率很低（2 除以 200 約 1%），但這不是原因證據。建議是先做追蹤與事件定義的核對，包含同期間的到站、加購、訂單是否一致，再依主要流失段檢查結帳流程與運費呈現；後做才是調整商品頁內容與廣告承諾的一致性。未知與限制是：運費呈現方式與放棄原因目前沒有資料，不能當成已查到的結果。"
+        ],
+        "elapsedMs": 80533,
+        "rtpPackets": 4049,
+        "responseStatuses": [
+          "completed",
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "errors": [],
+        "methodFullTextRead": true,
+        "successfulToolCount": 3,
+        "transportOk": true,
+        "providerEndConfirmed": true
+      },
+      {
+        "id": "visit-to-cart",
+        "input": "商品是單口65W USB-C桌面充電座，單價1500元，廣告目標是下單；只有我執行，每週4小時。數字都是同一週同一事件定義，但還沒有驗證追蹤正確性；運費呈現與放棄原因未知。我口述到站1000次、加購10次、訂單5筆。請先讀取方法庫全文，再告訴我先改善哪一段、依據、先做後做與核對方式。請用五到六句話回答，分清會員口述、工具資料、推論、建議與未知。",
+        "toolResults": [
+          {
+            "name": "thinkwithblack_entry_catalog",
+            "args": {},
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entries": [
+                {
+                  "id": "E03",
+                  "name": "網站轉換漏斗診斷"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_entry_read",
+            "args": {
+              "entry_id": "E03"
+            },
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entry_id": "E03",
+              "methods": [
+                {
+                  "id": "fixture-funnel-method",
+                  "name": "受控測試：分段漏斗查核"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "fixture-funnel-method"
+            },
+            "result": {
+              "id": "fixture-funnel-method",
+              "name": "受控測試：分段漏斗查核",
+              "source": "synthetic acceptance fixture",
+              "fullText": "先核對同期間、相同事件定義的到站、加入購物車及訂單。到站至加購比率為加購除以到站，加購至訂單比率為訂單除以加購。比例只能描述流失，不能證明原因。第一步驗證追蹤與分母，第二步依主要流失階段檢查。到站至加購弱時檢查廣告承諾與商品頁資訊一致性；加購至下單弱時檢查運費、付款及結帳步驟。這些都是待驗證方向，不是已確認原因。缺少關鍵分母時不得代填或確定優先階段，先索取缺少的數字，再依相同定義比較。"
+            }
+          }
+        ],
+        "replies": [
+          "好，我先讀取方法庫內容，再根據你提供的數字安排優先改善方向與核對方式。",
+          "會員口述的事實是：同一週同一定義下，到站1000次、加購10次、訂單5筆，而且追蹤還沒驗證正確性。工具資料的依據是方法庫指出，要先確認同期間、同定義的事件與分母，比例只能描述流失，不能證明原因。推論上，目前加購率大約是1%，加購到訂單大約是50%，看起來主要流失可能在到站到加購這一段，但這不能當成原因。建議先做的是追蹤查核，確認事件定義、分母與資料一致，再檢查廣告承諾和商品頁內容是否一致；之後才是針對結帳流程，包括運費呈現與付款步驟做優化。核對方式是看修正後同定義的到站、加購、訂單的變化。未知的部分包括運費呈現方式、放棄原因，以及追蹤是否真的正確，這些目前都沒有資料可以確認。"
+        ],
+        "elapsedMs": 70965,
+        "rtpPackets": 3570,
+        "responseStatuses": [
+          "completed",
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "errors": [],
+        "methodFullTextRead": true,
+        "successfulToolCount": 3,
+        "transportOk": true,
+        "providerEndConfirmed": true
+      },
+      {
+        "id": "cart-to-order-missing",
+        "input": "商品是單口65W USB-C桌面充電座，單價1500元，廣告目標是下單；只有我執行，每週4小時。數字都是同一週同一事件定義，但還沒有驗證追蹤正確性；運費呈現與放棄原因未知。我口述到站1000次、訂單2筆；加購次數沒有提供。請先讀取方法庫全文，再告訴我先改善哪一段、依據、先做後做與核對方式。請用五到六句話回答，分清會員口述、工具資料、推論、建議與未知。",
+        "toolResults": [
+          {
+            "name": "thinkwithblack_entry_catalog",
+            "args": {},
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entries": [
+                {
+                  "id": "E03",
+                  "name": "網站轉換漏斗診斷"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_entry_read",
+            "args": {
+              "entry_id": "E03"
+            },
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entry_id": "E03",
+              "methods": [
+                {
+                  "id": "fixture-funnel-method",
+                  "name": "受控測試：分段漏斗查核"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "fixture-funnel-method"
+            },
+            "result": {
+              "id": "fixture-funnel-method",
+              "name": "受控測試：分段漏斗查核",
+              "source": "synthetic acceptance fixture",
+              "fullText": "先核對同期間、相同事件定義的到站、加入購物車及訂單。到站至加購比率為加購除以到站，加購至訂單比率為訂單除以加購。比例只能描述流失，不能證明原因。第一步驗證追蹤與分母，第二步依主要流失階段檢查。到站至加購弱時檢查廣告承諾與商品頁資訊一致性；加購至下單弱時檢查運費、付款及結帳步驟。這些都是待驗證方向，不是已確認原因。缺少關鍵分母時不得代填或確定優先階段，先索取缺少的數字，再依相同定義比較。"
+            }
+          }
+        ],
+        "replies": [
+          "好的，我先幫你從方法庫把完整內容抓出來，再依照你的數字整理重點與先後順序。",
+          "會員口述：單口 65W USB-C 桌面充電座，單價 1500 元，目標是下單，只有你一個人執行，每週 4 小時；同週口述到站 1000 次、訂單 2 筆，且追蹤正確性尚未驗證。工具資料：方法全文指出，先驗證追蹤與分母，再找主要流失階段，缺少關鍵分母時不能自行補齊或確定優先段。推論：目前沒有加購次數，無法計算到站到加購、以及加購到訂單的比例，因此不能判斷應該先修商品頁或結帳。建議先做的是用同一事件定義補上加購次數，並驗證到站與訂單追蹤，核對方式是同期間比對到站、加購、訂單是否一致。後做才是依流失段檢查廣告承諾與商品頁資訊一致性，或運費、付款與結帳流程。未知：運費呈現、放棄原因與加購數目前都沒有數據，不能當成已確認問題。"
+        ],
+        "elapsedMs": 74829,
+        "rtpPackets": 3763,
+        "responseStatuses": [
+          "completed",
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "errors": [],
+        "methodFullTextRead": true,
+        "successfulToolCount": 3,
+        "transportOk": true,
+        "providerEndConfirmed": true
+      },
+      {
+        "id": "visit-to-cart-missing",
+        "input": "商品是單口65W USB-C桌面充電座，單價1500元，廣告目標是下單；只有我執行，每週4小時。數字都是同一週同一事件定義，但還沒有驗證追蹤正確性；運費呈現與放棄原因未知。我口述到站1000次、訂單5筆；加購次數沒有提供。請先讀取方法庫全文，再告訴我先改善哪一段、依據、先做後做與核對方式。請用五到六句話回答，分清會員口述、工具資料、推論、建議與未知。",
+        "toolResults": [
+          {
+            "name": "thinkwithblack_entry_catalog",
+            "args": {},
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entries": [
+                {
+                  "id": "E03",
+                  "name": "網站轉換漏斗診斷"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_entry_read",
+            "args": {
+              "entry_id": "E03"
+            },
+            "result": {
+              "source": "synthetic acceptance fixture",
+              "entry_id": "E03",
+              "methods": [
+                {
+                  "id": "fixture-funnel-method",
+                  "name": "受控測試：分段漏斗查核"
+                }
+              ]
+            }
+          },
+          {
+            "name": "thinkwithblack_marketing_skill_read",
+            "args": {
+              "id": "fixture-funnel-method"
+            },
+            "result": {
+              "id": "fixture-funnel-method",
+              "name": "受控測試：分段漏斗查核",
+              "source": "synthetic acceptance fixture",
+              "fullText": "先核對同期間、相同事件定義的到站、加入購物車及訂單。到站至加購比率為加購除以到站，加購至訂單比率為訂單除以加購。比例只能描述流失，不能證明原因。第一步驗證追蹤與分母，第二步依主要流失階段檢查。到站至加購弱時檢查廣告承諾與商品頁資訊一致性；加購至下單弱時檢查運費、付款及結帳步驟。這些都是待驗證方向，不是已確認原因。缺少關鍵分母時不得代填或確定優先階段，先索取缺少的數字，再依相同定義比較。"
+            }
+          }
+        ],
+        "replies": [
+          "好，我先從方法庫挑適用的入口並讀完整內容，再整理出可執行的優先順序。",
+          "會員口述是：65W USB-C 桌面充電座，單價1500元，目標是下單，每週只有你自己投入4小時，單週到站1000次、訂單5筆，但追蹤正確性尚未驗證，加購次數也沒有提供。\n工具資料顯示的方法是「受控測試：分段漏斗查核」，要求先驗證同期間、同事件定義與分母，再依主要流失階段檢查，而且缺少關鍵分母時不得代填或硬判優先段。\n推論是：目前沒有加購次數，就無法判斷是「到站到加購」弱，還是「加購到下單」弱，所以也不能確定哪一段是主要問題。\n建議先做的是：先核對追蹤事件和分母是否一致，並補上加購次數，再依比例找出主要流失段；後做的才是依流失段去檢查商品頁與廣告承諾一致性，或結帳中運費、付款、步驟的阻礙。\n未知的是：運費呈現與放棄原因仍未取得，比例也只能描述流失，不能證明真正原因。"
+        ],
+        "elapsedMs": 80779,
+        "rtpPackets": 4061,
+        "responseStatuses": [
+          "completed",
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "errors": [],
+        "methodFullTextRead": true,
+        "successfulToolCount": 3,
+        "transportOk": true,
+        "providerEndConfirmed": true
+      }
+    ],
+    "transportOk": true,
+    "bundleSha256": "816691a15661ef73935cdbff0c4a58de03185ddf99f368b426eec0504f1e4f00"
+  },
+  "helperSha256": {
+    "run.mjs": "23fa707ca1ef2edc7da208a28f7a747889a2075d16a58aaa6bccda98056aa96f"
+  },
+  "comparison": [
+    {
+      "case": "cart-to-order",
+      "memberNumbers": {
+        "visits": 1000,
+        "cart": 200,
+        "orders": 2
+      },
+      "computedCartToOrderPercent": 1,
+      "replyPriorities": [
+        "validate tracking and denominator",
+        "checkout and shipping",
+        "product page and ad consistency"
+      ],
+      "causesRemainUnknown": true
+    },
+    {
+      "case": "visit-to-cart",
+      "memberNumbers": {
+        "visits": 1000,
+        "cart": 10,
+        "orders": 5
+      },
+      "computedVisitToCartPercent": 1,
+      "computedCartToOrderPercent": 50,
+      "replyPriorities": [
+        "validate tracking and denominator",
+        "ad and product page consistency",
+        "checkout"
+      ],
+      "causesRemainUnknown": true
+    },
+    {
+      "case": "cart-to-order-missing",
+      "memberNumbers": {
+        "visits": 1000,
+        "cart": null,
+        "orders": 2
+      },
+      "priority": "validate tracking and obtain cart count before choosing funnel stage",
+      "missingCartNotInvented": true
+    },
+    {
+      "case": "visit-to-cart-missing",
+      "memberNumbers": {
+        "visits": 1000,
+        "cart": null,
+        "orders": 5
+      },
+      "priority": "validate tracking and obtain cart count before choosing funnel stage",
+      "missingCartNotInvented": true
+    }
+  ]
+}

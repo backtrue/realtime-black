@@ -420,3 +420,11 @@ Issue #17 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，兩筆正
 MCP 的模型參數可能包含對話文字，OpenAI 的文件請求使用 store:false，Realtime application state 與預設濫用監控政策已依官方文件列出，個別組織保存覆寫未取得資料，記為 null
 
 2026-11-05 fresh spec_evaluator 核對儲存、到期、版本、原始設定與外送資料流，Issue #26 判定 PASS。欄位、位置與完整證據見 [通話資料儲存清冊](storage-inventory.md)
+
+## Issue #14 漏斗診斷與缺數字實際模型驗收
+
+使用 source `41b7231` 的正式顧問指示、OpenAiRealtime、MemberEngine 與實際 gpt-realtime-2.1，在四個獨立 WebRTC 會話分別輸入兩組合成漏斗與各自缺加購數版本。每通走完目錄、入口及受控方法全文，均有 RTP、completed、零 error 與掛斷確認
+
+A 的 1000／200／2 推得加購至訂單 1%，先驗證追蹤再查結帳；B 的 1000／10／5 推得 1%／50%，先驗證追蹤再查廣告與商品頁。抽掉加購數後，兩案均指出缺少分母、無法確定主要流失階段，先補資料而未沿用另一案的數字
+
+四份答覆均區分會員口述、工具、推論、建議與未知，改善順序符合各自資料，原因未當成已確認。2026-11-05 fresh spec_evaluator 逐句核對原始輸入、方法與答覆、獨立重算數字、比對 source/helper/bundle SHA，Issue #14 判定 PASS。完整對照見 [漏斗診斷驗收](diagnosis-validation-2026-11-05.md)
