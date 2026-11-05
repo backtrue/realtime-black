@@ -1,0 +1,63 @@
+{
+  "observedAt": "2026-11-05T13:17:47.399Z",
+  "app": {
+    "id": "629e49c6-8dc3-42cd-b86c-d35b18e038dd",
+    "name": "eccal",
+    "url": "https://replit.com/@backtrue/eccal",
+    "repository": "backtrue/eccal-new",
+    "branch": "codex/thinkwithblack-mcp-auth"
+  },
+  "github": {
+    "testedCommit": "4ea45881d8e99651361415ef12d3c247fc7f0b89",
+    "syncedCommit": "351b2e56bf05da6b03c946b0eb0408ae3db51248",
+    "sameTree": true
+  },
+  "replitGit": {
+    "cleanBeforePull": true,
+    "pulledTestCommit": true,
+    "preservedEmptyPublishCommit": true,
+    "pushedSyncedCommit": true
+  },
+  "publish": {
+    "toolResult": "INVALID_ARGUMENT: schema review required in website",
+    "websiteAttemptStatus": "Build canceled",
+    "existingSiteStatus": "Live",
+    "migrationApprovalGiven": false,
+    "proposedDrops": [
+      {
+        "table": "voice_reservations",
+        "rows": 17
+      },
+      {
+        "table": "voice_quotas",
+        "rows": 3
+      },
+      {
+        "table": "voice_login_codes",
+        "rows": 1
+      },
+      {
+        "table": "voice_sessions",
+        "rows": 4
+      }
+    ],
+    "existingLiveDeploymentId": "03b7e1a3-4217-445c-abab-8ac828d50890"
+  },
+  "outsideReplitReadback": {
+    "eccalRootStatus": 200,
+    "anonymousInternalAuthenticateStatus": 200,
+    "contract": "eccal-voice-v1",
+    "anonymousIdentity": null,
+    "callSite": {
+      "observedAt": "2026-11-05T13:15:55.024Z",
+      "url": "https://call.thinkwithblack.com/",
+      "signedIn": true,
+      "balanceText": "剩餘通話時間：0 分 0 秒",
+      "recordCount": 12,
+      "individualMcpControlsPresent": false,
+      "publishCanceled": true,
+      "existingEccalLive": true
+    }
+  },
+  "developmentDatabaseConnectionInAvailableProjectSettings": false
+}

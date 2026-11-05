@@ -466,3 +466,9 @@ ECCAL 與原生 voice HTTP 的八種發證情境及最後一秒雙請求對帳�
 Issue #13 以實際 gpt-realtime-2.1 與目前內建 MCP 方法完成不足資訊、同通補充及完整資訊對照，MK-453 全文 SHA 相符。首次完整案例回 incomplete 已保留，單獨提高測試輸出上限重測後 completed，全部提供者通話已掛斷。本人教學口吻試聽仍待完成，見 [顧問對話驗證](consultant-validation-2026-11-05.md)
 
 同版五類異常與第一期未完成條件見 [異常流程驗證](exception-validation-2026-11-05.md)。語音完整檢查為 170 Workers、14 前端、3 原生、型別與 dry-run；ECCAL 17 額度、1 跨 repo 額度、8 登入、2 舊 OAuth 相容、2 原生 gate／搶用通過。正式會員與額度未改動，本機測試 schema、提供者通話與原生 runtime 已清理
+
+## ECCAL 測試同步與刪表發布取消
+
+ECCAL 測試提交 `4ea45881d8e99651361415ef12d3c247fc7f0b89` 已推上 codex/thinkwithblack-mcp-auth。Replit Git 拉取後保留原發布紀錄，形成同 tree 的 `351b2e56bf05da6b03c946b0eb0408ae3db51248`，已推送並由本機讀回
+
+Republish 預覽要刪除 voice_reservations、voice_quotas、voice_login_codes、voice_sessions，已於核准 migration 前取消。頁面讀回 Build canceled／Current status Live；既有會員登入、0 秒餘額與 12 筆通話紀錄仍可讀。Git 同步完成，這次發布取消，來源與後續資料庫連線缺口見 [ECCAL 同步與發布結果](replit-sync-validation-2026-11-05.md)
