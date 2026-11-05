@@ -9,6 +9,7 @@ import { boundedEccal } from "./eccal";
 import { boundedDelivery } from "./delivery";
 import { callDeadline } from "./metering";
 import { HttpEccalQuota } from "./eccal-http";
+import { HttpEccalEmail } from "./email";
 import { authRoutes, type AuthorizationPort } from './auth-routes';
 import { MemberAuthorization } from './member-authorization';
 import { McpOAuth } from './mcp-oauth';
@@ -45,6 +46,7 @@ function eccalPort(env: Env): EccalPort {
   const quota = new HttpEccalQuota(env.ECCAL_ORIGIN ?? '', env.ECCAL_SERVICE_TOKEN ?? '');
   return {
     authenticate: credentials => quota.authenticate(credentials), balance: id => quota.balance(id),
+    emailRecipient: id => quota.emailRecipient(id),
     reserve: (id, operation) => quota.reserve(id, operation), settle: (id, reservation, events) => quota.settle(id, reservation, events),
     mcpGrant: async memberId => {
       if (!env.AUTH) throw new AppError('MCP_AUTH_NOT_CONFIGURED');
@@ -176,7 +178,7 @@ export class MemberRoom extends DurableObject<Env> {
       mcp: new DefaultMethods(env.MCP_METHODS), documents: new OpenAiDocuments(env.OPENAI_API_KEY ?? "", env.TEXT_MODEL ?? ""),
       onMeterChange: async record => { unwrap(await env.CUTOFFS.get(env.CUTOFFS.idFromName(record.id)).updateDeadline(callDeadline(record, Date.now()), record.events.length)); },
       now: Date.now, id: () => crypto.randomUUID(),
-      delivery: env.DELIVERY ? boundedDelivery(env.DELIVERY) : undefined, appOrigin: env.APP_ORIGIN,
+      delivery: env.DELIVERY ? boundedDelivery(env.DELIVERY) : env.ECCAL_ORIGIN && env.ECCAL_SERVICE_TOKEN ? boundedDelivery(new HttpEccalEmail(env.ECCAL_ORIGIN, env.ECCAL_SERVICE_TOKEN)) : undefined, appOrigin: env.APP_ORIGIN,
     });
   }
   async start(identity: Identity, operationId: string, sdp: string) {
@@ -235,6 +237,9 @@ export class MemberRoom extends DurableObject<Env> {
   }
   async dispatchDelivery(memberId: string, id: string, jobId: string, proof: unknown, claimCode?: string) {
     return this.run(async () => publicDelivery(await this.engine.dispatchDelivery(memberId, id, jobId, proof, claimCode)));
+  }
+  async sendEmail(memberId: string, id: string, jobId: string) {
+    return this.run(async () => publicDelivery(await this.engine.sendEmail(memberId, id, jobId)));
   }
   async providerEnded(memberId: string, id: string, at: number): Promise<RpcResult<{ acknowledged: true }>> {
     const record = await this.ctx.storage.get<CallRecord>(`call:${id}`);
@@ -429,6 +434,11 @@ export default {
           const operationId = request.headers.get("idempotency-key") ?? "";
           response = Response.json(unwrap(await room.start(identity, operationId, await readText(request, 65536))), { status: 201 });
         } else {
+          const email = /^\/api\/calls\/([a-zA-Z0-9_-]{1,100})\/deliveries\/([a-zA-Z0-9_-]{1,100})\/email$/.exec(path);
+          if (email && request.method === "POST") {
+            if (request.body && await readText(request, 1) !== "") throw new AppError("INVALID_DELIVERY_REQUEST", 400);
+            response = Response.json(unwrap(await room.sendEmail(identity.memberId, email[1]!, email[2]!)));
+          } else {
           const match = /^\/api\/calls\/([a-zA-Z0-9_-]{1,100})(?:\/(end|documents|deliveries))?$/.exec(path);
           if (!match?.[1]) throw new AppError("NOT_FOUND", 404);
           if (!match[2] && request.method === "GET") response = Response.json(unwrap(await room.record(identity.memberId, match[1])));
@@ -447,6 +457,7 @@ export default {
             if (Object.keys(input).some(key => !["documentId", "channel", "recipient", "operationId"].includes(key)) || typeof input.documentId !== "string" || typeof input.operationId !== "string" || typeof input.recipient !== "string" || input.channel !== "email" && input.channel !== "line") throw new AppError("INVALID_DELIVERY_REQUEST", 400);
             response = Response.json(unwrap(await room.requestDelivery(identity.memberId, match[1], input as { documentId: string; channel: "email" | "line"; recipient: string; operationId: string })), { status: 201 });
           } else throw new AppError("METHOD_NOT_ALLOWED", 405);
+          }
         }
       }
     } catch (error) {

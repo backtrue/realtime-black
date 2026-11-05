@@ -18,6 +18,33 @@ async function prepared() {
 }
 
 describe("持久交付工作", () => {
+  it("Email 空白收件人由 ECCAL 登入信箱補上，自訂其他信箱遭拒", async () => {
+    const f = await prepared();
+    const created = await f.engine.requestDelivery('a', f.call.id, { documentId: f.document.id, channel: 'email', recipient: '', operationId: crypto.randomUUID() });
+    expect(created.job.recipient).toBe('fixture@example.invalid');
+    await expect(f.engine.requestDelivery('a', f.call.id, { documentId: f.document.id, channel: 'email', recipient: 'other@example.invalid', operationId: crypto.randomUUID() })).rejects.toMatchObject({ code: 'RECIPIENT_UNVERIFIED', status: 403 });
+    expect((await f.record(f.call.id))?.deliveries).toHaveLength(1); expect(f.send).not.toHaveBeenCalled();
+  });
+  it("派送前重查登入信箱，信箱已變更時不寄送既有工作", async () => {
+    const f = await prepared(); const created = await f.request();
+    f.eccal.emailRecipient = async () => 'changed@example.invalid';
+    await expect(f.engine.sendEmail('a', f.call.id, created.job.id)).rejects.toMatchObject({ code: 'RECIPIENT_UNVERIFIED' }); expect(f.send).not.toHaveBeenCalled();
+  });
+  it("會員 Email HTTP 送出可重播，另一會員與 LINE 工作不能套用", async () => {
+    const f = await prepared(); const created = await f.request(); const line = await f.request('line');
+    const runtime=env as unknown as Env; const stub=runtime.MEMBERS.get(runtime.MEMBERS.idFromName(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('a')).then(buffer=>[...new Uint8Array(buffer)].map(byte=>byte.toString(16).padStart(2,'0')).join(''))));
+    await runInDurableObject(stub,async instance=>{(instance as unknown as {engine:typeof f.engine}).engine=f.engine;});
+    const config={...runtime,APP_ORIGIN:'https://fixture.invalid',ECCAL:f.eccal};
+    const url=`https://fixture.invalid/api/calls/${f.call.id}/deliveries/${created.job.id}/email`;
+    const post=(target=url,cookie='fixture=a',origin=config.APP_ORIGIN)=>worker.fetch(new Request(target,{method:'POST',headers:{cookie,origin}}),config);
+    expect((await post(url,'','https://fixture.invalid')).status).toBe(401);
+    expect((await post(url,'fixture=a','https://foreign.invalid')).status).toBe(403);
+    expect((await post(url.replace(created.job.id,line.job.id))).status).toBe(404);
+    const first=await post(), replay=await post();
+    expect(first.status).toBe(200);expect(replay.status).toBe(200);expect((await first.json() as {state:string}).state).toBe('succeeded');expect((await replay.json() as {state:string}).state).toBe('succeeded');expect(f.send).toHaveBeenCalledTimes(1);
+    f.eccal.authenticate = async () => ({memberId:'b',eligible:true});
+    expect((await post(url,'fixture=b')).status).toBe(404);expect(f.send).toHaveBeenCalledTimes(1);
+  });
   it("建立待寄送工作不代表已送出，重播同一請求只保存一筆", async () => {
     const f = await prepared(); const op = crypto.randomUUID();
     const first = await f.request("email", op); const replay = await f.request("email", op);

@@ -7,8 +7,10 @@ const errors = {
   ECCAL_NOT_CONFIGURED: "會員服務尚未接通，暫時無法開始通話",
   CALL_NOT_READY: "通話紀錄尚未準備完成，請稍後重新整理",
   TRANSCRIPT_NOT_READY: "逐字稿還在整理，完成後就能產生成果",
-  INVALID_DELIVERY_REQUEST: "請確認收件方式與信箱",
-  RECIPIENT_INVALID: "請填寫正確的接收信箱",
+  INVALID_DELIVERY_REQUEST: "請確認收件方式後再試一次",
+  RECIPIENT_INVALID: "無法核對登入信箱，請重新登入 ECCAL",
+  RECIPIENT_UNVERIFIED: "收件人與 ECCAL 登入信箱不符，請重新登入後再試",
+  EMAIL_RECIPIENT_UNAVAILABLE: "暫時無法核對 ECCAL 登入信箱，請稍後再試",
   RECORD_NOT_FOUND: "找不到這筆通話紀錄，請重新整理清單",
   METHODS_UNAVAILABLE: "小黑的行銷方法暫時無法讀取，請稍後再試",
 };
@@ -164,16 +166,16 @@ async function records() {
         section.id = `document-${artifact.id}`;
         for (const finding of artifact.findings) section.append(node("pre", `${{ member: "會員提供", tool: "工具資料", inference: "判斷", recommendation: "建議", unknown: "待確認" }[finding.kind]}：${finding.text}`));
         if (artifact.kind !== "summary") {
-          const label = node("label", "接收信箱 ");
-          const address = document.createElement("input"); address.type = "email"; address.autocomplete = "email"; label.append(address); section.append(label);
+          section.append(node("p", "Email 成果會寄到你的 ECCAL 登入信箱"));
           for (const [channel, title] of [["email", "寄到 Email"], ["line", "用 LINE 領取"]]) {
             const button = node("button", title); button.className = "secondary";
+            const operationId = crypto.randomUUID();
             button.addEventListener("click", async () => {
-              if (channel === "email" && !address.value) { $("notice").textContent = "請填寫接收信箱"; return; }
               button.disabled = true;
               try {
-                const created = await api(`/api/calls/${record.id}/deliveries`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ documentId: artifact.id, channel, recipient: channel === "email" ? address.value : "", operationId: crypto.randomUUID() }) });
-                section.append(node("p", "等待核對與寄送"));
+                const created = await api(`/api/calls/${record.id}/deliveries`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ documentId: artifact.id, channel, recipient: "", operationId }) });
+                const sent = channel === "email" ? await api(`/api/calls/${record.id}/deliveries/${created.job.id}/email`, { method: "POST" }) : created.job;
+                section.append(node("p", { pending: "等待核對與寄送", sending: "正在寄送", unknown: "寄送結果待確認，請勿重複寄送", failed: "寄送失敗", succeeded: "已送出" }[sent.state]));
                 if (created.claimCode) { section.append(node("p", "加入「報數據」LINE 官方帳號，傳送以下領取碼")); section.append(node("pre", created.claimCode)); }
               } catch (error) { $("notice").textContent = error.message; button.disabled = false; }
             });

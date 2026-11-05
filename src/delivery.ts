@@ -1,4 +1,4 @@
-import { AppError, type CallRecord, type DeliveryPort } from "./contracts";
+import { AppError, type CallRecord, type DeliveryPort, type DeliveryResult, type EmailFailureCode } from "./contracts";
 
 export function boundedDelivery(port: DeliveryPort): DeliveryPort {
   const call = async <T>(operation: () => Promise<T>) => {
@@ -14,8 +14,9 @@ export type Delivery = {
   id: string; memberId: string; documentId: string; channel: "email" | "line";
   recipient: string; verifiedAt: number | null; state: DeliveryState;
   providerReceipt?: string; claimedAt?: number;
+  failureCode?: "DOCUMENT_STALE" | EmailFailureCode; providerStatus?: number;
 };
-export type DeliveryResult = { outcome: "sent"; receipt: string } | { outcome: "rejected" | "unknown" };
+export type { DeliveryResult } from "./contracts";
 export async function sendDelivery(delivery: Delivery, send: (delivery: Delivery) => Promise<DeliveryResult>, persist: (delivery: Delivery) => Promise<void>, supervised = false) {
   if (delivery.verifiedAt === null) throw new AppError("RECIPIENT_UNVERIFIED", 403);
   if (delivery.channel === "line" && !supervised) throw new AppError("LINE_SUPERVISION_REQUIRED", 403);
@@ -26,7 +27,10 @@ export async function sendDelivery(delivery: Delivery, send: (delivery: Delivery
   try { result = await send(delivery); } catch { result = { outcome: "unknown" }; }
   if (!result) result = { outcome: "unknown" };
   if (result.outcome === "sent" && typeof result.receipt === "string" && result.receipt) { delivery.state = "succeeded"; delivery.providerReceipt = result.receipt; }
-  else delivery.state = result.outcome === "rejected" ? "failed" : "unknown";
+  else {
+    delivery.state = result.outcome === "rejected" ? "failed" : "unknown";
+    if (result.outcome !== "sent") { delivery.failureCode = result.failureCode; delivery.providerStatus = result.providerStatus; }
+  }
   await persist(delivery);
   return delivery;
 }

@@ -33,6 +33,7 @@ describe("M2-12 通話資料儲存抽查", () => {
         for (const kind of ["summary", "report", "copy", "plan"] as const) await engine.document("a", call.id, kind);
         const record = await engine.get("a", call.id);
         const report = record.documents.find(document => document.kind === "report")!;
+        f.eccal.emailRecipient = async () => 'fixture-private-recipient@example.invalid';
         await engine.requestDelivery("a", call.id, { documentId: report.id, channel: "email", recipient: "fixture-private-recipient@example.invalid", operationId: crypto.randomUUID() });
         const line = await engine.requestDelivery("a", call.id, { documentId: report.id, channel: "line", recipient: "", operationId: crypto.randomUUID() });
 

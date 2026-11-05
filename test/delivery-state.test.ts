@@ -14,6 +14,7 @@ describe("M2-08 交付狀態與持久證據", () => {
     const runtime = env as unknown as Env;
     const stub = runtime.MEMBERS.get(runtime.MEMBERS.idFromName(await hash("a")));
     const f = fixture();
+    f.eccal.emailRecipient = vi.fn(async () => 'controlled@example.invalid');
     f.eccal.authenticate = vi.fn(async credentials => credentials.cookie === "fixture=a" ? { memberId: "a", eligible: true } : credentials.cookie === "fixture=b" ? { memberId: "b", eligible: true } : null);
     const rows = [];
     const cases = [

@@ -28,7 +28,7 @@ npm run dev -- --port 8787
 | `MCP_CLIENT_ID` | 舊版個人 OAuth 相容入口的 client ID | HTTPS 留白使用本站 CIMD metadata；loopback 測試需已登記的 client ID |
 | `ECCAL` service binding | 會員與額度 port | 有此綁定時採用此來源 |
 | `MCP_METHODS` service binding | 內建共用行銷方法 | `thinkwithblack-mcp` 的 `CallMethods` entrypoint |
-| `DELIVERY` service binding | 收件人與營運權限核對、Email／LINE 送出證據 | D4、D5 核定後的交付 adapter |
+| `DELIVERY` service binding | 收件人與營運權限核對、Email／LINE 送出證據 | 有此綁定時採用該交付 adapter；正式 Email 使用 ECCAL HTTP 與 Resend |
 
 `wrangler.jsonc` 已設定會員、通話截止與 AuthVault 三個 Durable Object，AuthVault 使用 v2 migration。`src/eccal-http.ts` 實作 `eccal-voice-v1`，在沒有 service binding 時使用 ECCAL HTTP 身分與額度介面，共用行銷方法由 `MCP_METHODS` 內部服務綁定提供，通話與工具流程不讀取個人 MCP grant
 
@@ -46,6 +46,7 @@ ECCAL 已有可在本機執行的 PostgreSQL 語音帳本、四項內部 HTTP �
 |---|---|
 | `authenticate` | 從已核定的登入憑證取得會員身分與語音資格，失效登入回傳 null |
 | `balance` | 讀取該會員權威的可用語音秒數 |
+| `emailRecipient` | 讀取該會員目前的 ECCAL 登入信箱 |
 | `reserve` | 以會員及操作識別值原子占用額度，重送同一操作回傳同一筆占用、可用秒數及接通前截止時間 |
 | `settle` | 接收後端事件時間軸，按下列核定規則結算，重送同一占用不重扣 |
 | `mcpGrant` | 保留的舊版型別介面，目前通話與工具流程不呼叫 |
@@ -76,11 +77,11 @@ Cloudflare 命名 entrypoint 由同帳號 Service Binding 呼叫。MCP 的 CallM
 
 ## 成果交付
 
-會員可在成果下方指定 Email 或取得 LINE 領取碼，HTTP 入口建立待處理工作，工作與通話紀錄一同持久保存。清單回傳待處理、寄送中、結果不明、失敗或已送出的狀態
+會員可在成果下方選擇寄到 ECCAL 登入信箱或取得 LINE 領取碼，HTTP 入口建立待處理工作，工作與通話紀錄一同持久保存。清單回傳待處理、寄送中、結果不明、失敗或已送出的狀態
 
-LINE 原碼只在建立時回傳給該會員，儲存端保存 SHA-256 雜湊。原成果到期、已成功領取或文件版本改變後不能再派送。Email 指定地址、成果識別值、會員及工作均須對上交付 adapter 回傳的核對範圍
+LINE 原碼只在建立時回傳給該會員，儲存端保存 SHA-256 雜湊。原成果到期、已成功領取或文件版本改變後不能再派送。Email 登入信箱、成果識別值、會員及工作均須對上交付 adapter 回傳的核對範圍
 
-派送入口為後端 MemberRoom RPC，未提供會員可直接要求發送的 HTTP 路由。`DELIVERY.verify` 負責依 D4、D5 核定的方式核對營運權限、收件人及證據；LINE 另須回傳有人監督。`DELIVERY.send` 回傳送出收據、明確拒絕或結果不明，最多等待 10 秒
+Email 提供本人專用的 HTTP 送出路由，經 MemberRoom 依序處理，重播回傳既有狀態。ECCAL 重新查詢登入信箱，透過既有 Resend 設定寄送；LINE 派送仍使用後端 MemberRoom RPC 與有人監督的核對。`DELIVERY.verify` 核對會員、工作、成果與收件人，`DELIVERY.send` 回傳送出收據、明確拒絕或結果不明，最多等待 10 秒。完整介面見 [Email 成果交付](email-delivery.md)
 
 後端在送出前先持久保存狀態並安排恢復 alarm。中斷後留下的寄送中工作改列結果不明，不自動重送。成功的 LINE 工作另外記錄核銷時間；所有成果連結開啟時仍透過 ECCAL 會員驗證讀取
 

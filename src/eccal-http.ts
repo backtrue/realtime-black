@@ -14,7 +14,7 @@ export class HttpEccalQuota implements Omit<EccalPort, 'mcpGrant'> {
       this.origin = url.origin;
     } catch { throw new AppError('ECCAL_CONFIGURATION_INVALID'); }
   }
-  private async request(action: string, body: unknown): Promise<unknown> {
+  protected async request(action: string, body: unknown): Promise<unknown> {
     let response: Response;
     try {
       response = await this.fetcher(`${this.origin}/api/voice/internal/${action}`, {
@@ -39,7 +39,7 @@ export class HttpEccalQuota implements Omit<EccalPort, 'mcpGrant'> {
     let value: unknown;
     try { value = JSON.parse(new TextDecoder('utf-8', { fatal: true, ignoreBOM: false }).decode(bytes)); } catch { throw new AppError('ECCAL_RESPONSE_INVALID'); }
     if (!response.ok) {
-      const allowed: Record<string, number> = { QUOTA_EXHAUSTED: 403, RESERVATION_ACTIVE: 409, RESERVATION_NOT_FOUND: 404, SETTLEMENT_CONFLICT: 409, INVALID_REQUEST: 400, INVALID_METER_EVENTS: 400, MEMBER_NOT_FOUND: 404 };
+      const allowed: Record<string, number> = { QUOTA_EXHAUSTED: 403, RESERVATION_ACTIVE: 409, RESERVATION_NOT_FOUND: 404, SETTLEMENT_CONFLICT: 409, INVALID_REQUEST: 400, INVALID_METER_EVENTS: 400, MEMBER_NOT_FOUND: 404, RECIPIENT_UNVERIFIED: 403, EMAIL_RECIPIENT_UNAVAILABLE: 503 };
       const code = object(value) && typeof value.error === 'string' ? value.error : '';
       if (Object.hasOwn(allowed, code) && response.status === allowed[code]) throw new AppError(code, response.status);
       throw new AppError('ECCAL_UNAVAILABLE');
@@ -70,6 +70,11 @@ export class HttpEccalQuota implements Omit<EccalPort, 'mcpGrant'> {
     const value = await this.request('balance', { memberId });
     if (!object(value) || value.memberId !== memberId || value.totalSeconds !== 300 || !seconds(value.billedSeconds) || !seconds(value.reservedSeconds) || !seconds(value.remainingSeconds) || value.billedSeconds + value.reservedSeconds + value.remainingSeconds !== 300) throw new AppError('ECCAL_RESPONSE_INVALID');
     return value.remainingSeconds;
+  }
+  async emailRecipient(memberId: string): Promise<string> {
+    const value = await this.request('email/recipient', { memberId });
+    if (!object(value) || value.memberId !== memberId || typeof value.recipient !== 'string' || value.recipient.length > 320 || !/^[^\s@<>]+@[^\s@<>]+$/.test(value.recipient)) throw new AppError('ECCAL_RESPONSE_INVALID');
+    return value.recipient;
   }
   async reserve(memberId: string, operationId: string): Promise<Reservation> {
     const value = await this.request('reserve', { memberId, operationId });

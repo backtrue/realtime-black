@@ -19,6 +19,7 @@ export function fixture() {
   const eccal: Dependencies["eccal"] = {
     authenticate: vi.fn(async credentials => credentials.cookie === "fixture=a" ? { memberId: "a", eligible: true } : null),
     balance: vi.fn(async memberId => balances.get(memberId) ?? 0),
+    emailRecipient: vi.fn(async () => 'fixture@example.invalid'),
     reserve: vi.fn(async (memberId, operationId) => {
       if (reservations.has(operationId)) return reservations.get(operationId)!;
       const seconds = balances.get(memberId) ?? 0;

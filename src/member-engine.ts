@@ -346,13 +346,20 @@ export class MemberEngine {
     const document = record.documents.find(document => document.id === input.documentId && document.sourceRevision === (record.transcriptRevision ?? 0));
     if (!document || document.kind === "summary") throw new AppError("DOCUMENT_NOT_FOUND", 404);
     if (!/^[A-Za-z0-9_-]{16,100}$/.test(input.operationId) || !["email", "line"].includes(input.channel)) throw new AppError("INVALID_DELIVERY_REQUEST", 400);
-    if (input.channel === "email" && (input.recipient.length > 320 || !/^[^\s@]+@[^\s@]+$/.test(input.recipient))) throw new AppError("RECIPIENT_INVALID", 400);
+    if (input.channel === "email" && (input.recipient.length > 320 || input.recipient !== "" && !/^[^\s@<>]+@[^\s@<>]+$/.test(input.recipient))) throw new AppError("RECIPIENT_INVALID", 400);
     if (input.channel === "line" && input.recipient !== "") throw new AppError("RECIPIENT_INVALID", 400);
     const fingerprint = await this.digest(JSON.stringify({ recordId: id, ...input }));
     const previous = record.deliveries?.find(job => job.operationId === input.operationId);
     if (previous) {
       if (previous.requestFingerprint !== fingerprint) throw new AppError("OPERATION_REPLAYED", 409);
       return { job: previous, claimCode: undefined };
+    }
+    if (input.channel === "email") {
+      if (!this.deps.eccal.emailRecipient) throw new AppError("EMAIL_RECIPIENT_UNAVAILABLE");
+      const recipient = await this.deps.eccal.emailRecipient(memberId);
+      if (!recipient || recipient.length > 320 || !/^[^\s@<>]+@[^\s@<>]+$/.test(recipient)) throw new AppError("EMAIL_RECIPIENT_UNAVAILABLE");
+      if (input.recipient !== "" && input.recipient !== recipient) throw new AppError("RECIPIENT_UNVERIFIED", 403);
+      input = { ...input, recipient };
     }
     const job: DeliveryJob = { id: this.deps.id(), recordId: id, memberId, documentId: input.documentId, sourceRevision: record.transcriptRevision ?? 0, operationId: input.operationId, requestFingerprint: fingerprint, channel: input.channel, recipient: input.recipient, verifiedAt: null, state: "pending", createdAt: this.deps.now() };
     const claimCode = input.channel === "line" ? this.deps.id().replaceAll("-", "") : undefined;
@@ -369,6 +376,10 @@ export class MemberEngine {
     if (!record.documents.some(document => document.id === job.documentId && document.sourceRevision === (record.transcriptRevision ?? 0)) || job.sourceRevision !== (record.transcriptRevision ?? 0)) throw new AppError("DOCUMENT_STALE", 409);
     if (job.state !== "pending") throw new AppError("DELIVERY_ALREADY_ATTEMPTED", 409);
     if (!this.deps.delivery || !this.deps.appOrigin) throw new AppError("DELIVERY_NOT_CONFIGURED");
+    if (job.channel === "email") {
+      if (!this.deps.eccal.emailRecipient) throw new AppError("EMAIL_RECIPIENT_UNAVAILABLE");
+      if (await this.deps.eccal.emailRecipient(memberId) !== job.recipient) throw new AppError("RECIPIENT_UNVERIFIED", 403);
+    }
     if (job.channel === "line" && (!claimCode || !job.claimDigest || job.claimExpiresAt === undefined || job.claimExpiresAt <= this.deps.now() || job.claimedAt !== undefined || await this.digest(claimCode) !== job.claimDigest)) throw new AppError("CLAIM_INVALID", 403);
     const verified = await this.deps.delivery.verify(structuredClone(job), proof);
     if (verified.memberId !== memberId || verified.jobId !== job.id || verified.documentId !== job.documentId || typeof verified.recipient !== "string" || !verified.recipient || !Number.isSafeInteger(verified.verifiedAt) || verified.verifiedAt > this.deps.now() || verified.verifiedAt < job.createdAt || job.channel === "email" && verified.recipient !== job.recipient) throw new AppError("RECIPIENT_UNVERIFIED", 403);
@@ -382,5 +393,12 @@ export class MemberEngine {
     }, verified.supervised === true);
     if (sent.state === "succeeded" && job.channel === "line") { job.claimedAt = this.deps.now(); await this.save(record); }
     return job;
+  }
+  async sendEmail(memberId: string, id: string, jobId: string) {
+    const record = await this.get(memberId, id);
+    const job = record.deliveries.find(job => job.id === jobId && job.channel === "email");
+    if (!job) throw new AppError("DELIVERY_NOT_FOUND", 404);
+    if (job.state !== "pending") return job;
+    return this.dispatchDelivery(memberId, id, jobId, { kind: "member-email-request" });
   }
 }

@@ -23,6 +23,7 @@ export type McpGrant = Readonly<{
 export interface EccalPort {
   authenticate(credentials: Credentials): Promise<Identity | null>;
   balance(memberId: string): Promise<number>;
+  emailRecipient?(memberId: string): Promise<string>;
   reserve(memberId: string, operationId: string): Promise<Reservation>;
   settle(memberId: string, reservationId: string, events: MeterEvent[]): Promise<Settlement>;
   mcpGrant(memberId: string): Promise<McpGrant>;
@@ -83,12 +84,15 @@ export type DeliveryJob = {
   channel: "email" | "line"; recipient: string; verifiedAt: number | null;
   state: "pending" | "sending" | "unknown" | "failed" | "succeeded";
   createdAt: number; providerReceipt?: string;
-  failureCode?: "DOCUMENT_STALE";
+  failureCode?: "DOCUMENT_STALE" | EmailFailureCode;
+  providerStatus?: number;
   claimDigest?: string; claimExpiresAt?: number; claimedAt?: number;
 };
+export type EmailFailureCode = "EMAIL_NOT_CONFIGURED" | "RECIPIENT_UNVERIFIED" | "RESEND_REJECTED" | "RESEND_UNAVAILABLE";
+export type DeliveryResult = { outcome: "sent"; receipt: string } | { outcome: "rejected" | "unknown"; failureCode?: EmailFailureCode; providerStatus?: number };
 export interface DeliveryPort {
   verify(job: DeliveryJob, proof: unknown): Promise<{ memberId: string; jobId: string; documentId: string; recipient: string; verifiedAt: number; supervised: boolean }>;
-  send(job: DeliveryJob, resultUrl: string): Promise<{ outcome: "sent"; receipt: string } | { outcome: "rejected" | "unknown" }>;
+  send(job: DeliveryJob, resultUrl: string): Promise<DeliveryResult>;
 }
 export type Dependencies = {
   eccal: EccalPort;

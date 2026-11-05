@@ -48,6 +48,7 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
       else if (path === "/api/calls" && init?.method === "POST") data = startResponse ? await startResponse() : { id: "fixture-call", sdp: "v=0\r\nanswer", deadline: Date.now() + 300000 };
       else if (path.endsWith("/end")) data = authOptions.endResponse ? await authOptions.endResponse() : { status: "ended" };
       else if (path.endsWith("/deliveries")) data = deliveryResponse ?? { job: { state: "pending" } };
+      else if (path.endsWith('/email')) data = typeof authOptions.sendEmailResponse === 'function' ? await authOptions.sendEmailResponse() : { state: 'succeeded' };
       else data = recordsResponse;
       return { ok: true, status: path === "/api/calls" && init?.method === "POST" ? 201 : 200, headers: new Headers({ "cache-control": "no-store" }), json: async () => data };
     },
@@ -56,6 +57,21 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
   await flush();
   return { elements, findElement, requests, connections, logs, click: id => elements.get(id).listeners.get("click")(), tick: () => { for (const callback of intervals) callback(); } };
 }
+
+test('Email 使用登入信箱，不出現地址輸入；送出回應中斷後沿用原操作識別值', async () => {
+  const record={id:'fixture-call',status:'ended',createdAt:Date.now(),transcript:[],deliveries:[],documents:[{id:'fixture-document',kind:'report',title:'合成行銷報告',findings:[]}]};
+  let sends=0;
+  const p=await page(async()=>audio(),undefined,[record],{job:{id:'fixture-email-job',state:'pending'}},{sendEmailResponse:async()=>{if(++sends===1)throw new Error('fixture connection interrupted');return{state:'succeeded'};}});
+  const section=p.findElement('document-fixture-document');
+  assert.equal(section.children.some(child=>child.type==='email'),false);
+  assert.ok(section.children.some(child=>child.textContent==='Email 成果會寄到你的 ECCAL 登入信箱'));
+  const button=section.children.find(child=>child.textContent==='寄到 Email');
+  await button.listeners.get('click')();assert.equal(button.disabled,false);
+  await button.listeners.get('click')();assert.equal(button.disabled,true);
+  const requests=p.requests.filter(request=>request.path.endsWith('/deliveries')).map(request=>JSON.parse(request.init.body));
+  assert.equal(requests.length,2);assert.equal(requests[0].recipient,'');assert.equal(requests[0].operationId,requests[1].operationId);
+  assert.ok(section.children.some(child=>child.textContent==='已送出'));
+});
 
 test("三類成果 hash 只開啟目前會員回應內的文件，竄改識別值無法顯示他人內容", async () => {
   const documents = ["report", "copy", "plan"].map(kind => ({ id: `fixture-${kind}`, kind, title: `合成${kind}`, findings: [{ kind: "member", text: "合成會員內容" }] }));
@@ -195,17 +211,17 @@ test("前端不按舊截止提早掛斷，提供者關閉後清理音訊", async
   assert.equal(p.requests.filter(request => request.path.endsWith("/end")).length, 1);
 });
 
-test("成果頁可建立 Email 待寄送，僅提交指定信箱與成果", async () => {
+test("Email 寄送結果不明時保留狀態，不顯示已送出", async () => {
   const record = { id: "fixture-call", status: "ended", createdAt: Date.now(), transcript: [], documents: [{ id: "fixture-doc", kind: "report", title: "合成報告", findings: [] }], deliveries: [] };
-  const p = await page(async () => audio(), undefined, [record]);
+  const p = await page(async () => audio(), undefined, [record], { job: { id: 'fixture-email-job', state: 'pending' } }, { sendEmailResponse: async () => ({ state: 'unknown' }) });
   const walk = node => [node, ...node.children.flatMap(walk)];
   const nodes = walk(p.elements.get("records"));
-  const label = nodes.find(node => node.textContent === "接收信箱 "); label.children[0].value = "fixture@example.invalid";
   await nodes.find(node => node.textContent === "寄到 Email").listeners.get("click")();
   const request = p.requests.find(request => request.path.endsWith("/deliveries"));
   const input = JSON.parse(request.init.body);
-  assert.equal(input.documentId, "fixture-doc"); assert.equal(input.recipient, "fixture@example.invalid"); assert.equal(input.channel, "email"); assert.equal("verifiedAt" in input, false);
-  assert.ok(walk(p.elements.get("records")).some(node => node.textContent === "等待核對與寄送"));
+  assert.equal(input.documentId, "fixture-doc"); assert.equal(input.recipient, ""); assert.equal(input.channel, "email"); assert.equal("verifiedAt" in input, false);
+  assert.ok(walk(p.elements.get("records")).some(node => node.textContent === "寄送結果待確認，請勿重複寄送"));
+  assert.equal(walk(p.elements.get("records")).some(node => node.textContent === "已送出"),false);
 });
 
 test("LINE 領取頁顯示一次性代碼並維持待寄送狀態", async () => {
