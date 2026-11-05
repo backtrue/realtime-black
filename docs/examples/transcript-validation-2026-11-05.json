@@ -330,5 +330,74 @@
     "wranglerDryRun": "PASS",
     "speechAndOrderGuardTests": 8,
     "secretlint": "PASS"
+  },
+  "release": {
+    "sourceCommit": "41b7231d9ca3345d688bb41598ac3da80c7237b1",
+    "origin": "https://call.thinkwithblack.com",
+    "deploymentId": "5a0c9583-4022-4449-8c16-1b33e312fbd7",
+    "versionId": "663f8503-6e3f-4f7b-89ee-c562b47eab66",
+    "trafficPercentage": 100,
+    "tag": "41b7231",
+    "createdAt": "2026-11-05T09:28:42.239407Z",
+    "scriptEtag": "187d1c3d4bd626bab303c4112b1b2309c9545730bc0eb60a725a560ce697cc7d",
+    "migrationTag": "v2",
+    "models": {
+      "REALTIME_MODEL": "gpt-realtime-2.1",
+      "TEXT_MODEL": "gpt-6.1-sol"
+    },
+    "secretBindings": [
+      "AUTH_VAULT_KEY",
+      "ECCAL_SERVICE_TOKEN",
+      "OPENAI_API_KEY"
+    ],
+    "publicReadback": [
+      {
+        "path": "/",
+        "status": 200,
+        "contentType": "text/html",
+        "cacheControl": "no-store",
+        "sha256": "4731bdb0e2f14586b2813277bd5db34ff92297b793dbbda39539bc517baa3f4c",
+        "matchesLocal": true
+      },
+      {
+        "path": "/app.js",
+        "status": 200,
+        "contentType": "text/javascript",
+        "cacheControl": "no-store",
+        "sha256": "409587e63c78843ff9436376667f205ef3f0ff862250af4c80d5073c1bbd0c00",
+        "matchesLocal": true
+      },
+      {
+        "path": "/style.css",
+        "status": 200,
+        "contentType": "text/css",
+        "cacheControl": "no-store",
+        "sha256": "84eec0bcefa60574db0aef54c247b7bce9db7b29f360f71a258b9eb13f135bcd",
+        "matchesLocal": true
+      },
+      {
+        "path": "/api/me",
+        "status": 401,
+        "contentType": "application/json",
+        "cacheControl": "no-store",
+        "body": "{\"error\":\"LOGIN_REQUIRED\"}"
+      },
+      {
+        "path": "/api/calls",
+        "status": 401,
+        "contentType": "application/json",
+        "cacheControl": "no-store",
+        "body": "{\"error\":\"LOGIN_REQUIRED\"}"
+      }
+    ],
+    "browserReadback": {
+      "signedIn": true,
+      "remainingSeconds": 0,
+      "startDisabled": true,
+      "existingRecordsReadable": true,
+      "latestRecordStatus": "ended",
+      "newCallCreated": false
+    },
+    "sourceHashesMatchAcceptedCases": true
   }
 }

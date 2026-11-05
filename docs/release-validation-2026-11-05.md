@@ -398,3 +398,15 @@ Issue #17 已於 2026-11-05 通過 fresh spec_evaluator 獨立驗收，兩筆正
 使用實際 MemberEngine.document／OpenAiDocuments 與 gpt-6.1-sol，將包含會員數字、受控方法、AI 建議與未解問題的合成通話產生摘要。回應 HTTP 200／completed、store:false，耗時 19,070ms；五種分類及所有 sourceIds 可核對，已知數字、推論比例、1＋2＋1 小時建議與未知原因均與輸入相符
 
 摘要保存於原通話、sourceRevision 4，A 讀回與產出完全一致，B 讀取及要求產生均回 404。2026-11-05 fresh spec_evaluator 核對輸入、完整摘要、來源分類、數字、保存與跨會員結果，Issue #16 判定 PASS。完整對照見 [本次諮詢摘要驗收](summary-validation-2026-11-05.md)
+
+## Issue #15 插話逐字稿修正與正式發布
+
+實際回歸確認插話後的晚到全文與 stopped 事件會保存尚未播放的結尾。修正後依提供者可信截斷點取回並裁切 PCM，只轉寫已播放前綴；音訊僅存於記憶體。掛斷與原結算不等待 retrieve 或 ASR，晚到結果不改變 endedAt 或 settlement
+
+同版 Native Workers SQLite 與實際 gpt-realtime-2.1／gpt-4o-transcribe 完成含追問及插話的對話，以及播放中直接掛斷。兩段合成會員語音先核對實際台詞；逐字稿保留已播內容、追問與順序，排除未播結尾。A／B／匿名分別回 200／404／401，拒絕回應無內容
+
+播放中掛斷 299ms 回應，受控 300 秒帳本扣 3 秒、餘 297 秒；後續轉寫不改變結束時間及帳目。兩個案例的 source SHA 與 runtime bundle 相同，提供者及本機 runtime 皆已關閉，無音檔或憑證落盤
+
+實作提交 `41b7231d9ca3345d688bb41598ac3da80c7237b1` 已推送及發布，deployment `5a0c9583-4022-4449-8c16-1b33e312fbd7`、version `663f8503-6e3f-4f7b-89ee-c562b47eab66`，100% 流量、tag `41b7231`。三項正式靜態檔與提交逐位元組相同；匿名會員及紀錄端點皆 401，瀏覽器重載後的登入、0 秒額度及既有紀錄正常
+
+完整檢查通過型別、155 項 Workers、13 項前端、3 項原生連線、dry-run 及 secretlint。2026-11-05 fresh spec_evaluator 核對最終程式及兩個實際語音案例，Issue #15 判定 PASS。測試對照與發布證據見 [插話逐字稿驗收](transcript-validation-2026-11-05.md)

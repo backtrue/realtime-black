@@ -34,3 +34,15 @@ Native Cloudflare Workers SQLite runtime 執行實際 MemberRoom、MemberEngine�
 完整 `npm run check` 通過型別、155 項 Workers、13 項前端、3 項原生連線及 dry-run 建置。插話測試涵蓋前綴、重送、零播放、較長音訊裁切、不足音訊拒絕、ASR 失敗，以及 retrieval 逾時、轉寫成功／失敗均不增加計費。音訊台詞與順序判斷另有 8 項純測試通過
 
 實際台詞、逐字稿、生成全文對照、提供者截斷點、三種身分讀取、帳目與清理見 [逐字稿驗收證據](examples/transcript-validation-2026-11-05.json)
+
+## 正式發布與讀回
+
+實作提交 `41b7231d9ca3345d688bb41598ac3da80c7237b1` 已推送至 GitHub main，正式站於 2026-11-05 17:28（台灣時間）發布
+
+- Deployment：`5a0c9583-4022-4449-8c16-1b33e312fbd7`
+- Version：`663f8503-6e3f-4f7b-89ee-c562b47eab66`，100% 流量，tag `41b7231`
+- 原生 runtime、模型與三項後端 secret binding 已讀回，migration tag 維持 v2
+- 首頁、app.js、style.css 均回 200，與提交內容逐位元組相同；匿名會員及紀錄端點均回 401，五項回應均為 no-store
+- 內建瀏覽器完整重新整理後仍已登入，餘額 0 秒、開始按鈕停用，原有逐字稿與摘要清單可讀，最新紀錄已結束
+
+2026-11-05 fresh spec_evaluator 已核對最終 source、兩個同版實際語音案例、三種身分讀取、計費、清理及完整檢查，判定 PASS
