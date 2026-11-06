@@ -1,0 +1,271 @@
+{
+  "issue": 24,
+  "validationDate": "2026-11-07",
+  "deliveryLocalDate": "2026-11-06",
+  "environment": "production",
+  "source": {
+    "voice": "8e6c9bf026029b2a9a9b415f27fe625aefa0c93c",
+    "eccal": "d0558cad60a87bcd34ccc6c68fd89a2a0ee66c70",
+    "eccalPublishedCheckpoint": "2977a46",
+    "eccalPublishedCheckpointParent": "d0558ca",
+    "eccalPublishedCheckpointChangedFiles": 0
+  },
+  "deployment": {
+    "voiceVersion": "8eb29b39-728f-40ad-bf9c-d7a9d64547e3",
+    "voiceDeployment": "b97a22af-0c59-4b71-a37d-80325aa13315",
+    "voiceTrafficPercent": 100,
+    "assetMatchesSource": true,
+    "eccalStatus": "success",
+    "eccalUrl": "https://eccal.thinkwithblack.com"
+  },
+  "officialAccount": {
+    "name": "ToldYou 報數據",
+    "id": "@791vlxya",
+    "chatEnabled": true,
+    "responseMode": "manual-and-auto-response",
+    "webhookEnabled": false,
+    "welcomeEnabled": true
+  },
+  "dataPreservation": {
+    "tableCount": 63,
+    "missing": [],
+    "changed": [],
+    "beforeSha256": "8fff7d1f6e476ee23a8e42b973dbcf25e70f3b0fea8c9309129bbfeae8ffaa41",
+    "afterSha256": "8fff7d1f6e476ee23a8e42b973dbcf25e70f3b0fea8c9309129bbfeae8ffaa41",
+    "backup": {
+      "bytes": 3778748,
+      "sha256": "5ecfe13f81abf94d42351124b9a5c1353984fae96dc87e6e7775437ff5c9c38d",
+      "mode": "600"
+    }
+  },
+  "candidateChecks": {
+    "voiceWorkers": 188,
+    "voiceFrontend": 26,
+    "voiceNative": 3,
+    "voiceTypecheck": "PASS",
+    "voiceDryRun": "PASS",
+    "eccalRegression": 43,
+    "eccalLineNativeContractLatest": 8,
+    "eccalTypecheck": "PASS",
+    "eccalBuild": "PASS"
+  },
+  "candidateReview": {
+    "agent": "line_delivery_candidate_acceptance",
+    "status": "PASS",
+    "reviewedAt": "2026-11-06",
+    "responseLossRecovery": "PASS",
+    "independentChecks": {
+      "workers": 30,
+      "frontend": 26,
+      "eccalNative": 8
+    }
+  },
+  "productionReplays": {
+    "observedAt": "2026-11-06T15:59:03.374Z",
+    "environment": "production",
+    "voiceVersion": "8eb29b39-728f-40ad-bf9c-d7a9d64547e3",
+    "memberCount": 2,
+    "officialAccount": "@791vlxya",
+    "controlledLineAccountCount": 1,
+    "actualResultsSent": 2,
+    "checks": [
+      {
+        "member": "A",
+        "state": "succeeded",
+        "claimed": true,
+        "receiptEvidenceMatches": true,
+        "recipientObserved": true,
+        "codeReuseStatus": 409,
+        "codeReuseError": "DELIVERY_ALREADY_ATTEMPTED",
+        "noUrlOnReuse": true,
+        "duplicateResultStatus": 200,
+        "duplicateResultUnchanged": true,
+        "changedReceiptStatus": 409
+      },
+      {
+        "member": "B",
+        "state": "succeeded",
+        "claimed": true,
+        "receiptEvidenceMatches": true,
+        "recipientObserved": true,
+        "codeReuseStatus": 409,
+        "codeReuseError": "DELIVERY_ALREADY_ATTEMPTED",
+        "noUrlOnReuse": true,
+        "duplicateResultStatus": 200,
+        "duplicateResultUnchanged": true,
+        "changedReceiptStatus": 409
+      }
+    ],
+    "unchangedAfterReplays": true
+  },
+  "productionFailure": {
+    "observedAt": "2026-11-06T16:03:32.883Z",
+    "environment": "production",
+    "trigger": "Controlled manual-chat session ended; LINE disabled message input before result transmission",
+    "messageInputDisabled": true,
+    "resultNotTransmitted": true,
+    "state": "failed",
+    "claimed": false,
+    "providerReceiptAbsent": true,
+    "noResultUrl": true,
+    "evidenceMatches": true,
+    "replayStatus": 409,
+    "replayError": "DELIVERY_ALREADY_ATTEMPTED",
+    "states": [
+      {
+        "state": "succeeded",
+        "claimed": true
+      },
+      {
+        "state": "failed",
+        "claimed": false
+      },
+      {
+        "state": "succeeded",
+        "claimed": true
+      }
+    ],
+    "actualSuccessfulResults": 2
+  },
+  "memberIsolation": {
+    "bReadsA": "RECORD_NOT_FOUND",
+    "aReadsB": "RECORD_NOT_FOUND",
+    "aOwnResultOpens": true,
+    "bOwnResultOpens": true,
+    "aRemainingSeconds": 298,
+    "bRemainingSeconds": 0
+  },
+  "liveUiNegatives": {
+    "wrongCodeRejected": true,
+    "wrongChatRejected": true,
+    "crossMemberCodeRejected": true,
+    "resultUrlReturnedForRejectedPrepare": false
+  },
+  "privateEvidenceSha256": {
+    "line-a-sent-private.png": "dd7b42ef7e055aa5df62ae321f4d35cda84900efcd7406e1d231bdf1c43b075a",
+    "line-b-sent-private.png": "5bc766c7347b54231862cbedb500813ad5976b9f93748aae2e6ca55b4a100077",
+    "line-both-received-private.png": "4d17c773611a096d2ed7fa867de245dd05a95eb720f6748fd91f180473ab5bf8",
+    "line-send-blocked-private.png": "c90d214ae307b0f2a83476b4d18aa3b0db1f41128ddbf4a2024f2fe5ed583503",
+    "eccal-final-private.png": "964e98d7e3fa8d8aa19653c79b7fafebb4eb7298fcbdd9066572e2764cd2d343",
+    "wrong-code-ui-private.png": "93bb7a2d3604e87144f19d938620877850949d4d017ca38e68a6650d53be0a23",
+    "wrong-chat-ui-private.png": "c9a109a0896775cfcb583b35694e01cb3b754db2bb8e57b7f57791a383589d2c",
+    "negative-http-private.json": "70d42dc8c4d214624e65a235a825aa98ccd4b3f1f8e2f97c81f3470c54a3587c",
+    "negative-blocked-ui-private.png": "7243fd8714fca9b3adb34890046dfac3c8d6e025a785769da22d66f2a244c5b2"
+  },
+  "publicScreenshots": [
+    {
+      "file": "line-delivery-2026-11-07/response-settings-enabled.png",
+      "sha256": "3babb9a660025c650100a18e2e8fd7559131fb29012891de224c00af87e5a99c",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/eccal-published-control.png",
+      "sha256": "848ae92e9c346a17be3a70209ec55ced925d4d58df3496384645296e3f39095b",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/production-a-completed.png",
+      "sha256": "6101e0a06bc0eec57652391e16109dc94a55aa3634ae5037eaf2fb37523baf8f",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/production-wrong-code.png",
+      "sha256": "ca7382243ae5ba7590c436e55ea8de60011d19c410b6a8fef73bd2681c43bef8",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/production-wrong-chat.png",
+      "sha256": "930a9c9bdd043bc2f8167c006b43585c7a76a0240801686555cf87ee7d6dc356",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/production-send-blocked.png",
+      "sha256": "aaf8335ac720533fd6078853711b22d7b9c348c77904c030efb9ffe95f11b1ce",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/production-b-denied-a.png",
+      "sha256": "627eb72ed2a16055d43657ec463f563cf41050fb2dc5b8793d9f380557b9a98e",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/production-a-denied-b.png",
+      "sha256": "627eb72ed2a16055d43657ec463f563cf41050fb2dc5b8793d9f380557b9a98e",
+      "synthetic": false
+    },
+    {
+      "file": "line-delivery-2026-11-07/preview-completed.png",
+      "sha256": "1eae074f3e2d39a31612d5bbd43353eae7ee69d60c62e4987b23867017a5b842",
+      "synthetic": true
+    }
+  ],
+  "formalReview": {
+    "status": "PASS",
+    "date": "2026-11-07",
+    "reviewer": "line_published_acceptance",
+    "completionAllowed": true,
+    "sourceAndLiveAssetMatch": true,
+    "privateAndPublicEvidenceShaMatch": true,
+    "liveFinalStatesMatch": true
+  },
+  "productionNegativeResponses": {
+    "observedAt": "2026-11-06T16:16:02.949Z",
+    "environment": "production",
+    "jobSha256": "885e009e6d5e82030cc69e247fc487f73584c371f4ddf749d4112f135e846aaf",
+    "cases": [
+      {
+        "name": "wrong-code",
+        "response": {
+          "requestedAt": "2026-11-06T16:16:02.108Z",
+          "completedAt": "2026-11-06T16:16:02.247Z",
+          "status": 403,
+          "headers": {
+            "content-type": "application/json",
+            "cache-control": "no-store",
+            "x-voice-line-contract": "voice-line-v1"
+          },
+          "rawBody": "{\"error\":\"CLAIM_INVALID\"}"
+        },
+        "jobStateBefore": "pending",
+        "jobStateAfter": "pending",
+        "resultUrl": null,
+        "jobUnchanged": true
+      },
+      {
+        "name": "wrong-chat",
+        "response": {
+          "requestedAt": "2026-11-06T16:16:02.609Z",
+          "completedAt": "2026-11-06T16:16:02.645Z",
+          "status": 403,
+          "headers": {
+            "content-type": "application/json",
+            "cache-control": "no-store",
+            "x-voice-line-contract": "voice-line-v1"
+          },
+          "rawBody": "{\"error\":\"RECIPIENT_UNVERIFIED\"}"
+        },
+        "jobStateBefore": "pending",
+        "jobStateAfter": "pending",
+        "resultUrl": null,
+        "jobUnchanged": true
+      }
+    ],
+    "rawPrivateEvidenceSha256": "70d42dc8c4d214624e65a235a825aa98ccd4b3f1f8e2f97c81f3470c54a3587c",
+    "closedAfterVerification": {
+      "state": "failed",
+      "resultTransmitted": false
+    }
+  },
+  "finalDeliveryStates": {
+    "at": "2026-11-06T16:17:33.933Z",
+    "httpStatus": 200,
+    "total": 4,
+    "states": {
+      "succeeded": 2,
+      "failed": 2
+    },
+    "successfulClaimed": 2,
+    "failedClaimed": 0,
+    "pending": 0
+  }
+}

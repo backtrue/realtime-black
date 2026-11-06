@@ -1,12 +1,12 @@
 # Issue 實作與驗證紀錄
 
-更新日期：2026-11-06
+更新日期：2026-11-07
 
-產品行為依 [產品規格 V0.3](product-spec.md)，任務及驗收依 [開發清單](development-plan.md)與對應 Issue。三 repo 提交、ECCAL 發布與 MCP 正式版本見 [發布紀錄](release-validation-2026-11-05.md)；Email 實收見 [Email 驗收](email-validation-2026-11-06.md)，最新首頁版本與測試會員額度見 [復古轉盤正式發布](retro-release-2026-11-06.md)
+產品行為依 [產品規格 V0.3](product-spec.md)，任務及驗收依 [開發清單](development-plan.md)與對應 Issue。三 repo 提交、ECCAL 發布與 MCP 正式版本見 [發布紀錄](release-validation-2026-11-05.md)；Email 實收見 [Email 驗收](email-validation-2026-11-06.md)，首頁與測試補額見 [復古轉盤正式發布](retro-release-2026-11-06.md)，最新版本與雙會員 LINE 實收見 [LINE 正式驗收](line-validation-2026-11-07.md)
 
 ## 本機驗證
 
-復古轉盤的 `npm run check` 已通過：型別檢查、179 項 Cloudflare Workers runtime 測試、25 項通話頁 Node 事件測試、3 項原生 Workers 服務連線整合測試及 Wrangler dry-run 建置。Email 另有 ECCAL 7 項真實 HTTP／PostgreSQL 整合測試，以及 17 額度、1 跨 repo 契約、8 登入回歸測試、ECCAL 型別與建置通過
+LINE 版的 `npm run check` 已通過：型別檢查、188 項 Cloudflare Workers runtime 測試、26 項通話頁 Node 事件測試、3 項原生 Workers 服務連線整合測試及 Wrangler dry-run 建置。ECCAL 43 項 LINE、Email、額度、跨 repo 契約、登入與通話資格相關測試、型別與建置通過，本版原生 gate 另保存兩項請求與帳本證據
 
 ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 repo MCP 授權測試通過，型別與建置通過。MCP 138 項 OAuth／scope 測試及完整 2,414 項回歸測試、型別、安全掃描與 dry-run 建置通過，驗證紀錄見 [跨站登入與個別會員授權驗證](auth-validation-2026-11-04.md)及[正式發布紀錄](release-validation-2026-11-05.md)
 
@@ -47,12 +47,12 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 | #21 | M2-07 | 三類成果完成 A 登出與重新登入、B／匿名／Email／LINE 身分拒絕、通話及文件 ID 竄改、前端 hash 與 no-store 核對 | 2026-11-05 自動與獨立驗收通過，見成果連結驗收 |
 | #22 | M2-08 | Email／LINE 各四種受控通路結果，八案 HTTP 建立／重放及 SQLite 重建讀回，六案 RPC 派送，未送及不明不標成功，成功對回成果、通路及收據 | 2026-11-05 自動與獨立驗收通過，見交付狀態驗收 |
 | #23 | M2-09 | 只寄會員 ECCAL 登入信箱，Resend 正式 Delivered、Gmail 實收、原成果網址與會員重登存取相符；未核對收件人拒絕、失敗與不明工作不標成功且不重寄 | 2026-11-06 正式驗收證據見 Email 驗收 |
-| #24 | M2-10 | LINE 申請、持久雜湊碼、範圍核對、監督限制及單次核銷 | D5 ECCAL 待辦、營運權限、後台流程與實送 |
+| #24 | M2-10 | ECCAL 營運核對頁、持久待辦、可重試的雜湊碼、兩會員 LINE 正式實收與核銷；錯碼、錯聊天室、跨會員碼、重複與實際輸入停用失敗均驗證 | 2026-11-07 正式與 fresh 獨立驗收 PASS，見 [LINE 驗收](line-validation-2026-11-07.md) |
 | #25 | M2-11 | 六欄格式已重新產生並逐項回對合成諮詢與三類成果，來源、分類及目前版本過濾均核對 | 2026-11-05 自動與獨立驗收通過，見 handoff-format.md |
 | #26 | M2-12 | 合成實際語音與 SQLite 全程儲存、30 天清除、repo 及紀錄輸出均核對；正式 Cloudflare 設定與外送資料範圍已讀回 | 2026-11-05 自動與獨立驗收通過，見 storage-inventory.md |
-| #27 | G1-01 | 本機核心流程測試、指定會員 Email 正式實收與成果存取 | 兩位測試會員的完整流程與 LINE 實收 |
-| #28 | G1-02 | 復古來源 b647abc 的五類異常與 179／25／3 完整檢查一致；本次另跑 ECCAL 原生搶最後一秒 2 項通過，見 [本版異常矩陣](exception-validation-2026-11-06.md) | 前置 #27 實際交付全流程，#24 等待指定官方帳號與兩會員領取碼 |
-| #29 | G1-03 | 復古版 a919d0dd 正式發布 100%；本版獨立重建、發布／回復、真實通話、298 秒帳目及成果存取均經 fresh 驗收 PASS | G1-03 明列前置 #28，等待 #27／#24 全流程，Issue 保持開啟 |
+| #27 | G1-01 | 指定會員 Email 正式實收、雙會員 LINE 正式實收、各自成果存取與雙向紀錄隔離 | 前置 #6 的兩分頁／兩台實際裝置，以及兩位會員完整案例與跨通話帳目 |
+| #28 | G1-02 | LINE 來源 8e6c9bf 的五類異常與 188／26／3 完整檢查通過；本版 ECCAL 原生搶最後一秒兩項與正式 LINE 失敗驗證完成，見 [本版異常矩陣](exception-validation-2026-11-07.md) | 前置 #27 完整流程 |
+| #29 | G1-03 | LINE 版 8eb29b39 正式發布 100%、ECCAL 發布保留 63 表資料；既有復古版獨立重建、發布／回復與真實短通話驗收紀錄保留 | G1-03 明列前置 #28，等待 #27 完整流程，Issue 保持開啟 |
 | #30 | V-01 | — | D6 可用聲音服務與本人授權樣本 |
 | #31 | V-02 | — | D6 本人音色、台灣國語與延遲試聽 |
 | #32 | B2-01 | — | D7 分鐘方案、價格、付款與入帳規則 |

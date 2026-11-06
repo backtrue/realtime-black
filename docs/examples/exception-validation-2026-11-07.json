@@ -1,0 +1,148 @@
+{
+  "recordedAt": "2026-11-06T16:09:53.306Z",
+  "issue": 28,
+  "productSourceCommit": "8e6c9bf026029b2a9a9b415f27fe625aefa0c93c",
+  "productionVersion": "8eb29b39-728f-40ad-bf9c-d7a9d64547e3",
+  "eccalCommit": "d0558cad60a87bcd34ccc6c68fd89a2a0ee66c70",
+  "sourceSha256": {
+    "src/worker.ts": "3464fb6fc42a0670bda4b44873aeeedafa96a79a4ddfe4fcaf52552e70f4a4a3",
+    "src/member-engine.ts": "c9b3545422d8fc3cec52919b499b01604b5ba864db76296a9b679a25c29bab4a",
+    "src/metering.ts": "18deadb72cabe9380f8da95efe67a97b9d56ec3c9d8f20b0d0f4a854ab60a6c5",
+    "src/default-methods.ts": "6b3f5661360720fa7f08677e117ee53640c35040dbd50cf30aee68c897a9c74e",
+    "src/delivery.ts": "078799f596aced8852771466df280a1c52606de8adb30550770f5a3e97aa66a2",
+    "src/contracts.ts": "8ee8cd50d04197e77437d61a25e8f5ea73366e75e8a41904ed9724af6db0a4b9",
+    "test/member.test.ts": "285f7a332323fabcf292bc7bc418aa23e1c7ba57a2f1c51337795543e0769309",
+    "test/default-methods.test.ts": "35bdc4f0193e4930051dc963224f91d607cd6e4880756cad3f86173137cf70ce",
+    "test/delivery-state.test.ts": "49e8b1b9bded80353fa99220ebc8da4c94d5f091968a28cb355ed8aeef225952",
+    "test/retention.test.ts": "3dbce22923929e3e527a6754bc21c87edde4cbdcde5ca40ded0384142127f82d",
+    "test/storage.test.ts": "666e6ff7d8c22b8ae10bf856f8658a0cfe8ee423ab8a7d4d819c286e3c832d39",
+    "src/line-delivery.ts": "dd3ef8d128c12b9272c9dcf140560bf4e7397e609f32e3a5de2f421d93f5171a",
+    "src/line-eccal.ts": "806f083f071e50c00dba2b49ac066a8a6b858e1d8b2f328fd1b3f368afc1c344",
+    "test/line-delivery.test.ts": "5edcda1a199498d43aaa780ba01d683c287cd63b251d44d336102b576720c0fe"
+  },
+  "allFilesMatchReleasedSource": true,
+  "fullCheck": {
+    "command": "npm run check",
+    "workers": 188,
+    "frontend": 26,
+    "nativeRuntime": 3,
+    "typecheck": "PASS",
+    "dryRun": "PASS",
+    "log": "line-delivery-2026-11-07/voice-check.log",
+    "logSha256": "dc22d3c25d8d70807f9c62678a640813c7647d52287da07619e4dafad2505b57",
+    "rawLogSha256": "0e0edcccd1d303341ad785dc6da773025016332626195a349ca9eb1f3011d3e6",
+    "publicLogFormat": "Trailing whitespace removed; result lines preserved"
+  },
+  "currentNativeGate": {
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "command": "REALTIME_BLACK_ROOT=/Volumes/SD/Call-black VOICE_GATE_EVIDENCE=<private output> node --import tsx --test server/voiceGateContract.test.ts",
+    "sourceShaVerified": true,
+    "evidence": "line-native-gate-2026-11-07.json",
+    "schemaRemoved": true,
+    "runtimeDisposed": true
+  },
+  "cases": [
+    {
+      "name": "last-one-second-race",
+      "status": "PASS",
+      "evidence": "line-native-gate-2026-11-07.json",
+      "responses": [
+        201,
+        409
+      ],
+      "reservedSeconds": 1,
+      "repeatStartStatus": 409,
+      "repeatEndStatuses": [
+        200,
+        200
+      ],
+      "providerEndCount": 1,
+      "remainingSeconds": 0
+    },
+    {
+      "name": "server-cutoff",
+      "status": "PASS",
+      "files": [
+        "test/member.test.ts"
+      ],
+      "case": "沒有前端倒數仍在額度截止後由後端掛斷",
+      "nativeEvidence": "line-native-gate-2026-11-07.json"
+    },
+    {
+      "name": "tool-rejected",
+      "status": "PASS",
+      "files": [
+        "test/default-methods.test.ts",
+        "test/member.test.ts"
+      ],
+      "cases": [
+        "拒絕混入私人資料或寫入工具的服務清單",
+        "未授權的停廣告工具無法執行",
+        "工具失敗的紀錄不填造資料"
+      ]
+    },
+    {
+      "name": "delivery-failed",
+      "status": "PASS",
+      "files": [
+        "test/delivery-state.test.ts",
+        "test/line-delivery.test.ts"
+      ],
+      "result": "Eight controlled HTTP/SQLite/RPC delivery cases, nine LINE tests, eight ECCAL LINE native cases, and production manual-input-disabled failure preserved as failed",
+      "productionEvidence": "line-validation-2026-11-07.json"
+    },
+    {
+      "name": "record-expired",
+      "status": "PASS",
+      "files": [
+        "test/retention.test.ts",
+        "test/storage.test.ts",
+        "test/member.test.ts"
+      ],
+      "result": "30-day list/direct access/alarm/storage clearing"
+    }
+  ],
+  "voiceAcceptance": {
+    "generalServiceVoice": {
+      "userConfirmedHeardReply": true,
+      "evidence": "retro-release-2026-11-06.json"
+    },
+    "customOwnerVoice": {
+      "state": "pending",
+      "issues": [
+        30,
+        31
+      ]
+    }
+  },
+  "uncompletedDependencies": [
+    {
+      "issue": 6,
+      "remaining": "Two real tabs and two physical devices"
+    },
+    {
+      "issue": 13,
+      "remaining": "Owner teaching-style listening opinion"
+    },
+    {
+      "issue": 27,
+      "remaining": "Two-member Email/LINE full flow"
+    },
+    {
+      "issue": 30,
+      "remaining": "Owner voice eligibility and authorization"
+    },
+    {
+      "issue": 31,
+      "remaining": "Owner voice listening and latency acceptance"
+    }
+  ],
+  "issueState": "open",
+  "dependencyIssue": 27,
+  "lineDeliveryEvidence": "line-validation-2026-11-07.json",
+  "formalReview": {
+    "status": "pending"
+  }
+}

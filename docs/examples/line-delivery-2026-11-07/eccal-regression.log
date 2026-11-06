@@ -1,0 +1,269 @@
+TAP version 13
+# Subtest: 內部端點驗證服務身分、嚴格欄位與會員登入信箱，不寄到其他會員
+ok 1 - 內部端點驗證服務身分、嚴格欄位與會員登入信箱，不寄到其他會員
+  ---
+  duration_ms: 140.257083
+  type: 'test'
+  ...
+# Subtest: 真實 HTTP／PostgreSQL 與語音引擎只寄登入信箱，保存收據且重送不重寄
+ok 2 - 真實 HTTP／PostgreSQL 與語音引擎只寄登入信箱，保存收據且重送不重寄
+  ---
+  duration_ms: 71.405708
+  type: 'test'
+  ...
+# Subtest: 寄件回應 rejected 保存 failed，不標成功、不自動重送
+ok 3 - 寄件回應 rejected 保存 failed，不標成功、不自動重送
+  ---
+  duration_ms: 52.642042
+  type: 'test'
+  ...
+# Subtest: 寄件回應 server 保存 unknown，不標成功、不自動重送
+ok 4 - 寄件回應 server 保存 unknown，不標成功、不自動重送
+  ---
+  duration_ms: 26.5565
+  type: 'test'
+  ...
+# Subtest: 寄件回應 network 保存 unknown，不標成功、不自動重送
+ok 5 - 寄件回應 network 保存 unknown，不標成功、不自動重送
+  ---
+  duration_ms: 49.191375
+  type: 'test'
+  ...
+# Subtest: 寄件回應 malformed 保存 unknown，不標成功、不自動重送
+ok 6 - 寄件回應 malformed 保存 unknown，不標成功、不自動重送
+  ---
+  duration_ms: 31.913125
+  type: 'test'
+  ...
+# Subtest: 寄送設定缺少時明確失敗，信箱變更、結果網址遭替換均不發送
+ok 7 - 寄送設定缺少時明確失敗，信箱變更、結果網址遭替換均不發送
+  ---
+  duration_ms: 52.585458
+  type: 'test'
+  ...
+# Subtest: 實際 ECCAL 身分及權威餘額連到原生通話發證入口，拒絕失效與會員冒用
+ok 8 - 實際 ECCAL 身分及權威餘額連到原生通話發證入口，拒絕失效與會員冒用
+  ---
+  duration_ms: 459.898291
+  type: 'test'
+  ...
+# Subtest: 兩個獨立會員憑證同時搶最後1秒，開始與結束重送不重發或重扣
+ok 9 - 兩個獨立會員憑證同時搶最後1秒，開始與結束重送不重發或重扣
+  ---
+  duration_ms: 57.595208
+  type: 'test'
+  ...
+# Subtest: ECCAL LINE 真人核對經真實 HTTP、RPC、SQLite 完成雙會員與防護驗證
+    # Subtest: 營運管理者、服務呼叫者與 Origin 邊界
+    ok 1 - 營運管理者、服務呼叫者與 Origin 邊界
+      ---
+      duration_ms: 28.989917
+      type: 'test'
+      ...
+    # Subtest: 首次成功落盤但回應遺失，同一請求重送取得唯一可用領取碼
+    ok 2 - 首次成功落盤但回應遺失，同一請求重送取得唯一可用領取碼
+      ---
+      duration_ms: 6.674625
+      type: 'test'
+      ...
+    # Subtest: 兩會員從實際會員路由建立 ECCAL 待辦及領取碼
+    ok 3 - 兩會員從實際會員路由建立 ECCAL 待辦及領取碼
+      ---
+      duration_ms: 7.491667
+      type: 'test'
+      ...
+    # Subtest: 錯碼、錯聊天室、錯官方帳號不取得成果連結
+    ok 4 - 錯碼、錯聊天室、錯官方帳號不取得成果連結
+      ---
+      duration_ms: 15.966209
+      type: 'test'
+      ...
+    # Subtest: 正確核對、送出證據、核銷與重複請求
+    ok 5 - 正確核對、送出證據、核銷與重複請求
+      ---
+      duration_ms: 31.521625
+      type: 'test'
+      ...
+    # Subtest: 不明結果與傳送失敗不標成功，不能重複派送
+    ok 6 - 不明結果與傳送失敗不標成功，不能重複派送
+      ---
+      duration_ms: 33.363584
+      type: 'test'
+      ...
+    # Subtest: 成果仍限原會員，會員回應不含營運證據
+    ok 7 - 成果仍限原會員，會員回應不含營運證據
+      ---
+      duration_ms: 3.55075
+      type: 'test'
+      ...
+    1..7
+ok 10 - ECCAL LINE 真人核對經真實 HTTP、RPC、SQLite 完成雙會員與防護驗證
+  ---
+  duration_ms: 635.928834
+  type: 'test'
+  ...
+# Subtest: 跨repo登入從ECCAL一次性碼換成本站HttpOnly會話，兩邊憑證分離且資料庫只存雜湊
+ok 11 - 跨repo登入從ECCAL一次性碼換成本站HttpOnly會話，兩邊憑證分離且資料庫只存雜湊
+  ---
+  duration_ms: 203.959833
+  type: 'test'
+  ...
+# Subtest: callback換瀏覽器時不交換code，原瀏覽器仍可完成登入
+ok 12 - callback換瀏覽器時不交換code，原瀏覽器仍可完成登入
+  ---
+  duration_ms: 36.935125
+  type: 'test'
+  ...
+# Subtest: ECCAL登入途中換成別人的JWT拒絕，防止舊登入回呼覆寫此次會員
+ok 13 - ECCAL登入途中換成別人的JWT拒絕，防止舊登入回呼覆寫此次會員
+  ---
+  duration_ms: 41.671875
+  type: 'test'
+  ...
+# Subtest: 未登入時經綁定Google state回到ECCAL，再完成同一跨站登入
+ok 14 - 未登入時經綁定Google state回到ECCAL，再完成同一跨站登入
+  ---
+  duration_ms: 23.023458
+  type: 'test'
+  ...
+# Subtest: 8個並行交換只建立一筆會話，code到期拒絕，session不超過原JWT期限
+ok 15 - 8個並行交換只建立一筆會話，code到期拒絕，session不超過原JWT期限
+  ---
+  duration_ms: 65.746166
+  type: 'test'
+  ...
+# Subtest: 會話到期、登出與服務端撤銷後皆無法再讀會員資料，跨站登出拒絕
+ok 16 - 會話到期、登出與服務端撤銷後皆無法再讀會員資料，跨站登出拒絕
+  ---
+  duration_ms: 32.411833
+  type: 'test'
+  ...
+# Subtest: MCP帳號核對只接受相同ECCAL會員的Email，拒絕額外欄位與錯服務憑證
+ok 17 - MCP帳號核對只接受相同ECCAL會員的Email，拒絕額外欄位與錯服務憑證
+  ---
+  duration_ms: 29.152583
+  type: 'test'
+  ...
+# Subtest: Email大小寫正規化後仍有兩個帳號時拒絕綁定，不能以Email混用會員
+ok 18 - Email大小寫正規化後仍有兩個帳號時拒絕綁定，不能以Email混用會員
+  ---
+  duration_ms: 17.107291
+  type: 'test'
+  ...
+# Subtest: 每位現有會員各有300秒，查詢不建立或重發額度，點數及會員方案不變
+ok 19 - 每位現有會員各有300秒，查詢不建立或重發額度，點數及會員方案不變
+  ---
+  duration_ms: 121.662042
+  type: 'test'
+  ...
+# Subtest: 兩通120及180秒後為300、180、0，重新建立服務不重發，其他會員維持300
+ok 20 - 兩通120及180秒後為300、180、0，重新建立服務不重發，其他會員維持300
+  ---
+  duration_ms: 67.502708
+  type: 'test'
+  ...
+# Subtest: 同一操作12個並行占用只產生同一筆與同一截止
+ok 21 - 同一操作12個並行占用只產生同一筆與同一截止
+  ---
+  duration_ms: 67.215709
+  type: 'test'
+  ...
+# Subtest: 最後1秒的多裝置不同操作只能成功占用一次
+ok 22 - 最後1秒的多裝置不同操作只能成功占用一次
+  ---
+  duration_ms: 61.789333
+  type: 'test'
+  ...
+# Subtest: 未接通為0秒、釋放占用，舊操作重播不改期限或重新占用
+ok 23 - 未接通為0秒、釋放占用，舊操作重播不改期限或重新占用
+  ---
+  duration_ms: 28.576917
+  type: 'test'
+  ...
+# Subtest: 90秒對話加30秒工具等待扣90秒，重疊等待排除一次
+ok 24 - 90秒對話加30秒工具等待扣90秒，重疊等待排除一次
+  ---
+  duration_ms: 41.434875
+  type: 'test'
+  ...
+# Subtest: 逐段不取整，0.4秒加0.4秒合計扣1秒；零長度工具不吃掉後續時間
+ok 25 - 逐段不取整，0.4秒加0.4秒合計扣1秒；零長度工具不吃掉後續時間
+  ---
+  duration_ms: 18.600375
+  type: 'test'
+  ...
+# Subtest: 工具未回覆直到結束的等待不扣，斷線至確認結束仍計入
+ok 26 - 工具未回覆直到結束的等待不扣，斷線至確認結束仍計入
+  ---
+  duration_ms: 12.880209
+  type: 'test'
+  ...
+# Subtest: 12次並行相同結算只扣一次，事件亂序及重複送達返回原收據
+ok 27 - 12次並行相同結算只扣一次，事件亂序及重複送達返回原收據
+  ---
+  duration_ms: 40.0605
+  type: 'test'
+  ...
+# Subtest: 已結算後修改時間軸拒絕，不覆寫帳目或原收據
+ok 28 - 已結算後修改時間軸拒絕，不覆寫帳目或原收據
+  ---
+  duration_ms: 24.825625
+  type: 'test'
+  ...
+# Subtest: 錯會員、未知占用及不存在會員拒絕，其他會員帳目不變
+ok 29 - 錯會員、未知占用及不存在會員拒絕，其他會員帳目不變
+  ---
+  duration_ms: 30.649125
+  type: 'test'
+  ...
+# Subtest: 無結束、衝突事件、未知欄位與失配工具時間軸拒絕
+ok 30 - 無結束、衝突事件、未知欄位與失配工具時間軸拒絕
+  ---
+  duration_ms: 12.467541
+  type: 'test'
+  ...
+# Subtest: 帳目更新後寫收據失敗時整筆交易回復，占用保持且可重試
+ok 31 - 帳目更新後寫收據失敗時整筆交易回復，占用保持且可重試
+  ---
+  duration_ms: 47.163791
+  type: 'test'
+  ...
+# Subtest: 資料庫拒絕重發額度、負數及未完成收據狀態
+ok 32 - 資料庫拒絕重發額度、負數及未完成收據狀態
+  ---
+  duration_ms: 12.137542
+  type: 'test'
+  ...
+# Subtest: HTTP驗證有效、過期、錯簽章及已刪除會員，回傳無權杖
+ok 33 - HTTP驗證有效、過期、錯簽章及已刪除會員，回傳無權杖
+  ---
+  duration_ms: 56.890583
+  type: 'test'
+  ...
+# Subtest: HTTP後端介面可查詢占用結算，拒絕額度注入、錯服務權杖及額外欄位
+ok 34 - HTTP後端介面可查詢占用結算，拒絕額度注入、錯服務權杖及額外欄位
+  ---
+  duration_ms: 27.179375
+  type: 'test'
+  ...
+# Subtest: 未設定服務權杖的介面拒絕使用
+ok 35 - 未設定服務權杖的介面拒絕使用
+  ---
+  duration_ms: 7.412667
+  type: 'test'
+  ...
+# Subtest: realtime-black live adapter與通話引擎經HTTP對上ECCAL真PostgreSQL帳目
+ok 36 - realtime-black live adapter與通話引擎經HTTP對上ECCAL真PostgreSQL帳目
+  ---
+  duration_ms: 210.15975
+  type: 'test'
+  ...
+1..36
+# tests 43
+# suites 0
+# pass 43
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1252.647167

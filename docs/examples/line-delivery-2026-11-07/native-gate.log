@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: 實際 ECCAL 身分及權威餘額連到原生通話發證入口，拒絕失效與會員冒用
+ok 1 - 實際 ECCAL 身分及權威餘額連到原生通話發證入口，拒絕失效與會員冒用
+  ---
+  duration_ms: 1378.086917
+  type: 'test'
+  ...
+# Subtest: 兩個獨立會員憑證同時搶最後1秒，開始與結束重送不重發或重扣
+ok 2 - 兩個獨立會員憑證同時搶最後1秒，開始與結束重送不重發或重扣
+  ---
+  duration_ms: 78.354333
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2275.389958
