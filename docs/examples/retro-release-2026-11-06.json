@@ -128,6 +128,17 @@
       "startEnabled": true,
       "records": 13,
       "screenshot": "retro-release-2026-11-06/member-after-short-call.png"
+    },
+    "finalOwnerReport": {
+      "observedAt": "2026-11-06T11:50:57Z",
+      "source": "IAB signed-in member records and expanded report",
+      "kind": "report",
+      "title": "轉換率診斷方法與首要查核數字",
+      "methodId": "MK-453",
+      "emailState": "succeeded",
+      "readable": true,
+      "recordOrigin": "existing-call",
+      "screenshot": "retro-release-2026-11-06/final-owner-report.png"
     }
   },
   "realNewCall": {
@@ -174,7 +185,72 @@
       "originalHistoryAndCreditReconcile": true,
       "otherMembersUnchanged": true
     },
-    "voiceReplyVerified": false,
-    "state": "settlement-verified-voice-answer-awaiting-user-result"
+    "voiceReplyVerified": true,
+    "state": "user-confirmed-audio-and-settlement-verified",
+    "voiceReplyEvidenceSource": "user-confirmation",
+    "userConfirmation": {
+      "date": "2026-11-06",
+      "answer": "有聽到回答，已掛斷"
+    }
+  },
+  "currentSourceRehearsal": {
+    "sourceCommit": "b647abccbd5ddcff0387c33b2b41179217450cab",
+    "reproducibleBundleSha256": "a434244906640e13f664a3f64915fb3bebe6bff33f3d952223165dc8ad805f88",
+    "matchesProductionScript": true,
+    "candidateVersion": "5b4359b4-2c69-4cd7-add2-2afcad739905",
+    "restoredVersion": "5b4359b4-2c69-4cd7-add2-2afcad739905",
+    "passed": true,
+    "testWorkerRemoved": true,
+    "temporarySourceRemoved": true,
+    "productionUnchanged": true,
+    "evidence": "retro-rehearsal-2026-11-06.json"
+  },
+  "currentNativeGate": {
+    "passed": 2,
+    "failed": 0,
+    "sourceCommit": "b647abccbd5ddcff0387c33b2b41179217450cab",
+    "eccalCommit": "17020ceff127dec9ab4d773d2705878888b80b91",
+    "evidence": "retro-native-gate-2026-11-06.json",
+    "productionQuotaUsed": false
+  },
+  "independentPublishedAcceptance": {
+    "date": "2026-11-06",
+    "reviewer": "fresh spec_evaluator",
+    "status": "NEEDS_WORK",
+    "publishedReleaseVerification": "PASS",
+    "issueOwnCriteria": "PASS",
+    "issueClosureAllowed": false,
+    "issueState": "open",
+    "blocker": {
+      "issue": 28,
+      "requiredBy": "docs/development-plan.md#g1-03",
+      "dependencyIssue": 27,
+      "remaining": "Two-member Email/LINE full flow through #24"
+    }
+  },
+  "finalLedgerReadback": {
+    "observedAt": "2026-11-06T12:03:06.849Z",
+    "databaseReadOnly": true,
+    "member": "A",
+    "balance": {
+      "totalSeconds": 300,
+      "billedSeconds": 2,
+      "reservedSeconds": 0,
+      "remainingSeconds": 298
+    },
+    "unsettledReservations": 0,
+    "ledger": {
+      "reserved_seconds": 300,
+      "billed_seconds": 2,
+      "remaining_seconds": 298,
+      "events_digest": "43989854835621048ec75f7af62bbbeba49394a799424d332b124cc37cad9552",
+      "settled_at": "2026-11-06T11:18:54.524Z"
+    },
+    "otherTestMembersUnchanged": true,
+    "http": {
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "cacheControl": "no-store"
+    }
   }
 }

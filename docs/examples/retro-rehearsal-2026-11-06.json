@@ -1,0 +1,310 @@
+{
+  "observedAt": "2026-11-06T11:56:06.331Z",
+  "issue": 29,
+  "environment": "Isolated temporary Cloudflare Workers test service",
+  "sourceCommit": "b647abccbd5ddcff0387c33b2b41179217450cab",
+  "testWorker": "realtime-black-check-574d47a6",
+  "productionWorker": "realtime-black",
+  "productionBindingsReused": false,
+  "productionSecretsUsed": false,
+  "productionCallsCreated": false,
+  "productionChanges": false,
+  "steps": [
+    {
+      "name": "candidate-public-readback",
+      "assets": [
+        {
+          "asset": "index.html",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "535036f0fe4f4de10217f4dc414e6c1722fa7c0551ba691e95040e62fa9cab4b",
+          "matchesSource": true
+        },
+        {
+          "asset": "app.js",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "377d3133d729e99e99ab6e3877012308afcad63d1f64544b9546fbe81c0ce39f",
+          "matchesSource": true
+        },
+        {
+          "asset": "style.css",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "3a2308cb7ca56883c2ecf10be16069a5f98aafde3ffbc392141c2845d7ec9390",
+          "matchesSource": true
+        }
+      ],
+      "isolatedEccalRequest": {
+        "status": 503,
+        "error": "ECCAL_NOT_CONFIGURED"
+      }
+    },
+    {
+      "name": "alternate-public-readback",
+      "assets": [
+        {
+          "asset": "index.html",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "f0b68215ba0970123cc23bb8703d2fb2ce574a029ccdcc293ae240618c48d0e5",
+          "matchesSource": true
+        },
+        {
+          "asset": "app.js",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "3481e96df0eb5868d2e0d5d068fd8a16eeda85792ac440697e9cbf5a1a9eb750",
+          "matchesSource": true
+        },
+        {
+          "asset": "style.css",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "84eec0bcefa60574db0aef54c247b7bce9db7b29f360f71a258b9eb13f135bcd",
+          "matchesSource": true
+        }
+      ],
+      "isolatedEccalRequest": {
+        "status": 503,
+        "error": "ECCAL_NOT_CONFIGURED"
+      }
+    },
+    {
+      "name": "restored-public-readback",
+      "assets": [
+        {
+          "asset": "index.html",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "535036f0fe4f4de10217f4dc414e6c1722fa7c0551ba691e95040e62fa9cab4b",
+          "matchesSource": true
+        },
+        {
+          "asset": "app.js",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "377d3133d729e99e99ab6e3877012308afcad63d1f64544b9546fbe81c0ce39f",
+          "matchesSource": true
+        },
+        {
+          "asset": "style.css",
+          "status": 200,
+          "cacheControl": "no-store",
+          "sha256": "3a2308cb7ca56883c2ecf10be16069a5f98aafde3ffbc392141c2845d7ec9390",
+          "matchesSource": true
+        }
+      ],
+      "isolatedEccalRequest": {
+        "status": 503,
+        "error": "ECCAL_NOT_CONFIGURED"
+      }
+    }
+  ],
+  "productionBefore": {
+    "deploymentId": "14919548-0124-49db-ab82-388411436bfd",
+    "versions": [
+      {
+        "version_id": "a919d0dd-99d6-4de1-b2a9-f1c996eed5cd",
+        "percentage": 100
+      }
+    ]
+  },
+  "packageLockSha256": "191f51f3af0107d9eaeb58ffbf67c07fbac8ab4a13aa1733d062c229d0874375",
+  "npmCi": "PASS",
+  "wranglerVersion": "4.157.0",
+  "reproducibleBuild": {
+    "sha256": "a434244906640e13f664a3f64915fb3bebe6bff33f3d952223165dc8ad805f88",
+    "attempts": 2,
+    "equal": true
+  },
+  "testOrigin": "https://realtime-black-check-574d47a6.backtrue.workers.dev",
+  "candidate": {
+    "deploymentId": "f37f25d0-ceb5-4ea3-bcb8-2a23ae93f9b1",
+    "id": "5b4359b4-2c69-4cd7-add2-2afcad739905",
+    "tag": "b647abc",
+    "scriptEtag": "8e7d613f0f87ba7e4a971a8e73aed3071018d8b5b771ec06ffcd7a3ee080058d",
+    "migrationTag": "v2",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace",
+        "className": "AuthVault",
+        "namespaceId": "523d4d6f8c9b47c5878aa0f0b50b27b1"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace",
+        "className": "CallCutoff",
+        "namespaceId": "33f77861d83c4b83a0ea67a321c0fcb6"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace",
+        "className": "MemberRoom",
+        "namespaceId": "55ad980f6f854d0897e431834318da8c"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text"
+      }
+    ],
+    "trafficPercentage": 100
+  },
+  "isolation": {
+    "testNamespaceCount": 3,
+    "productionNamespaceCount": 3,
+    "sharedNamespaceCount": 0,
+    "secrets": 0,
+    "serviceBindings": 0
+  },
+  "productionScriptEtag": "8e7d613f0f87ba7e4a971a8e73aed3071018d8b5b771ec06ffcd7a3ee080058d",
+  "matchesProductionScript": true,
+  "alternate": {
+    "sourceCommit": "11197d0724703a1a614b52a10b07325c06b94ad8",
+    "deploymentId": "c828973e-311a-4e39-87d6-71cf195718f6",
+    "id": "6d5d60b8-4ea6-43fe-b975-f2292f5b713b",
+    "tag": "11197d0",
+    "scriptEtag": "161d3f53da33a43ce377e66fe4c7e9664aedf9d1dcdeb1cd06cbebf96accdf1b",
+    "migrationTag": "v2",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace",
+        "className": "AuthVault",
+        "namespaceId": "523d4d6f8c9b47c5878aa0f0b50b27b1"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace",
+        "className": "CallCutoff",
+        "namespaceId": "33f77861d83c4b83a0ea67a321c0fcb6"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace",
+        "className": "MemberRoom",
+        "namespaceId": "55ad980f6f854d0897e431834318da8c"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text"
+      }
+    ],
+    "trafficPercentage": 100
+  },
+  "restored": {
+    "deploymentId": "086c3b47-d7d1-4a6f-b4f0-dd6733ebed4b",
+    "id": "5b4359b4-2c69-4cd7-add2-2afcad739905",
+    "tag": "b647abc",
+    "scriptEtag": "8e7d613f0f87ba7e4a971a8e73aed3071018d8b5b771ec06ffcd7a3ee080058d",
+    "migrationTag": "v2",
+    "bindings": [
+      {
+        "name": "APP_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "AUTH",
+        "type": "durable_object_namespace",
+        "className": "AuthVault",
+        "namespaceId": "523d4d6f8c9b47c5878aa0f0b50b27b1"
+      },
+      {
+        "name": "CUTOFFS",
+        "type": "durable_object_namespace",
+        "className": "CallCutoff",
+        "namespaceId": "33f77861d83c4b83a0ea67a321c0fcb6"
+      },
+      {
+        "name": "ECCAL_ORIGIN",
+        "type": "plain_text"
+      },
+      {
+        "name": "MEMBERS",
+        "type": "durable_object_namespace",
+        "className": "MemberRoom",
+        "namespaceId": "55ad980f6f854d0897e431834318da8c"
+      },
+      {
+        "name": "REALTIME_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "TEXT_MODEL",
+        "type": "plain_text"
+      }
+    ],
+    "trafficPercentage": 100,
+    "matchesCandidate": true
+  },
+  "testEnvironmentPassed": true,
+  "testWorkerRemoved": true,
+  "productionAfter": {
+    "deploymentId": "14919548-0124-49db-ab82-388411436bfd",
+    "versions": [
+      {
+        "version_id": "a919d0dd-99d6-4de1-b2a9-f1c996eed5cd",
+        "percentage": 100
+      }
+    ]
+  },
+  "productionUnchanged": true,
+  "scope": "isolated current retro source rebuild, publish and rollback",
+  "rawResultSha256": "84495cd1d5f5947fd4bdf41f8b058173a7c0dabd34cb2bf30a1a9679b2e55d07",
+  "helperSha256": "0ea7e79fef05b6b6c1f261263a70537166c7d6604e6824d81c9149114f62fa9b",
+  "temporarySourceRemoved": true,
+  "firstAttempt": {
+    "state": "failed",
+    "error": "ACCEPTANCE_ASSERTION_FAILED",
+    "sourceCommit": "b647abccbd5ddcff0387c33b2b41179217450cab",
+    "publicReadbackDetailsRecorded": false,
+    "reproducibleBuild": {
+      "sha256": "a434244906640e13f664a3f64915fb3bebe6bff33f3d952223165dc8ad805f88",
+      "attempts": 2,
+      "equal": true
+    },
+    "matchesProductionScript": true,
+    "testWorkerRemoved": true,
+    "productionUnchanged": true,
+    "rawResultSha256": "268c270269add9d7ccca737a0768602e72f6112954686213ef5dfac2af93c630"
+  },
+  "testConfiguration": "retro-rehearsal-2026-11-06-config.json",
+  "testConfigurationSha256": "b82a0cb9c23b6c62878ae22d9de4247224d3ea10f41d7bec3d16e4c1541fc08a"
+}

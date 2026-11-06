@@ -1,0 +1,141 @@
+{
+  "recordedAt": "2026-11-06T12:01:52.052Z",
+  "issue": 28,
+  "productSourceCommit": "b647abccbd5ddcff0387c33b2b41179217450cab",
+  "productionVersion": "a919d0dd-99d6-4de1-b2a9-f1c996eed5cd",
+  "eccalCommit": "17020ceff127dec9ab4d773d2705878888b80b91",
+  "sourceSha256": {
+    "src/worker.ts": "fd08a49da6798de7040fb55f1e376fe803bc78b9ee1272cc34232eca47581cc9",
+    "src/member-engine.ts": "9974d2b74d2af1dcfca49260ff531ce9c1685cd7bd5709fd74bfd4e8d79a5a5e",
+    "src/metering.ts": "18deadb72cabe9380f8da95efe67a97b9d56ec3c9d8f20b0d0f4a854ab60a6c5",
+    "src/default-methods.ts": "6b3f5661360720fa7f08677e117ee53640c35040dbd50cf30aee68c897a9c74e",
+    "src/delivery.ts": "078799f596aced8852771466df280a1c52606de8adb30550770f5a3e97aa66a2",
+    "src/contracts.ts": "9413a7955816c24527ae554a7258d478c5bdafc7cab986a1a1f3b5b31f57e63a",
+    "test/member.test.ts": "285f7a332323fabcf292bc7bc418aa23e1c7ba57a2f1c51337795543e0769309",
+    "test/default-methods.test.ts": "35bdc4f0193e4930051dc963224f91d607cd6e4880756cad3f86173137cf70ce",
+    "test/delivery-state.test.ts": "49e8b1b9bded80353fa99220ebc8da4c94d5f091968a28cb355ed8aeef225952",
+    "test/retention.test.ts": "3dbce22923929e3e527a6754bc21c87edde4cbdcde5ca40ded0384142127f82d",
+    "test/storage.test.ts": "666e6ff7d8c22b8ae10bf856f8658a0cfe8ee423ab8a7d4d819c286e3c832d39"
+  },
+  "allFilesMatchReleasedSource": true,
+  "fullCheck": {
+    "command": "npm run check",
+    "workers": 179,
+    "frontend": 25,
+    "nativeRuntime": 3,
+    "typecheck": "PASS",
+    "dryRun": "PASS",
+    "log": "../design/verification/check.log",
+    "logSha256": "6dc13dd53329d5075190713261fdbe8bf7cf4b924a8b2c0a2f6eb54e106d68fd"
+  },
+  "currentNativeGate": {
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "command": "REALTIME_BLACK_ROOT=/Volumes/SD/Call-black VOICE_GATE_EVIDENCE=<private output> node --import tsx --test server/voiceGateContract.test.ts",
+    "sourceShaVerified": true,
+    "evidence": "retro-native-gate-2026-11-06.json",
+    "schemaRemoved": true,
+    "runtimeDisposed": true
+  },
+  "cases": [
+    {
+      "name": "last-one-second-race",
+      "status": "PASS",
+      "evidence": "retro-native-gate-2026-11-06.json",
+      "responses": [
+        201,
+        409
+      ],
+      "reservedSeconds": 1,
+      "repeatStartStatus": 409,
+      "repeatEndStatuses": [
+        200,
+        200
+      ],
+      "providerEndCount": 1,
+      "remainingSeconds": 0
+    },
+    {
+      "name": "server-cutoff",
+      "status": "PASS",
+      "files": [
+        "test/member.test.ts"
+      ],
+      "case": "沒有前端倒數仍在額度截止後由後端掛斷",
+      "nativeEvidence": "retro-native-gate-2026-11-06.json"
+    },
+    {
+      "name": "tool-rejected",
+      "status": "PASS",
+      "files": [
+        "test/default-methods.test.ts",
+        "test/member.test.ts"
+      ],
+      "cases": [
+        "拒絕混入私人資料或寫入工具的服務清單",
+        "未授權的停廣告工具無法執行",
+        "工具失敗的紀錄不填造資料"
+      ]
+    },
+    {
+      "name": "delivery-failed",
+      "status": "PASS",
+      "files": [
+        "test/delivery-state.test.ts"
+      ],
+      "result": "pending, succeeded, failed and unknown persisted and re-read over actual local HTTP/SQLite; eight cases"
+    },
+    {
+      "name": "record-expired",
+      "status": "PASS",
+      "files": [
+        "test/retention.test.ts",
+        "test/storage.test.ts",
+        "test/member.test.ts"
+      ],
+      "result": "30-day list/direct access/alarm/storage clearing"
+    }
+  ],
+  "voiceAcceptance": {
+    "generalServiceVoice": {
+      "userConfirmedHeardReply": true,
+      "evidence": "retro-release-2026-11-06.json"
+    },
+    "customOwnerVoice": {
+      "state": "pending",
+      "issues": [
+        30,
+        31
+      ]
+    }
+  },
+  "uncompletedDependencies": [
+    {
+      "issue": 6,
+      "remaining": "Two real tabs and two physical devices"
+    },
+    {
+      "issue": 13,
+      "remaining": "Owner teaching-style listening opinion"
+    },
+    {
+      "issue": 24,
+      "remaining": "Select LINE Official Account, two member claim-code conversations and supervised delivery"
+    },
+    {
+      "issue": 27,
+      "remaining": "Two-member Email/LINE full flow"
+    },
+    {
+      "issue": 30,
+      "remaining": "Owner voice eligibility and authorization"
+    },
+    {
+      "issue": 31,
+      "remaining": "Owner voice listening and latency acceptance"
+    }
+  ],
+  "issueState": "open",
+  "dependencyIssue": 27
+}
