@@ -1,6 +1,7 @@
 import { AppError, type CallRecord, type Dependencies, type Identity, type MeterEvent, type DocumentKind, type TranscriptLine, type Reservation, type Settlement, type ConfirmedEnd, type DeliveryJob } from "./contracts";
 import { SHARED_METHOD_TOOLS } from "./default-methods";
 import { sendDelivery } from "./delivery";
+import { LINE_ACCOUNT, lineInput, type LinePrepare, type LineComplete } from './line-delivery';
 import { billedSeconds, callDeadline } from "./metering";
 
 const DAYS_30 = 30 * 24 * 60 * 60 * 1000;
@@ -26,6 +27,7 @@ export class MemberEngine {
   private invalidateDocuments(record: CallRecord) {
     record.documents = [];
     for (const job of record.deliveries ?? []) if (job.state === "pending") { job.state = "failed"; job.failureCode = "DOCUMENT_STALE"; }
+    for (const job of record.deliveries ?? []) if (job.state === 'sending' && job.lineAttempt) { job.state = 'unknown'; job.failureCode = 'DOCUMENT_STALE'; }
   }
   private event(record: CallRecord, type: MeterEvent["type"], id = this.deps.id(), toolCallId?: string) {
     if (!record.events.some(event => event.id === id)) record.events.push({ id, type, at: this.deps.now(), ...(toolCallId ? { toolCallId } : {}) });
@@ -201,8 +203,8 @@ export class MemberEngine {
     }
     const records = await this.deps.store.list<CallRecord>("call:");
     for (const [key, record] of records) {
-      if ((record.deliveries ?? []).some(job => job.state === "sending")) {
-        for (const job of record.deliveries) if (job.state === "sending") job.state = "unknown";
+      if ((record.deliveries ?? []).some(job => job.state === "sending" && !job.lineAttempt)) {
+        for (const job of record.deliveries) if (job.state === "sending" && !job.lineAttempt) job.state = "unknown";
         await this.save(record);
       }
       if (record.expiresAt !== undefined && record.expiresAt <= this.deps.now()) {
@@ -352,7 +354,13 @@ export class MemberEngine {
     const previous = record.deliveries?.find(job => job.operationId === input.operationId);
     if (previous) {
       if (previous.requestFingerprint !== fingerprint) throw new AppError("OPERATION_REPLAYED", 409);
-      return { job: previous, claimCode: undefined };
+      let claimCode: string | undefined;
+      if (previous.channel === 'line' && previous.state === 'pending' && previous.claimVersion === 'derived-v1') {
+        if (!this.deps.lineClaim) throw new AppError('LINE_NOT_CONFIGURED');
+        claimCode = await this.deps.lineClaim(previous);
+        if (await this.digest(claimCode) !== previous.claimDigest) throw new AppError('CLAIM_UNAVAILABLE', 409);
+      }
+      return { job: previous, claimCode };
     }
     if (input.channel === "email") {
       if (!this.deps.eccal.emailRecipient) throw new AppError("EMAIL_RECIPIENT_UNAVAILABLE");
@@ -362,12 +370,58 @@ export class MemberEngine {
       input = { ...input, recipient };
     }
     const job: DeliveryJob = { id: this.deps.id(), recordId: id, memberId, documentId: input.documentId, sourceRevision: record.transcriptRevision ?? 0, operationId: input.operationId, requestFingerprint: fingerprint, channel: input.channel, recipient: input.recipient, verifiedAt: null, state: "pending", createdAt: this.deps.now() };
-    const claimCode = input.channel === "line" ? this.deps.id().replaceAll("-", "") : undefined;
-    if (claimCode) { job.claimDigest = await this.digest(claimCode); job.claimExpiresAt = record.expiresAt; }
+    const claimCode = input.channel === 'line' ? await this.deps.lineClaim?.(job) : undefined;
+    if (input.channel === 'line' && (!claimCode || !/^[a-f0-9]{32}$/.test(claimCode))) throw new AppError('LINE_NOT_CONFIGURED');
+    if (claimCode) { job.claimDigest = await this.digest(claimCode); job.claimExpiresAt = record.expiresAt; job.claimVersion = 'derived-v1'; }
+    if (input.channel === 'line') {
+      if (!this.deps.registerLineDelivery || !record.expiresAt) throw new AppError('LINE_NOT_CONFIGURED');
+      await this.deps.registerLineDelivery({ memberId, recordId: id, jobId: job.id, expiresAt: record.expiresAt });
+    }
     record.deliveries ??= [];
     record.deliveries.push(job);
     await this.save(record);
     return { job, claimCode };
+  }
+  async lineTask(memberId: string, id: string, jobId: string) {
+    const record = await this.get(memberId, id);
+    const job = record.deliveries.find(job => job.id === jobId && job.channel === 'line');
+    if (!job) throw new AppError('DELIVERY_NOT_FOUND', 404);
+    const document = record.documents.find(document => document.id === job.documentId && document.sourceRevision === (record.transcriptRevision ?? 0));
+    return { job, expiresAt: record.expiresAt!, documentTitle: document?.title ?? '內容已更新', currentDocument: !!document && job.sourceRevision === (record.transcriptRevision ?? 0) };
+  }
+  async prepareLine(memberId: string, id: string, input: LinePrepare) {
+    lineInput('prepare', input);
+    const record = await this.get(memberId, id);
+    const { job, currentDocument } = await this.lineTask(memberId, id, input.jobId);
+    if (!currentDocument) throw new AppError('DOCUMENT_STALE', 409);
+    if (job.state !== 'pending' || job.lineAttempt) throw new AppError('DELIVERY_ALREADY_ATTEMPTED', 409);
+    if (!job.claimDigest || job.claimExpiresAt === undefined || job.claimExpiresAt <= this.deps.now() || job.claimedAt !== undefined || await this.digest(input.claimCode) !== job.claimDigest) throw new AppError('CLAIM_INVALID', 403);
+    job.recipient = input.chatRef; job.verifiedAt = this.deps.now(); job.state = 'sending';
+    job.lineAttempt = { id: input.attemptId, officialAccount: LINE_ACCOUNT, chatRef: input.chatRef, preparedAt: this.deps.now() };
+    record.deliveries[record.deliveries.findIndex(value => value.id === job.id)] = job;
+    await this.save(record);
+    return this.lineTask(memberId, id, job.id);
+  }
+  async completeLine(memberId: string, id: string, input: LineComplete) {
+    lineInput('complete', input);
+    const record = await this.get(memberId, id);
+    const { job, currentDocument } = await this.lineTask(memberId, id, input.jobId);
+    const attempt = job.lineAttempt;
+    if (!attempt || attempt.id !== input.attemptId || attempt.chatRef !== input.chatRef || attempt.officialAccount !== input.officialAccount) throw new AppError('RECIPIENT_UNVERIFIED', 403);
+    const fingerprint = await this.digest(JSON.stringify({ jobId: input.jobId, attemptId: input.attemptId, officialAccount: input.officialAccount, chatRef: input.chatRef, outcome: input.outcome, receipt: input.receipt, evidenceSha256: input.evidenceSha256 }));
+    if (attempt.resultFingerprint) {
+      if (attempt.resultFingerprint !== fingerprint) throw new AppError('DELIVERY_ALREADY_ATTEMPTED', 409);
+      return this.lineTask(memberId, id, job.id);
+    }
+    if (!currentDocument) throw new AppError('DOCUMENT_STALE', 409);
+    if (job.state !== 'sending') throw new AppError('DELIVERY_ALREADY_ATTEMPTED', 409);
+    attempt.resultFingerprint = fingerprint;
+    attempt.evidence = { outcome: input.outcome, receipt: input.receipt, evidenceSha256: input.evidenceSha256, observedAt: this.deps.now() };
+    job.state = input.outcome === 'sent' ? 'succeeded' : input.outcome === 'rejected' ? 'failed' : 'unknown';
+    if (input.outcome === 'sent') { job.providerReceipt = input.receipt; job.claimedAt = this.deps.now(); }
+    record.deliveries[record.deliveries.findIndex(value => value.id === job.id)] = job;
+    await this.save(record);
+    return this.lineTask(memberId, id, job.id);
   }
   async dispatchDelivery(memberId: string, id: string, jobId: string, proof: unknown, claimCode?: string) {
     const record = await this.get(memberId, id);

@@ -61,11 +61,13 @@ describe("持久交付工作", () => {
     await expect(f.engine.dispatchDelivery("b", f.call.id, created.job.id, {})).rejects.toMatchObject({ status: 404 });
     expect(f.send).not.toHaveBeenCalled();
   });
-  it("LINE 領取碼只回傳一次，儲存端保留雜湊", async () => {
+  it("LINE 待辦重試可取回同一組領取碼，儲存端只保留雜湊", async () => {
     const f = await prepared(); const op = crypto.randomUUID(); const created = await f.request("line", op);
     expect(created.claimCode).toMatch(/^[a-f0-9]{32}$/); expect(created.job.claimDigest).toHaveLength(64);
     expect(JSON.stringify([...f.data.values()])).not.toContain(created.claimCode);
-    expect((await f.request("line", op)).claimCode).toBeUndefined();
+    const replay = await f.request('line', op);
+    expect(replay.claimCode).toBe(created.claimCode); expect(replay.job.id).toBe(created.job.id);
+    expect((await f.record(f.call.id))!.deliveries).toHaveLength(1);
   });
   it("錯誤領取碼不進行收件人核對或寄送", async () => {
     const f = await prepared(); const created = await f.request("line");

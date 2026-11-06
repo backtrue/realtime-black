@@ -87,6 +87,8 @@ export type DeliveryJob = {
   failureCode?: "DOCUMENT_STALE" | EmailFailureCode;
   providerStatus?: number;
   claimDigest?: string; claimExpiresAt?: number; claimedAt?: number;
+  claimVersion?: 'derived-v1';
+  lineAttempt?: { id: string; officialAccount: string; chatRef: string; preparedAt: number; resultFingerprint?: string; evidence?: { outcome: string; receipt: string; evidenceSha256?: string; observedAt: number } };
 };
 export type EmailFailureCode = "EMAIL_NOT_CONFIGURED" | "RECIPIENT_UNVERIFIED" | "RESEND_REJECTED" | "RESEND_UNAVAILABLE";
 export type DeliveryResult = { outcome: "sent"; receipt: string } | { outcome: "rejected" | "unknown"; failureCode?: EmailFailureCode; providerStatus?: number };
@@ -105,4 +107,6 @@ export type Dependencies = {
   id: () => string;
   delivery?: DeliveryPort;
   appOrigin?: string;
+  registerLineDelivery?: (ref: { memberId: string; recordId: string; jobId: string; expiresAt: number }) => Promise<void>;
+  lineClaim?: (job: DeliveryJob) => Promise<string>;
 };

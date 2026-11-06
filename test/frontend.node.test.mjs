@@ -61,7 +61,7 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
       else if (path === "/api/me") data = authOptions.balance ?? { eligible: true, remainingSeconds: 300 };
       else if (path === "/api/calls" && init?.method === "POST") data = startResponse ? await startResponse() : { id: "fixture-call", sdp: "v=0\r\nanswer", deadline: Date.now() + 300000 };
       else if (path.endsWith("/end")) data = authOptions.endResponse ? await authOptions.endResponse() : { status: "ended" };
-      else if (path.endsWith("/deliveries")) data = deliveryResponse ?? { job: { state: "pending" } };
+      else if (path.endsWith("/deliveries")) data = typeof deliveryResponse === 'function' ? await deliveryResponse(path, init) : deliveryResponse ?? { job: { state: "pending" } };
       else if (path.endsWith('/email')) data = typeof authOptions.sendEmailResponse === 'function' ? await authOptions.sendEmailResponse() : { state: 'succeeded' };
       else if (/^\/api\/calls\/[^/]+$/.test(path)) data = authOptions.callRecord ? await authOptions.callRecord() : { status: "active", usage: { elapsedSeconds: 0, audioStarted: false, waitingForTool: false } };
       else data = typeof recordsResponse === 'function' ? await recordsResponse() : recordsResponse;
@@ -86,6 +86,24 @@ test('Email 使用登入信箱，不出現地址輸入；送出回應中斷後�
   const requests=p.requests.filter(request=>request.path.endsWith('/deliveries')).map(request=>JSON.parse(request.init.body));
   assert.equal(requests.length,2);assert.equal(requests[0].recipient,'');assert.equal(requests[0].operationId,requests[1].operationId);
   assert.ok(section.children.some(child=>child.textContent==='已送出'));
+});
+
+test('LINE 建立回應中斷後，同一按鈕重試取得同一筆待辦與領取碼', async () => {
+  const record = { id: 'fixture-call', status: 'ended', createdAt: Date.now(), transcript: [], deliveries: [], documents: [{ id: 'fixture-document', kind: 'report', title: '合成行銷報告', findings: [] }] };
+  const jobs = new Map(); let attempts = 0;
+  const p = await page(async () => audio(), undefined, [record], async (_path, init) => {
+    const input = JSON.parse(init.body);
+    if (!jobs.has(input.operationId)) jobs.set(input.operationId, { job: { id: 'fixture-line-job', state: 'pending' }, claimCode: 'c'.repeat(32) });
+    if (++attempts === 1) throw new Error('controlled lost create response');
+    return jobs.get(input.operationId);
+  });
+  const section = p.findElement('document-fixture-document');
+  const button = section.children.find(child => child.textContent === '用 LINE 領取');
+  await button.listeners.get('click')(); assert.equal(button.disabled, false);
+  await button.listeners.get('click')(); assert.equal(button.disabled, true);
+  const requests = p.requests.filter(request => request.path.endsWith('/deliveries')).map(request => JSON.parse(request.init.body));
+  assert.equal(requests.length, 2); assert.equal(requests[0].operationId, requests[1].operationId); assert.equal(jobs.size, 1);
+  assert.ok(section.children.some(child => child.textContent === 'c'.repeat(32)));
 });
 
 test("三類成果 hash 只開啟目前會員回應內的文件，竄改識別值無法顯示他人內容", async () => {

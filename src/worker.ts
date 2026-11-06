@@ -13,6 +13,9 @@ import { HttpEccalEmail } from "./email";
 import { authRoutes, type AuthorizationPort } from './auth-routes';
 import { MemberAuthorization } from './member-authorization';
 import { McpOAuth } from './mcp-oauth';
+import { appOrigin } from './auth-crypto';
+import { HttpEccalLine } from './line-eccal';
+import { LineDeliveryIndex, LINE_ACCOUNT, LINE_ACCOUNT_NAME, lineCaller, lineInput, deriveLineClaim, type LineRef, type LinePrepare, type LineComplete } from './line-delivery';
 
 export interface Env {
   ASSETS: Fetcher;
@@ -149,6 +152,7 @@ function publicDelivery(job: DeliveryJob) { return { id: job.id, documentId: job
 
 export class MemberRoom extends DurableObject<Env> {
   private engine: MemberEngine;
+  private lineIndex: LineDeliveryIndex;
   private sockets = new Map<string, WebSocket>();
   private pendingSpeech = new Map<string, Map<string, TranscriptLine[]>>();
   private assistantPlayback = new Map<string, AssistantPlayback>();
@@ -172,6 +176,7 @@ export class MemberRoom extends DurableObject<Env> {
       list: prefix => ctx.storage.list({ prefix }),
       alarm: at => ctx.storage.setAlarm(at),
     };
+    this.lineIndex = new LineDeliveryIndex(store);
     this.engine = new MemberEngine({
       store, eccal: boundedEccal(eccalPort(env)),
       realtime: new OpenAiRealtime(env.OPENAI_API_KEY ?? "", env.REALTIME_MODEL ?? ""),
@@ -179,6 +184,8 @@ export class MemberRoom extends DurableObject<Env> {
       onMeterChange: async record => { unwrap(await env.CUTOFFS.get(env.CUTOFFS.idFromName(record.id)).updateDeadline(callDeadline(record, Date.now()), record.events.length)); },
       now: Date.now, id: () => crypto.randomUUID(),
       delivery: env.DELIVERY ? boundedDelivery(env.DELIVERY) : env.ECCAL_ORIGIN && env.ECCAL_SERVICE_TOKEN ? boundedDelivery(new HttpEccalEmail(env.ECCAL_ORIGIN, env.ECCAL_SERVICE_TOKEN)) : undefined, appOrigin: env.APP_ORIGIN,
+      registerLineDelivery: ref => new HttpEccalLine(env.ECCAL_ORIGIN ?? '', env.ECCAL_SERVICE_TOKEN ?? '').register(ref),
+      lineClaim: job => deriveLineClaim(env.ECCAL_SERVICE_TOKEN, job),
     });
   }
   async start(identity: Identity, operationId: string, sdp: string) {
@@ -241,6 +248,17 @@ export class MemberRoom extends DurableObject<Env> {
   async sendEmail(memberId: string, id: string, jobId: string) {
     return this.run(async () => publicDelivery(await this.engine.sendEmail(memberId, id, jobId)));
   }
+  async registerLineRef(ref: LineRef) { return this.run(() => this.lineIndex.register(ref)); }
+  async lineRefs() { return this.run(() => this.lineIndex.refs()); }
+  async lineRef(jobId: string) { return this.run(() => this.lineIndex.ref(jobId)); }
+  async removeLineRef(ref: LineRef) { return this.run(() => this.lineIndex.remove(ref)); }
+  private lineView(task: Awaited<ReturnType<MemberEngine['lineTask']>>) {
+    const job = task.job;
+    return { ...publicDelivery(job), memberId: job.memberId, recordId: job.recordId, expiresAt: task.expiresAt, documentTitle: task.documentTitle, currentDocument: task.currentDocument, recipient: job.recipient, verifiedAt: job.verifiedAt, claimedAt: job.claimedAt, attempt: job.lineAttempt, ...(job.state === 'sending' ? { resultUrl: new URL(`/#call=${encodeURIComponent(job.recordId)}&document=${encodeURIComponent(job.documentId)}`, appOrigin(this.env.APP_ORIGIN)).href } : {}) };
+  }
+  async lineTask(ref: LineRef) { return this.run(async () => this.lineView(await this.engine.lineTask(ref.memberId, ref.recordId, ref.jobId))); }
+  async prepareLine(ref: LineRef, input: LinePrepare) { return this.run(async () => this.lineView(await this.engine.prepareLine(ref.memberId, ref.recordId, input))); }
+  async completeLine(ref: LineRef, input: LineComplete) { return this.run(async () => this.lineView(await this.engine.completeLine(ref.memberId, ref.recordId, input))); }
   async providerEnded(memberId: string, id: string, at: number): Promise<RpcResult<{ acknowledged: true }>> {
     const record = await this.ctx.storage.get<CallRecord>(`call:${id}`);
     if (!record || record.memberId !== memberId) return { ok: false, error: "RECORD_NOT_FOUND", status: 404 };
@@ -290,6 +308,7 @@ export class MemberRoom extends DurableObject<Env> {
     }));
   }
   async alarm() {
+    if (await this.lineIndex.initialized()) { await this.run(() => this.lineIndex.prune()); return; }
     await this.run(() => this.engine.alarm());
     for (const record of (await this.ctx.storage.list<CallRecord>({ prefix: "call:" })).values()) {
       if (record.endedAt !== undefined && this.sockets.has(record.id)) this.finish(record.memberId, record);
@@ -404,12 +423,42 @@ const securityHeaders = {
   "permissions-policy": "microphone=(self), camera=()",
   "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
 };
+async function lineInternal(request: Request, env: Env) {
+  if (request.method !== 'POST') throw new AppError('METHOD_NOT_ALLOWED', 405);
+  if (request.headers.has('origin')) throw new AppError('ORIGIN_FORBIDDEN', 403);
+  await lineCaller(request.headers.get('authorization'), env.ECCAL_SERVICE_TOKEN);
+  if (!request.headers.get('content-type')?.startsWith('application/json')) throw new AppError('JSON_REQUIRED', 415);
+  const action = new URL(request.url).pathname.slice('/internal/voice-line/'.length);
+  let body: unknown;
+  try { body = JSON.parse(await readText(request, 8192)); } catch (error) { if (error instanceof AppError) throw error; throw new AppError('INVALID_REQUEST', 400); }
+  const input = lineInput(action, body);
+  const index = env.MEMBERS.get(env.MEMBERS.idFromName('system:voice-line-index:v1'));
+  if (action === 'register') return Response.json(unwrap(await index.registerLineRef(input as LineRef)));
+  const room = async (ref: LineRef) => env.MEMBERS.get(env.MEMBERS.idFromName(await memberKey(ref.memberId)));
+  if (action === 'list') {
+    const refs = unwrap(await index.lineRefs());
+    const tasks = [];
+    for (const ref of refs) {
+      const result = await (await room(ref)).lineTask(ref);
+      if (result.ok) tasks.push(result.value);
+      else if (result.status === 404) unwrap(await index.removeLineRef(ref));
+      else throw new AppError(result.error, result.status);
+    }
+    return Response.json({ officialAccount: LINE_ACCOUNT, accountName: LINE_ACCOUNT_NAME, tasks });
+  }
+  const ref = unwrap(await index.lineRef(input.jobId as string));
+  const stub = await room(ref);
+  if (action === 'prepare') return Response.json(unwrap(await stub.prepareLine(ref, input as LinePrepare)));
+  if (action === 'complete') return Response.json(unwrap(await stub.completeLine(ref, input as LineComplete)));
+  throw new AppError('NOT_FOUND', 404);
+}
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     let response: Response;
     try {
       const path = new URL(request.url).pathname;
-      if (path.startsWith('/auth/') || path === '/oauth/client-metadata.json') response = await authRoutes(request, env, memberId => {
+      if (path.startsWith('/internal/voice-line/')) response = await lineInternal(request, env);
+      else if (path.startsWith('/auth/') || path === '/oauth/client-metadata.json') response = await authRoutes(request, env, memberId => {
         if (!env.AUTH) throw new AppError('MCP_AUTH_NOT_CONFIGURED');
         const port = async () => env.AUTH.get(env.AUTH.idFromName(await memberKey(memberId)));
         return {
@@ -465,6 +514,7 @@ export default {
       response = Response.json({ error: mapped.code }, { status: mapped.status });
     }
     const result = new Response(response.body, response);
+    if (new URL(request.url).pathname.startsWith('/internal/voice-line/')) result.headers.set('x-voice-line-contract', 'voice-line-v1');
     for (const [key, value] of Object.entries(securityHeaders)) result.headers.set(key, value);
     result.headers.set("cache-control", "no-store");
     return result;

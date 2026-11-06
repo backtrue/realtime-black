@@ -2,6 +2,7 @@ import { vi } from "vitest";
 import { MemberEngine } from "../src/member-engine";
 import { billedSeconds as calculateBilledSeconds } from "../src/metering";
 import { AppError, type CallRecord, type Dependencies, type MeterEvent, type Reservation, type Settlement, type Store } from "../src/contracts";
+import { deriveLineClaim } from '../src/line-delivery';
 
 export function fixture() {
   let now = Date.now();
@@ -42,7 +43,7 @@ export function fixture() {
   const realtime = { create: vi.fn(async () => ({ callId: "rtc_fixture", sdp: "v=0\r\nanswer" })), hangup: vi.fn(async () => {}) };
   const mcp = { list: vi.fn(async () => [{ name: "thinkwithblack_entry_catalog", description: "讀取方法", parameters: { type: "object", properties: {} } }]), call: vi.fn(async () => ({ method: "fixture-only", evidence: "source-1" })) };
   const documents: Dependencies["documents"] = { generate: vi.fn<Dependencies["documents"]["generate"]>(async (kind, record) => ({ kind, title: "測試諮詢", findings: [{ kind: "member", text: "測試會員提供的問題", sourceIds: [record.transcript[0]!.itemId] }] })) };
-  const deps: Dependencies = { eccal, realtime, mcp, documents, store, now: () => now, id: () => crypto.randomUUID() };
+  const deps: Dependencies = { eccal, realtime, mcp, documents, store, now: () => now, id: () => crypto.randomUUID(), registerLineDelivery: vi.fn(async () => {}), lineClaim: job => deriveLineClaim('CQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQk', job) };
   const engine = new MemberEngine(deps);
   return { engine, deps, eccal, realtime, mcp, documents, data, store, balances, advance: (milliseconds: number) => { now += milliseconds; }, now: () => now,
     start: async (memberId = "a", operationId = crypto.randomUUID()) => {

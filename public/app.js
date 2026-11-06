@@ -315,7 +315,7 @@ async function records() {
                 const created = await api(`/api/calls/${record.id}/deliveries`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ documentId: artifact.id, channel, recipient: "", operationId }) });
                 const sent = channel === "email" ? await api(`/api/calls/${record.id}/deliveries/${created.job.id}/email`, { method: "POST" }) : created.job;
                 section.append(node("p", { pending: "等待核對與寄送", sending: "正在寄送", unknown: "寄送結果待確認，請勿重複寄送", failed: "寄送失敗", succeeded: "已送出" }[sent.state]));
-                if (created.claimCode) { section.append(node("p", "加入「報數據」LINE 官方帳號，傳送以下領取碼")); section.append(node("pre", created.claimCode)); }
+                if (created.claimCode) { section.append(node("p", "加入「ToldYou 報數據」（@791vlxya），在 LINE 傳送以下領取碼")); const join = node('a', '開啟 ToldYou 報數據'); join.href = 'https://line.me/R/ti/p/@791vlxya'; join.target = '_blank'; join.rel = 'noreferrer'; section.append(join); section.append(node("pre", created.claimCode)); }
               } catch (error) { $("notice").textContent = error.message; button.disabled = false; }
             });
             section.append(button);
