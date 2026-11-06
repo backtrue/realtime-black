@@ -2,11 +2,11 @@
 
 更新日期：2026-11-06
 
-產品行為依 [產品規格 V0.3](product-spec.md)，任務及驗收依 [開發清單](development-plan.md)與對應 Issue。三 repo 提交、ECCAL 發布與 MCP 正式版本見 [發布紀錄](release-validation-2026-11-05.md)；最新 Email 正式版本與實收見 [2026-11-06 Email 驗收](email-validation-2026-11-06.md)
+產品行為依 [產品規格 V0.3](product-spec.md)，任務及驗收依 [開發清單](development-plan.md)與對應 Issue。三 repo 提交、ECCAL 發布與 MCP 正式版本見 [發布紀錄](release-validation-2026-11-05.md)；Email 實收見 [Email 驗收](email-validation-2026-11-06.md)，最新首頁版本與測試會員額度見 [復古轉盤正式發布](retro-release-2026-11-06.md)
 
 ## 本機驗證
 
-`npm run check` 已通過：型別檢查、177 項 Cloudflare Workers runtime 測試、15 項通話頁 Node 事件測試、3 項原生 Workers 服務連線整合測試及 Wrangler dry-run 建置。Email 另有 ECCAL 7 項真實 HTTP／PostgreSQL 整合測試，以及 17 額度、1 跨 repo 契約、8 登入回歸測試、ECCAL 型別與建置通過
+復古轉盤的 `npm run check` 已通過：型別檢查、179 項 Cloudflare Workers runtime 測試、25 項通話頁 Node 事件測試、3 項原生 Workers 服務連線整合測試及 Wrangler dry-run 建置。Email 另有 ECCAL 7 項真實 HTTP／PostgreSQL 整合測試，以及 17 額度、1 跨 repo 契約、8 登入回歸測試、ECCAL 型別與建置通過
 
 ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 repo MCP 授權測試通過，型別與建置通過。MCP 138 項 OAuth／scope 測試及完整 2,414 項回歸測試、型別、安全掃描與 dry-run 建置通過，驗證紀錄見 [跨站登入與個別會員授權驗證](auth-validation-2026-11-04.md)及[正式發布紀錄](release-validation-2026-11-05.md)
 
@@ -52,7 +52,7 @@ ECCAL 17 項語音帳本、1 項額度跨 repo、8 項跨站登入、2 項三 re
 | #26 | M2-12 | 合成實際語音與 SQLite 全程儲存、30 天清除、repo 及紀錄輸出均核對；正式 Cloudflare 設定與外送資料範圍已讀回 | 2026-11-05 自動與獨立驗收通過，見 storage-inventory.md |
 | #27 | G1-01 | 本機核心流程測試、指定會員 Email 正式實收與成果存取 | 兩位測試會員的完整流程與 LINE 實收 |
 | #28 | G1-02 | 同版搶最後一秒、服務端截止、工具拒絕、交付失敗與紀錄到期已驗證；未完成任務與本人音色狀態分開登記，見異常流程驗證 | 前置 #27 實際交付全流程與後續複驗 |
-| #29 | G1-03 | 獨立 git archive／npm ci、兩次相同 bundle、Cloudflare 測試部署與指定版本回復、九項檔案讀回、三個 DO 隔離與清理皆通過，正式部署未變 | 同一新版的正式網頁短通話、額度及成果存取抽查；需可用測試額度 |
+| #29 | G1-03 | 獨立測試重建與回復通過；復古版 a919d0dd 正式發布 100%，三個資產與來源相同；補額後新通話扣 2 秒、剩餘 298 秒，首頁與 ECCAL 一致，既有報告可讀 | 新通話有 1 段辨識失敗且沒有逐字稿，待核對實際語音結果與新成果 |
 | #30 | V-01 | — | D6 可用聲音服務與本人授權樣本 |
 | #31 | V-02 | — | D6 本人音色、台灣國語與延遲試聽 |
 | #32 | B2-01 | — | D7 分鐘方案、價格、付款與入帳規則 |

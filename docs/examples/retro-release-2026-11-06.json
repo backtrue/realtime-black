@@ -1,0 +1,180 @@
+{
+  "observedAt": "2026-11-06T11:00:21.563Z",
+  "appOrigin": "https://call.thinkwithblack.com",
+  "repository": "backtrue/realtime-black",
+  "branch": "main",
+  "featureCommit": "6d5863307b7b0021ccc04e463418059f6277d49d",
+  "sourceCommit": "b647abccbd5ddcff0387c33b2b41179217450cab",
+  "cloudflare": {
+    "deploymentId": "14919548-0124-49db-ab82-388411436bfd",
+    "versionId": "a919d0dd-99d6-4de1-b2a9-f1c996eed5cd",
+    "trafficPercent": 100,
+    "publishedAt": "2026-11-06T10:59:47.247152Z",
+    "previousVersionId": "ac2518ba-4681-4111-ab28-46d71f1293a2",
+    "rollbackCommand": "npx wrangler rollback ac2518ba-4681-4111-ab28-46d71f1293a2 --message \"Return to prior Email release\""
+  },
+  "assets": [
+    {
+      "path": "/",
+      "status": 200,
+      "cacheControl": "no-store",
+      "sha256": "535036f0fe4f4de10217f4dc414e6c1722fa7c0551ba691e95040e62fa9cab4b",
+      "matchesSource": true,
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "cacheControl": "no-store",
+      "sha256": "377d3133d729e99e99ab6e3877012308afcad63d1f64544b9546fbe81c0ce39f",
+      "matchesSource": true,
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "cacheControl": "no-store",
+      "sha256": "3a2308cb7ca56883c2ecf10be16069a5f98aafde3ffbc392141c2845d7ec9390",
+      "matchesSource": true,
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+    }
+  ],
+  "eccal": {
+    "origin": "https://eccal.thinkwithblack.com",
+    "publishedCommit": "17020ceff127dec9ab4d773d2705878888b80b91",
+    "buildId": "10ddb496-0e38-497a-bc9e-155cc77634e0",
+    "sourceChangedThisRelease": false,
+    "schemaChangedThisRelease": false,
+    "replitActionsThisRelease": []
+  },
+  "checks": {
+    "workers": 179,
+    "frontend": 25,
+    "nativeRuntime": 3,
+    "typecheck": "PASS",
+    "buildDryRun": "PASS",
+    "independentCandidateAcceptance": "PASS"
+  },
+  "testCredit": {
+    "state": "committed",
+    "operationId": "retro-dialer-test-credit-20261106-A",
+    "observedAt": "2026-11-06T11:16:13.188Z",
+    "member": "A",
+    "creditedSeconds": 300,
+    "before": {
+      "totalSeconds": 300,
+      "currentAllowanceUsedSeconds": 300,
+      "remainingSeconds": 0
+    },
+    "after": {
+      "totalSeconds": 300,
+      "currentAllowanceUsedSeconds": 0,
+      "remainingSeconds": 300
+    },
+    "originalReservationHistoryPreserved": true,
+    "otherMembersUnchanged": true,
+    "schemaChanged": false,
+    "unchangedOtherTables": 62,
+    "backup": {
+      "observedAt": "2026-11-06T11:12:43.363Z",
+      "format": "PostgreSQL custom",
+      "bytes": 3777881,
+      "sha256": "30be7698ec1affb68123d5e7947bfb8677250b9fdd8d0248a46665faa30be7bb",
+      "tableCount": 63,
+      "allRestoredTableDigestsMatch": true,
+      "restoreDatabaseRemoved": true,
+      "sourceSnapshotSha256": "326642eb0201242c76de1e3017d3a233c08bc2ba1e1e176cae0bbc016fdb269c"
+    },
+    "committedReceiptSha256": "1ba205a424adcb537a43757c942dab212395197da40586eebc2d903c9f3f835f",
+    "helperSha256": "7aaee17bf6d14b6176c373cbb06e95d5cd70301fd1506fef3edaced73a8d4222",
+    "runnerSha256": "713478b8b9fac85b67984f656d1da9e20f2cdc41788ade67a6b5419102cc34fa",
+    "tests": 5,
+    "independentPreflightAcceptance": "PASS",
+    "independentResultAcceptance": "PASS",
+    "httpReadback": {
+      "observedAt": "2026-11-06T11:16:33.877Z",
+      "status": 200,
+      "contract": "eccal-voice-v1",
+      "cacheControl": "no-store",
+      "member": "A",
+      "balance": {
+        "totalSeconds": 300,
+        "billedSeconds": 0,
+        "reservedSeconds": 0,
+        "remainingSeconds": 300
+      }
+    }
+  },
+  "browser": {
+    "beforeCredit": {
+      "member": "A",
+      "availableSeconds": 0,
+      "startEnabled": false,
+      "existingRecords": 12,
+      "existingReportReadable": true,
+      "existingEmailStatus": "succeeded"
+    },
+    "afterCredit": {
+      "observedAt": "2026-11-06T11:16:34Z",
+      "source": "IAB full reload, AX and screenshot",
+      "availableSeconds": 300,
+      "startEnabled": true,
+      "screenshot": "retro-release-2026-11-06/member-refilled.png"
+    },
+    "afterShortCall": {
+      "source": "IAB end panel, records and homepage readback",
+      "billedSeconds": 2,
+      "remainingSeconds": 298,
+      "startEnabled": true,
+      "records": 13,
+      "screenshot": "retro-release-2026-11-06/member-after-short-call.png"
+    }
+  },
+  "realNewCall": {
+    "observedAt": "2026-11-06T11:21:43.734Z",
+    "member": "A",
+    "callIdSha256": "b9634ea60f7777fefcded823636500d327188c4a452fb8e5ff391f93170b222f",
+    "status": "ended",
+    "createdAt": 1793963927586,
+    "endedAt": 1793963934203,
+    "expiresAt": 1796555934203,
+    "wallSeconds": 6.617,
+    "usage": {
+      "audioStarted": true,
+      "elapsedSeconds": 2,
+      "waitingForTool": false
+    },
+    "settlement": {
+      "billedSeconds": 2,
+      "remainingSeconds": 298
+    },
+    "transcriptTurns": 0,
+    "transcriptionFailures": 1,
+    "pendingTranscripts": 0,
+    "documents": 0,
+    "ledger": {
+      "reservedSeconds": 300,
+      "billedSeconds": 2,
+      "remainingSeconds": 298,
+      "settledAt": "2026-11-06T11:18:54.524Z",
+      "eventsDigest": "43989854835621048ec75f7af62bbbeba49394a799424d332b124cc37cad9552"
+    },
+    "quota": {
+      "totalSeconds": 300,
+      "currentAllowanceUsedSeconds": 2,
+      "remainingSeconds": 298,
+      "cumulativeOriginalReservationBilledSeconds": 302,
+      "administrativeTestCreditSeconds": 300
+    },
+    "checks": {
+      "singleNewReservation": true,
+      "workerAndEccalBilledMatch": true,
+      "workerAndEccalRemainingMatch": true,
+      "usageMatchesSettlement": true,
+      "originalHistoryAndCreditReconcile": true,
+      "otherMembersUnchanged": true
+    },
+    "voiceReplyVerified": false,
+    "state": "settlement-verified-voice-answer-awaiting-user-result"
+  }
+}

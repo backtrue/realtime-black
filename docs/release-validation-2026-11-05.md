@@ -484,3 +484,9 @@ Republish 已成功，發布提交為 059dd26，parent 為 2e841c4，0 changed f
 語音站 source `11197d0` 已推上 GitHub main，Cloudflare version `ac2518ba-4681-4111-ab28-46d71f1293a2` 為 100% 流量，正式 app.js 與來源相同。ECCAL 原分支發布提交為 `17020ce`，parent `e081d99`、0 changed files，build `10ddb496-0e38-497a-bc9e-155cc77634e0`，GitHub、Replit 與本機同步，Republish 顯示 Live，提供者為 success
 
 發布前後正式 63 張表的筆數及逐列內容摘要完全相同。指定會員的既有 MK-453 對話產生新報告後，Email 工作為 succeeded，Resend Delivered、Gmail 收件匣實收與原成果連結吻合；未登入無法讀取，原會員重新登入後可開啟報告。完整檢查與四類失敗工作快照見 [Email 驗收](email-validation-2026-11-06.md)
+
+## 2026-11-06 復古轉盤正式發布與測試補額
+
+功能提交 `6d58633` 與來源 `b647abc` 已推上 main，Cloudflare version `a919d0dd-99d6-4de1-b2a9-f1c996eed5cd`、deployment `14919548-0124-49db-ab82-388411436bfd` 為 100% 流量，正式 HTML／JS／CSS 均與來源相同。179 Workers、25 前端、3 原生、型別、dry-run 及 fresh 獨立驗收通過
+
+依使用者核准，對目前登入的測試會員 A 單次補回 300 秒；全庫備份及 63 表本機還原比對通過，原始通話結算、其他會員及其餘 62 表資料不變，補額前後獨立驗收 PASS。補額後的新通話扣 2 秒、剩餘 298 秒，首頁、服務端計時與 ECCAL 結算一致；逐字稿為 0 段且有 1 段辨識失敗，實際語音結果與新成果接續核對，見 [本次版本、備份與補額證據](retro-release-2026-11-06.md)
