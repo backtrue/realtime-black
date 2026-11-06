@@ -1,0 +1,241 @@
+<div id="black-voice-preview">
+<style>
+  .rbv-retro { --case:light-dark(#f6edda,#302c25); --ink:light-dark(#302c24,#fbf1de); --muted:light-dark(#6b6051,#c7b99e); --rule:light-dark(#c6bca6,#635a4c); --dial:#31312c; --orange:#af3a20; color-scheme:light dark; box-sizing:border-box; width:min(100%,380px); margin:auto; height:508px; padding:19px 23px 17px; display:flex; flex-direction:column; align-items:stretch; border:1px solid var(--rule); border-radius:24px; box-shadow:inset 0 2px 0 #ffffff60,inset 0 -4px 0 #382a171c,0 7px 16px #2d24100b; color:var(--ink); background:var(--case); font:400 14px/1.4 system-ui,"PingFang TC","Microsoft JhengHei",sans-serif; text-align:center; position:relative; }
+  .rbv-retro *, .rbv-retro *::before, .rbv-retro *::after { box-sizing:border-box; }
+  .rbv-retro [hidden] { display:none!important; }
+  .rbv-retro button { -webkit-tap-highlight-color:transparent; touch-action:manipulation; color:inherit; font:inherit; }
+  .rbv-retro .rbv-top { display:flex; justify-content:space-between; align-items:center; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .rbv-retro .rbv-label { display:flex; gap:8px; align-items:center; letter-spacing:.13em; font-weight:650; font-size:13px; }
+  .rbv-retro .rbv-stamp { width:15px; height:15px; display:grid; place-items:center; border:2px solid currentColor; border-radius:50%; color:var(--orange); }
+  .rbv-retro .rbv-stamp::after { content:""; width:5px; height:5px; background:currentColor; border-radius:50%; }
+  .rbv-retro .rbv-history { display:grid; place-items:center; width:44px; height:44px; border:1px solid var(--rule); border-radius:50%; background:transparent; }
+  .rbv-retro .rbv-history :is(svg,i) { width:18px; height:18px; }
+  .rbv-retro .rbv-name { padding-top:17px; }
+  .rbv-retro .rbv-name h2 { margin:0; color:var(--ink); font:650 34px/1.17 Georgia,"Songti TC","Noto Serif TC",serif; letter-spacing:.045em; }
+  .rbv-retro .rbv-name p { color:var(--muted); margin:5px 0 0; font-size:13px; letter-spacing:.08em; }
+  .rbv-retro .rbv-idle, .rbv-retro .rbv-active { flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+  .rbv-retro .rbv-rotary { position:relative; isolation:isolate; flex:none; display:block; width:min(228px,88%); aspect-ratio:1; border:0; border-radius:50%; padding:0; background:radial-gradient(circle at 36% 22%,#58584e,#2e302c 63%,#272824 67%,#787766 68%,#3b3c35 70%,#b4a68a 71%,#f3e5c7 72%,#afa183 74%,#5f594d 75%,#e5d9bd 77%); box-shadow:0 5px 7px #352d2539,inset 0 -3px 3px #3b322437; user-select:none; }
+  .rbv-retro .rbv-rotary:active { transform:translateY(1px); }
+  .rbv-retro .rbv-wheel { position:absolute; inset:3%; border-radius:50%; }
+  .rbv-retro .rbv-hole { position:absolute; left:var(--x); top:var(--y); transform:translate(-50%,-50%); width:13.2%; aspect-ratio:1; display:grid; place-items:center; color:#383327; background:radial-gradient(ellipse at 67% 80%,#fff3d8 10%,#e0cead 75%,#91836a 90%); border:1px solid #211f1b; border-radius:50%; box-shadow:inset 1px 3px 3px #3d392868,0 1px 1px #bcb69b8c; font:600 17px/1 Georgia,serif; }
+  .rbv-retro .rbv-hub { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46%; height:46%; display:flex; flex-direction:column; gap:4px; align-items:center; justify-content:center; border-radius:50%; background:linear-gradient(145deg,#c04b2e,#a5321d); color:#fff4db; box-shadow:0 0 0 3px #ac9a7e,0 0 0 5px #262722,inset 0 0 0 3px #9c331f,inset 0 0 0 4px #d78964; }
+  .rbv-retro .rbv-hub :is(svg,i) { width:24px; height:24px; }
+  .rbv-retro .rbv-hub span { font-size:14px; font-weight:650; letter-spacing:.12em; }
+  .rbv-retro .rbv-stop { position:absolute; z-index:2; right:8%; bottom:20%; width:21%; height:5%; border-radius:2px 4px 4px 2px; transform:rotate(35deg); background:linear-gradient(180deg,#fff5d9,#c8b794 49%,#99896e 50%,#d7caab); box-shadow:0px 2px 3px #16171280; }
+  .rbv-retro .rbv-caption { margin:15px 0 0; color:var(--muted); font-size:13px; letter-spacing:.035em; }
+  .rbv-retro .rbv-foot { display:flex; justify-content:space-between; align-items:baseline; gap:5px; padding-top:12px; border-top:1px solid var(--rule); color:var(--muted); font-size:12px; }
+  .rbv-retro .rbv-foot strong { margin-inline-start:5px; color:var(--ink); font:550 15px/1 ui-monospace,Menlo,monospace; }
+  .rbv-retro .rbv-status { display:flex; align-items:center; gap:7px; color:var(--muted); font-size:14px; }
+  .rbv-retro .rbv-status::before { content:""; width:8px; height:8px; border-radius:50%; background:#bf6944; }
+  .rbv-retro .rbv-time { margin:12px 0 23px; font:400 42px/1 ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; letter-spacing:-.055em; }
+  .rbv-retro .rbv-actions { display:flex; justify-content:center; gap:30px; }
+  .rbv-retro .rbv-action { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; min-width:64px; background:none; border:0; padding:0; font-size:13px; }
+  .rbv-retro .rbv-action > span:first-child { width:55px; height:55px; display:grid; place-items:center; border-radius:50%; border:1px solid var(--rule); box-shadow:inset 0 1px 1px #fff4; }
+  .rbv-retro .rbv-action[data-act="hang"] > span:first-child { background:var(--orange); border-color:var(--orange); color:#fff4db; }
+  .rbv-retro .rbv-action[aria-pressed="true"] > span:first-child { background:var(--ink); color:var(--case); }
+  .rbv-retro .rbv-action :is(svg,i) { width:23px; height:23px; }
+</style><style>
+#black-voice-preview {font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+#black-voice-preview *{box-sizing:border-box}
+#black-voice-preview [hidden]{display:none!important}
+#black-voice-preview .bv-stage{width:100%;padding:12px 7px 17px;display:flex;align-items:center;justify-content:center;min-height:558px}
+#black-voice-preview .rbv{position:relative;isolation:isolate}
+#black-voice-preview button{font-family:inherit;touch-action:manipulation}
+#black-voice-preview .bv-modern{--shell:light-dark(#f3f6ef,#172820);--ink:light-dark(#172a22,#eff6e9);--faint:light-dark(#526458,#afc6b7);--hair:light-dark(#c6d3c7,#384d42);--glow:light-dark(#c5e3cd,#283e31);position:relative;overflow:hidden;width:min(100%,366px);height:526px;border-radius:29px;border:1px solid var(--hair);background:radial-gradient(ellipse 80% 44% at 50% 35%,var(--glow),transparent 96%),var(--shell);color:var(--ink);box-shadow:0 14px 38px -28px #132c21a0;display:flex;flex-direction:column}
+.bv-modern .bv-top{margin:0 23px;min-height:65px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hair)}
+.bv-modern .bv-brand{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:650;letter-spacing:.06em}
+.bv-modern .bv-logo{display:flex;width:20px;height:22px;align-items:center;gap:2px;transform:skewX(-12deg)}
+.bv-modern .bv-logo b{width:3px;background:currentColor;display:block;border-radius:2px}
+.bv-modern .bv-logo b:nth-child(1){height:7px}.bv-modern .bv-logo b:nth-child(2){height:15px}.bv-modern .bv-logo b:nth-child(3){height:20px}.bv-modern .bv-logo b:nth-child(4){height:12px}
+.bv-modern .bv-history-icon{border:0;background:transparent;color:var(--faint);display:grid;place-items:center;min-width:44px;min-height:44px}
+.bv-modern .bv-history-icon svg{width:21px;height:21px}
+.bv-modern .bv-main{flex:1;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 18px 22px;position:relative}
+.bv-modern .bv-seal{position:relative;display:grid;place-items:center;width:110px;height:110px;border-radius:50%;margin:0 0 13px;background:radial-gradient(ellipse at 38% 26%,#384c41 0%,#1d3228 76%);color:#e9f3df;box-shadow:inset 0 0 0 1px #53685b,0 0 0 6px var(--shell),0 0 0 7px var(--hair)}
+.bv-modern .bv-seal:before{position:absolute;inset:8px;border-radius:50%;content:"";border:1px solid #79917e57}
+.bv-modern .bv-seal strong{position:relative;font-family:"Songti TC","Noto Serif CJK TC","Noto Serif TC",serif;font-size:52px;font-weight:700;line-height:1;transform:rotate(-5deg)}
+.bv-modern .bv-name{margin:5px 0 2px;line-height:1.2;font-size:34px;letter-spacing:.015em;font-weight:650;color:var(--ink)}
+.bv-modern .bv-sub{margin:0;color:var(--faint);font-size:14px;letter-spacing:.08em}
+.bv-modern .bv-controls{margin-top:23px;width:100%;display:flex;flex-direction:column;align-items:center}
+.bv-modern .bv-quota{display:inline-flex;align-items:center;gap:7px;color:var(--faint);font-size:12px;font-weight:550}
+.bv-modern .bv-quota .bv-led{width:6px;height:6px;background:light-dark(#208354,#8ed9af);border-radius:50%}
+.bv-modern .bv-button-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:none;border:none;color:var(--ink);padding:2px 10px;font-size:14px;font-weight:650}
+.bv-modern .bv-start{margin-top:13px}
+.bv-modern .bv-circle{display:grid;place-items:center;border-radius:50%;width:67px;height:67px;background:#18734d;color:#fff;box-shadow:inset 0 1px 0 #ffffff45,0 5px 12px -6px #174b35a8}
+.bv-modern .bv-circle svg{width:30px;height:30px;stroke-width:2.3}
+.bv-modern .bv-start:hover .bv-circle{background:#105d3c}.bv-modern .bv-button-wrap:active .bv-circle{transform:scale(.96)}
+.bv-modern .bv-call-row{display:flex;align-items:flex-end;justify-content:center;gap:29px;margin-top:12px}
+.bv-modern .bv-call-row .bv-circle{width:53px;height:53px;box-shadow:none}.bv-modern .bv-call-row svg{width:24px;height:24px}
+.bv-modern .bv-mic .bv-circle{border:1px solid var(--hair);background:var(--shell);color:var(--ink)}
+.bv-modern .bv-mic[aria-pressed=true] .bv-circle{background:var(--ink);color:var(--shell)}.bv-modern .bv-mic:disabled{opacity:.45}
+.bv-modern .bv-stop .bv-circle{background:#ad392f;color:#fff}
+.bv-modern .bv-time{display:flex;align-items:center;gap:9px;color:var(--faint);font-size:14px}
+.bv-modern [data-role=timer]{font:600 15px/1 ui-monospace,SFMono-Regular,monospace;color:var(--ink);font-variant-numeric:tabular-nums}
+.bv-modern .bv-bottom{padding:12px 22px 15px;display:flex;align-items:center;justify-content:space-between;color:var(--faint);font-size:11px;letter-spacing:.09em}
+.bv-modern .bv-bottom .bv-line{flex:1;height:1px;background:var(--hair);margin:0 9px}
+</style><style>
+#black-voice-preview .rbv-retro .rbv-rotary{touch-action:none}
+#black-voice-preview .rbv-wheel{transform:rotate(var(--wheel-turn,0deg));transition:transform 210ms ease-out}
+#black-voice-preview .rbv-rotary[data-dragging] .rbv-wheel{transition:none}
+#black-voice-preview .bv-sheet{z-index:4;position:absolute;inset:0;display:flex;flex-direction:column;line-height:1.5;text-align:left;padding:22px 24px;background:var(--shell,var(--case));color:var(--ink);border-radius:inherit}
+#black-voice-preview .bv-sheet-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hair,var(--rule));padding-bottom:9px}
+#black-voice-preview .bv-sheet-top strong{font-weight:600;font-size:15px}
+#black-voice-preview .bv-back{border:0;background:transparent;color:inherit;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 3px;gap:5px;font-size:14px}
+#black-voice-preview .bv-back svg{width:17px;height:17px}
+#black-voice-preview .bv-sheet h3{font-size:26px;line-height:1.25;color:inherit;margin:26px 0 4px;font-weight:600}
+#black-voice-preview .bv-sheet p{color:var(--faint,var(--muted));margin:0 0 18px;font-size:13px}
+#black-voice-preview .bv-sheet-list{flex:1;overflow:auto}
+#black-voice-preview .bv-record{display:flex;align-items:center;justify-content:space-between;padding:13px 1px;border-top:1px solid var(--hair,var(--rule));font-size:14px}
+#black-voice-preview .bv-record span:last-child{font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums}
+#black-voice-preview .bv-return{align-self:flex-start;background:var(--ink);color:var(--shell,var(--case));border:0;border-radius:24px;padding:0 20px;min-height:44px;font-size:14px;font-weight:600;margin-top:12px}
+#black-voice-preview .bv-caption-note{font-size:12px;letter-spacing:.04em;text-align:center;color:light-dark(#545a55,#c2c7c4);margin:0 0 2px}
+@media(prefers-reduced-motion:reduce){#black-voice-preview .rbv-wheel{transition:none!important}}
+</style>
+<style>
+#black-voice-preview i[data-lucide]{display:inline-grid;place-content:center;font-family:Arial,"Noto Sans Symbols 2",sans-serif;font-style:normal;font-weight:400;line-height:1}
+#black-voice-preview i[data-lucide="history"]{font-size:23px}
+#black-voice-preview i[data-lucide="phone"], #black-voice-preview i[data-lucide="phone-off"]{font-size:26px}
+</style><div class="viz-carousel viz-dotted-background" aria-label="打電話給小黑的撥號介面設計" data-previous-label="上一款" data-next-label="下一款">
+<section data-variant="復古轉盤" aria-label="復古轉盤"><div class="bv-stage">
+<article class="rbv rbv-retro" data-state="idle" aria-label="小黑專線復古電話">
+  <header class="rbv-top">
+    <div class="rbv-label"><span class="rbv-stamp" aria-hidden="true"></span>報數據 · 顧問專線</div>
+    <button class="rbv-history cursor-interaction" type="button" data-act="history" aria-label="通話紀錄"><i data-lucide="history" aria-hidden="true">◷</i></button>
+  </header>
+  <div class="rbv-name"><h2>AI 小黑</h2><p>行銷顧問</p></div>
+  <div class="rbv-idle" data-view="idle">
+    <button class="rbv-rotary cursor-interaction" type="button" data-act="call" aria-label="撥給 AI 小黑">
+      <span class="rbv-wheel" aria-hidden="true">
+        <span class="rbv-hole" style="--x:88%;--y:50%">1</span><span class="rbv-hole" style="--x:83.2%;--y:31.6%">2</span><span class="rbv-hole" style="--x:70.1%;--y:17.8%">3</span><span class="rbv-hole" style="--x:52%;--y:12%">4</span><span class="rbv-hole" style="--x:33.3%;--y:15.8%">5</span><span class="rbv-hole" style="--x:18.9%;--y:28.2%">6</span><span class="rbv-hole" style="--x:12.2%;--y:46%">7</span><span class="rbv-hole" style="--x:15%;--y:64.8%">8</span><span class="rbv-hole" style="--x:26.6%;--y:80%">9</span><span class="rbv-hole" style="--x:44%;--y:87.5%">0</span>
+      </span>
+      <span class="rbv-hub" aria-hidden="true"><i data-lucide="phone">☎︎</i><span>撥號</span></span><span class="rbv-stop" aria-hidden="true"></span>
+    </button>
+    <p class="rbv-caption">順時針轉動，或輕點中央撥號</p>
+  </div>
+  <div class="rbv-active" data-view="active" hidden>
+    <span class="rbv-status" data-role="state" aria-live="polite">撥號中</span>
+    <span class="rbv-time" data-role="timer">00:00</span>
+    <div class="rbv-actions">
+      <button class="rbv-action cursor-interaction" data-act="mute" type="button" aria-pressed="false"><span><i data-lucide="mic-off" aria-hidden="true">🎙︎</i></span><span>靜音</span></button>
+      <button class="rbv-action cursor-interaction" data-act="hang" type="button"><span><i data-lucide="phone-off" aria-hidden="true">☎︎</i></span><span>掛斷</span></button>
+    </div>
+  </div>
+  <footer class="rbv-foot"><span>ECCAL 會員</span><span>試用餘額 <strong>05:00</strong></span></footer>
+</article>
+</div></section>
+<section data-variant="手機直撥" aria-label="手機直撥" hidden><div class="bv-stage">
+<article class="rbv bv-modern" data-state="idle" aria-label="手機一鍵直撥">
+  <div class="bv-top"><div class="bv-brand"><span class="bv-logo" aria-hidden="true"><b></b><b></b><b></b><b></b></span>報數據</div><button type="button" class="bv-history-icon cursor-interaction" data-act="history" aria-label="通話紀錄"><i data-lucide="history" aria-hidden="true">◷</i></button></div>
+  <div class="bv-main">
+    <div class="bv-seal" aria-hidden="true"><strong>黑</strong></div>
+    <h2 class="bv-name">小黑老師</h2><p class="bv-sub">AI 行銷顧問</p>
+    <div data-view="idle" class="bv-controls">
+      <div class="bv-quota"><span class="bv-led" aria-hidden="true"></span>可用通話時間 <span>05:00</span></div>
+      <button type="button" class="bv-button-wrap bv-start cursor-interaction" data-act="call"><span class="bv-circle"><i data-lucide="phone" aria-hidden="true">☎︎</i></span><span>撥給小黑</span></button>
+    </div>
+    <div data-view="active" class="bv-controls" hidden>
+      <div class="bv-time"><span data-role="state" role="status">撥號中…</span><span data-role="timer"></span></div>
+      <div class="bv-call-row">
+        <button type="button" class="bv-button-wrap bv-mic cursor-interaction" data-act="mute" aria-pressed="false"><span class="bv-circle"><i data-lucide="mic" aria-hidden="true">🎙︎</i></span><span data-mute-label>靜音</span></button>
+        <button type="button" class="bv-button-wrap bv-stop cursor-interaction" data-act="hang"><span class="bv-circle"><i data-lucide="phone-off" aria-hidden="true">☎︎</i></span><span>掛斷</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="bv-bottom"><span>ECCAL 會員專線</span><span class="bv-line"></span><span lang="en">DIRECT LINE</span></div>
+</article>
+</div></section>
+</div><p class="bv-caption-note">互動示意 · 使用模擬通話</p>
+</div>
+
+<script>
+(()=>{
+  const root=document.getElementById('black-voice-preview');
+  if(!root)return;
+  const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  for(const face of root.querySelectorAll('article.rbv')){
+    const one=s=>face.querySelector(s), act=k=>one('[data-act="'+k+'"]');
+    const idle=one('[data-view=idle]'), active=one('[data-view=active]');
+    const status=one('[data-role=state]'), timer=one('[data-role=timer]'), call=act('call'), history=act('history'), mute=act('mute'), hang=act('hang');
+    const muteLabel=mute.lastElementChild, records=[];
+    let dialTimer, clock, began=0, muted=false, opener;
+    const sheet=document.createElement('div');
+    sheet.className='bv-sheet';sheet.hidden=true;
+    sheet.innerHTML='<div class="bv-sheet-top"><strong>報數據</strong><button class="bv-back cursor-interaction" type="button">返回專線</button></div><h3></h3><p></p><div class="bv-sheet-list"></div><button class="bv-return cursor-interaction" type="button">查看通話紀錄</button>';
+    face.append(sheet);
+    const back=sheet.querySelector('.bv-back'), more=sheet.querySelector('.bv-return');
+    function sheetMode(mode){
+      const historyPage=mode==='history';
+      if(sheet.hidden)opener=face.contains(document.activeElement)?document.activeElement:call;
+      for(const el of face.children){if(el!==sheet)el.inert=true;}
+      sheet.hidden=false;
+      sheet.querySelector('h3').textContent=historyPage?'通話紀錄':'通話已結束';
+      sheet.querySelector('p').textContent=historyPage?(records.length?'本次預覽的通話紀錄':'撥打第一通後，紀錄會出現在這裡。'):'你和 AI 小黑的示範通話';
+      const list=sheet.querySelector('.bv-sheet-list'); list.replaceChildren();
+      for(const item of (historyPage?records:records.slice(0,1))){
+        const row=document.createElement('div');row.className='bv-record';
+        for(const text of [historyPage?'AI 小黑 · 示範通話':'本次通話時間',fmt(item)]){
+          const cell=document.createElement('span');cell.textContent=text;row.append(cell);
+        }
+        list.append(row);
+      }
+      more.hidden=historyPage;back.focus({preventScroll:true});
+    }
+    function closeSheet(){
+      sheet.hidden=true;
+      for(const el of face.children){if(el!==sheet)el.inert=false;}
+      (opener && opener.getClientRects().length?opener:call).focus({preventScroll:true});
+    }
+    back.onclick=closeSheet;
+    sheet.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();});
+    more.onclick=()=>sheetMode('history');history.onclick=()=>sheetMode('history');
+    function setMute(value){
+      muted=value;
+      mute.setAttribute('aria-pressed',String(value));muteLabel.textContent=value?'取消靜音':'靜音';
+      if(face.dataset.state==='connected')status.textContent=value?'麥克風已靜音':'通話中';
+    }
+    function dial(){
+      if(face.dataset.state!=='idle'||!sheet.hidden)return;
+      face.dataset.state='dialing';idle.hidden=true;active.hidden=false;
+      status.textContent='撥號中…';timer.textContent='';history.disabled=true;
+      mute.disabled=true;setMute(false);hang.focus({preventScroll:true});
+      dialTimer=setTimeout(()=>{
+        face.dataset.state='connected';status.textContent='通話中';began=Date.now();
+        timer.textContent='00:00';mute.disabled=false;
+        clock=setInterval(()=>{timer.textContent=fmt(Math.floor((Date.now()-began)/1000));},300);
+      },1200);
+    }
+    call.addEventListener('click',dial);
+    hang.onclick=()=>{
+      const connected=face.dataset.state==='connected';
+      clearTimeout(dialTimer);clearInterval(clock);
+      if(connected)records.unshift(Math.floor((Date.now()-began)/1000));
+      face.dataset.state='idle';active.hidden=true;idle.hidden=false;history.disabled=false;
+      if(connected)sheetMode('ended');else call.focus({preventScroll:true});
+    };
+    mute.onclick=()=>{if(face.dataset.state==='connected')setMute(!muted);};
+    if(face.classList.contains('rbv-retro')){
+      let drag=null,ignoreClick=false;
+      const reset=()=>{drag=null;call.removeAttribute('data-dragging');call.style.setProperty('--wheel-turn','0deg');};
+      call.addEventListener('pointerdown',e=>{
+        if(!e.isPrimary||e.button!==0)return;
+        const r=call.getBoundingClientRect(), x=r.x+r.width/2, y=r.y+r.height/2;
+        if(Math.hypot(e.clientX-x,e.clientY-y)<r.width*.22)return;
+        drag={id:e.pointerId,x,y,start:Math.atan2(e.clientY-y,e.clientX-x),amount:0};
+        ignoreClick=false;call.setPointerCapture(e.pointerId);call.setAttribute('data-dragging','');
+      });
+      call.addEventListener('pointermove',e=>{
+        if(!drag||e.pointerId!==drag.id)return;
+        const a=Math.atan2(e.clientY-drag.y,e.clientX-drag.x)-drag.start;
+        drag.amount=Math.atan2(Math.sin(a),Math.cos(a))*180/Math.PI;
+        call.style.setProperty('--wheel-turn',Math.max(-6,Math.min(125,drag.amount))+'deg');
+      });
+      call.addEventListener('pointerup',e=>{
+        if(!drag||e.pointerId!==drag.id)return;
+        const amount=drag.amount;reset();
+        if(Math.abs(amount)>8){ignoreClick=true;if(amount>=28)dial();setTimeout(()=>{ignoreClick=false;},0);}
+      });
+      call.addEventListener('pointercancel',reset);
+      call.addEventListener('click',e=>{if(ignoreClick){e.stopImmediatePropagation();e.preventDefault();}},true);
+    }
+  }
+})();
+</script>
