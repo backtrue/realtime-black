@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { env } from "cloudflare:workers";
 import { runInDurableObject, runDurableObjectAlarm } from "cloudflare:test";
-import { billedSeconds, callDeadline, TOOL_WAIT_LIMIT_MS } from "../src/metering";
+import { billedSeconds, callDeadline, callUsage, TOOL_WAIT_LIMIT_MS } from "../src/metering";
 import type { MeterEvent } from "../src/contracts";
 import type { Env } from "../src/worker";
 import { fixture } from "./fixture";
@@ -10,6 +10,16 @@ afterEach(() => vi.restoreAllMocks());
 const event = (type: MeterEvent["type"], at: number, toolCallId?: string): MeterEvent => ({ id: `${type}:${at}:${toolCallId ?? ""}`, type, at, ...(toolCallId ? { toolCallId } : {}) });
 
 describe("D2 核定扣秒時間軸", () => {
+  it("撥號介面用時來自同一扣秒時間軸，音訊前為零、工具等待暫停、結算固定", () => {
+    const reservation = { id: "r", memberId: "a", seconds: 300, deadline: 300000 };
+    const events = [event("reserved", 0)];
+    expect(callUsage({ events, reservation }, 10000)).toEqual({ elapsedSeconds: 0, audioStarted: false, waitingForTool: false });
+    events.push(event("connected", 10000), event("tool_started", 25000, "t1"));
+    expect(callUsage({ events, reservation }, 45000)).toEqual({ elapsedSeconds: 15, audioStarted: true, waitingForTool: true });
+    events.push(event("tool_finished", 55000, "t1"), event("ended", 60001));
+    expect(callUsage({ events, reservation }, 999999).elapsedSeconds).toBe(21);
+    expect(callUsage({ events, reservation, settlement: { billedSeconds: 21, remainingSeconds: 279 } }, 999999)).toEqual({ elapsedSeconds: 21, audioStarted: true, waitingForTool: false });
+  });
   it.each([
     { name: "未接通", events: [event("reserved", 0), event("ended", 5000)], expected: 0 },
     { name: "90 秒對話加 30 秒工具等待", events: [event("connected", 0), event("tool_started", 30000, "t1"), event("tool_finished", 60000, "t1"), event("ended", 120000)], expected: 90 },

@@ -1,4 +1,4 @@
-import { AppError, type MeterEvent, type Reservation } from "./contracts";
+import { AppError, type CallRecord, type MeterEvent, type Reservation } from "./contracts";
 
 // 會員授權與 MCP 各最多等待 10 秒
 export const TOOL_WAIT_LIMIT_MS = 20000;
@@ -39,6 +39,15 @@ export function billedSeconds(events: MeterEvent[], reservedSeconds: number): nu
   const ended = events.find(event => event.type === "ended");
   if (!ended || !Number.isSafeInteger(reservedSeconds) || reservedSeconds < 0) throw new AppError("METER_EVENTS_INVALID");
   return Math.min(reservedSeconds, Math.ceil(timeline(events, ended.at).elapsed / 1000));
+}
+
+export function callUsage(record: Pick<CallRecord, "events" | "reservation" | "settlement">, now: number) {
+  const state = timeline(record.events, now);
+  return {
+    elapsedSeconds: record.settlement?.billedSeconds ?? Math.min(record.reservation.seconds, Math.ceil(state.elapsed / 1000)),
+    audioStarted: state.connected !== undefined,
+    waitingForTool: !record.events.some(event => event.type === "ended") && state.openTools.length > 0,
+  };
 }
 
 export function callDeadline(record: { events: MeterEvent[]; reservation: Reservation }, now: number): number {

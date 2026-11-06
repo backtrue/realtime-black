@@ -321,6 +321,16 @@ describe("交付狀態及領取碼", () => {
 
 describe("Cloudflare 路由與實際 Durable Object 儲存", () => {
   const runtime = env as unknown as Env;
+  it("本人紀錄提供同一結算時間軸的介面用時，其他會員仍無法讀取", async () => {
+    const f = fixture(); const call = await f.start();
+    await f.engine.ingest("a", call.id, { type: "input_audio_buffer.speech_started" });
+    f.advance(21000); await f.engine.end("a", call.id);
+    const record = await f.record(call.id);
+    const stub = runtime.MEMBERS.get(runtime.MEMBERS.idFromName(crypto.randomUUID()));
+    await runInDurableObject(stub, async (_instance, storage) => { await storage.storage.put(`call:${call.id}`, record); });
+    expect(await stub.record("a", call.id)).toMatchObject({ ok: true, value: { usage: { elapsedSeconds: 21, audioStarted: true, waitingForTool: false } } });
+    expect(await stub.record("b", call.id)).toMatchObject({ ok: false, status: 404 });
+  });
   it("缺 ECCAL 綁定拒絕發證，不回傳任何金鑰", async () => {
     const response = await worker.fetch(new Request("https://fixture.invalid/api/me"), runtime);
     expect(response.status).toBe(503); expect(await response.json()).toEqual({ error: "ECCAL_NOT_CONFIGURED" });

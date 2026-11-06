@@ -7,7 +7,7 @@ import { DefaultMethods, type MethodService } from "./default-methods";
 import { AssistantPlayback, MAX_ASSISTANT_AUDIO_CHARS } from "./assistant-playback";
 import { boundedEccal } from "./eccal";
 import { boundedDelivery } from "./delivery";
-import { callDeadline } from "./metering";
+import { callDeadline, callUsage } from "./metering";
 import { HttpEccalQuota } from "./eccal-http";
 import { HttpEccalEmail } from "./email";
 import { authRoutes, type AuthorizationPort } from './auth-routes';
@@ -143,7 +143,7 @@ export class CallCutoff extends DurableObject<Env> {
 }
 
 function publicRecord(record: CallRecord) {
-  return { id: record.id, status: record.status, createdAt: record.createdAt, endedAt: record.endedAt, expiresAt: record.expiresAt, transcript: record.transcript, documents: record.documents.filter(document => document.sourceRevision === (record.transcriptRevision ?? 0)), deliveries: (record.deliveries ?? []).map(publicDelivery), settlement: record.settlement, pendingTranscripts: record.pendingTranscripts?.length ?? 0, transcriptionFailures: record.transcriptionFailures?.length ?? 0 };
+  return { id: record.id, status: record.status, createdAt: record.createdAt, endedAt: record.endedAt, expiresAt: record.expiresAt, transcript: record.transcript, documents: record.documents.filter(document => document.sourceRevision === (record.transcriptRevision ?? 0)), deliveries: (record.deliveries ?? []).map(publicDelivery), settlement: record.settlement, usage: callUsage(record, Date.now()), pendingTranscripts: record.pendingTranscripts?.length ?? 0, transcriptionFailures: record.transcriptionFailures?.length ?? 0 };
 }
 function publicDelivery(job: DeliveryJob) { return { id: job.id, documentId: job.documentId, channel: job.channel, state: job.state, createdAt: job.createdAt, failureCode: job.failureCode }; }
 

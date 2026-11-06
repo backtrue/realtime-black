@@ -1,18 +1,60 @@
 <!doctype html>
 <html lang="zh-Hant">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>打電話給小黑</title><link rel="stylesheet" href="/style.css"><script type="module" src="/app.js"></script></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6edda">
+  <title>打電話給小黑</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
 <body>
   <main>
-    <header><span class="tag">ECCAL 會員專用</span><h1>打電話給小黑</h1><p>和 AI 小黑聊聊你的行銷問題，從現況一起找出下一步</p></header>
-    <section aria-labelledby="call-title" class="card">
-      <h2 id="call-title">AI 小黑語音顧問</h2><p>你正在與 AI 對話</p>
-      <p id="membership" role="status">正在確認會員資格</p>
-      <div class="actions"><a id="login" href="/auth/login" hidden>登入 ECCAL 會員</a><button id="logout" class="secondary" hidden>登出</button></div>
-      <p id="call-status" role="status" aria-live="polite">尚未通話</p>
-      <div class="actions"><button id="start" disabled>開始通話</button><button id="stop" class="secondary" disabled>結束通話</button></div>
-      <p id="notice" role="alert"></p><audio id="speaker" autoplay></audio>
-    </section>
-    <section aria-labelledby="records-title" class="card"><div class="section-title"><h2 id="records-title">我的通話紀錄</h2><button id="refresh" class="secondary">重新整理</button></div><p>逐字稿與摘要保存 30 天</p><div id="records"></div></section>
+    <h1 class="sr-only">打電話給小黑</h1>
+    <article id="dialer" class="rbv-retro" data-state="idle" aria-label="小黑專線復古電話">
+      <div id="dialer-face" class="dialer-face">
+        <header class="rbv-top">
+          <div class="rbv-label"><span class="rbv-stamp" aria-hidden="true"></span>報數據 · 顧問專線</div>
+          <button id="history" class="rbv-history" type="button" aria-label="通話紀錄" aria-controls="records-panel"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 4v5h5M3.5 9a9 9 0 1 1-.2 6M12 7v5l3 2"/></svg></button>
+        </header>
+        <div class="rbv-name"><h2 id="call-title">AI 小黑</h2><p>AI 行銷顧問</p></div>
+        <div id="idle-view" class="rbv-idle">
+          <button id="start" class="rbv-rotary" type="button" aria-label="撥給 AI 小黑" aria-describedby="dial-hint membership" disabled>
+            <span class="rbv-wheel" aria-hidden="true">
+              <span class="rbv-hole">1</span><span class="rbv-hole">2</span><span class="rbv-hole">3</span><span class="rbv-hole">4</span><span class="rbv-hole">5</span><span class="rbv-hole">6</span><span class="rbv-hole">7</span><span class="rbv-hole">8</span><span class="rbv-hole">9</span><span class="rbv-hole">0</span>
+            </span>
+            <span class="rbv-hub" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3 4 4c-2 1 0 7 5 12s11 7 12 5l1-3-5-3-2 2c-3-1-6-4-7-7l2-2-3-5Z"/></svg><span>撥號</span></span><span class="rbv-stop" aria-hidden="true"></span>
+          </button>
+          <p id="dial-hint" class="rbv-caption">順時針轉動，或輕點中央撥號</p>
+          <p id="idle-state" class="idle-state"></p>
+        </div>
+        <div id="active-view" class="rbv-active" hidden>
+          <p id="call-status" class="rbv-status" role="status" aria-live="polite">尚未通話</p>
+          <span id="call-timer" class="rbv-time" aria-label="服務端通話用時">00:00</span>
+          <p id="meter-status" class="meter-status">第一段音訊後開始計時</p>
+          <div class="rbv-actions">
+            <button id="mute" class="rbv-action" type="button" aria-pressed="false" disabled><span><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></svg></span><span id="mute-label">靜音</span></button>
+            <button id="stop" class="rbv-action" data-act="hang" type="button" disabled><span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 16v-4c0-5 18-5 18 0v4h-5v-4H8v4H3Z"/></svg></span><span>掛斷</span></button>
+          </div>
+        </div>
+        <p id="notice" role="alert"></p>
+        <p id="membership" class="sr-only" role="status">正在確認會員資格</p>
+        <footer class="rbv-foot">
+          <div class="member-actions"><span id="member-label">確認會員中</span><a id="login" href="/auth/login" hidden>登入 ECCAL</a><button id="logout" type="button" hidden>登出</button></div>
+          <span class="quota-label">可用時間 <strong id="quota">--:--</strong></span>
+        </footer>
+      </div>
+      <section id="records-panel" class="bv-sheet" role="dialog" aria-modal="true" aria-labelledby="records-title" hidden>
+        <header class="bv-sheet-top"><strong>報數據</strong><button id="records-back" class="bv-back" type="button">返回專線</button></header>
+        <div class="section-title"><h2 id="records-title">通話紀錄</h2><button id="refresh" class="secondary" type="button">重新整理</button></div>
+        <p class="retention">逐字稿與摘要保存 30 天</p><div id="records" class="bv-sheet-list"></div>
+      </section>
+      <section id="end-panel" class="bv-sheet" role="dialog" aria-modal="true" aria-labelledby="end-title" hidden>
+        <header class="bv-sheet-top"><strong>報數據</strong><button id="end-back" class="bv-back" type="button">返回專線</button></header>
+        <h2 id="end-title">通話已結束</h2><p id="end-summary"></p><button id="view-records" class="bv-return" type="button">查看通話紀錄</button>
+      </section>
+      <audio id="speaker" autoplay></audio>
+    </article>
   </main>
 </body>
 </html>

@@ -1,0 +1,275 @@
+{
+  "widths": [
+    {
+      "controls": [
+        {
+          "bottom": 540.3828125,
+          "height": 228,
+          "id": "start",
+          "left": 46,
+          "right": 274,
+          "top": 312.3828125,
+          "width": 228
+        },
+        {
+          "bottom": 207.015625,
+          "height": 44,
+          "id": "history",
+          "left": 248,
+          "right": 292,
+          "top": 163.015625,
+          "width": 44
+        },
+        {
+          "bottom": 638.984375,
+          "height": 44,
+          "id": "logout",
+          "left": 98.375,
+          "right": 142.375,
+          "top": 594.984375,
+          "width": 44
+        }
+      ],
+      "documentWidth": 320,
+      "width": 320
+    },
+    {
+      "controls": [
+        {
+          "bottom": 540.3828125,
+          "height": 228,
+          "id": "start",
+          "left": 82.5,
+          "right": 310.5,
+          "top": 312.3828125,
+          "width": 228
+        },
+        {
+          "bottom": 207.015625,
+          "height": 44,
+          "id": "history",
+          "left": 309,
+          "right": 353,
+          "top": 163.015625,
+          "width": 44
+        },
+        {
+          "bottom": 638.984375,
+          "height": 44,
+          "id": "logout",
+          "left": 114.375,
+          "right": 158.375,
+          "top": 594.984375,
+          "width": 44
+        }
+      ],
+      "documentWidth": 393,
+      "width": 393
+    },
+    {
+      "controls": [
+        {
+          "bottom": 540.3828125,
+          "height": 228,
+          "id": "start",
+          "left": 270,
+          "right": 498,
+          "top": 312.3828125,
+          "width": 228
+        },
+        {
+          "bottom": 207.015625,
+          "height": 44,
+          "id": "history",
+          "left": 506,
+          "right": 550,
+          "top": 163.015625,
+          "width": 44
+        },
+        {
+          "bottom": 638.984375,
+          "height": 44,
+          "id": "logout",
+          "left": 292.375,
+          "right": 336.375,
+          "top": 594.984375,
+          "width": 44
+        }
+      ],
+      "documentWidth": 768,
+      "width": 768
+    },
+    {
+      "controls": [
+        {
+          "bottom": 540.3828125,
+          "height": 228,
+          "id": "start",
+          "left": 526,
+          "right": 754,
+          "top": 312.3828125,
+          "width": 228
+        },
+        {
+          "bottom": 207.015625,
+          "height": 44,
+          "id": "history",
+          "left": 762,
+          "right": 806,
+          "top": 163.015625,
+          "width": 44
+        },
+        {
+          "bottom": 638.984375,
+          "height": 44,
+          "id": "logout",
+          "left": 548.375,
+          "right": 592.375,
+          "top": 594.984375,
+          "width": 44
+        }
+      ],
+      "documentWidth": 1280,
+      "width": 1280
+    }
+  ],
+  "accessStates": [
+    {
+      "disabled": true,
+      "documentWidth": 320,
+      "message": "請先登入 ECCAL 會員",
+      "quota": "--:--",
+      "url": "?scenario=guest",
+      "width": 320
+    },
+    {
+      "disabled": true,
+      "documentWidth": 320,
+      "message": "可用通話時間已用完",
+      "quota": "00:00",
+      "url": "?scenario=zero",
+      "width": 320
+    },
+    {
+      "disabled": true,
+      "documentWidth": 320,
+      "message": "目前會員資格無法使用語音顧問",
+      "quota": "03:52",
+      "url": "?scenario=ineligible",
+      "width": 320
+    }
+  ],
+  "callStates": [
+    {
+      "documentWidth": 393,
+      "elapsed": "00:00",
+      "meter": "第一段音訊後開始計時",
+      "notice": "",
+      "phase": "permission",
+      "scenario": "?scenario=mic-pending",
+      "startDisabled": true,
+      "status": "正在取得麥克風權限"
+    },
+    {
+      "documentWidth": 393,
+      "elapsed": "00:00",
+      "meter": "第一段音訊後開始計時",
+      "notice": "麥克風權限未開啟，這次沒有接通",
+      "phase": "idle",
+      "scenario": "?scenario=mic-denied",
+      "startDisabled": false,
+      "status": "未接通"
+    },
+    {
+      "documentWidth": 393,
+      "elapsed": "00:00",
+      "meter": "第一段音訊後開始計時",
+      "notice": "連線未完成，請稍後重新撥打",
+      "phase": "idle",
+      "scenario": "?scenario=connection-failed",
+      "startDisabled": false,
+      "status": "未接通"
+    },
+    {
+      "documentWidth": 393,
+      "elapsed": "00:21",
+      "meter": "通話用時由服務端核對",
+      "notice": "",
+      "phase": "ending",
+      "scenario": "?scenario=hangup-pending",
+      "startDisabled": true,
+      "status": "正在確認通話結束狀態"
+    },
+    {
+      "documentWidth": 393,
+      "elapsed": "00:15",
+      "meter": "正在查詢方法，等待時間不計入",
+      "notice": "",
+      "phase": "connected",
+      "scenario": "?scenario=tool-wait",
+      "startDisabled": true,
+      "status": "已接通，可以開始說話"
+    }
+  ],
+  "keyboard": {
+    "enterDial": true,
+    "enterHangup": true,
+    "dialogTabWrap": true,
+    "escapeCloses": true,
+    "restoreHistoryFocus": true
+  },
+  "drag": {
+    "clockwiseDials": true
+  },
+  "mute": {
+    "trackDisabled": true,
+    "ariaPressedTrue": true,
+    "labelChanged": true
+  },
+  "deepLink": {
+    "reportExpanded": true,
+    "backgroundInert": true,
+    "backVisibleAt320": true
+  },
+  "pendingEnd": {
+    "startDisabled": true,
+    "serverConfirmationOpensEndSheet": true
+  },
+  "sourceCommit": "a1efb8a",
+  "style": "復古轉盤",
+  "environment": "local-controlled-HTTP-and-media-fixture",
+  "checks": {
+    "command": "npm run check",
+    "exit": 0,
+    "workers": 179,
+    "frontend": 25,
+    "native": 3,
+    "typecheck": true,
+    "dryRun": true,
+    "completedAt": "2026-11-06T10:40:14.292Z",
+    "log": "check.log"
+  },
+  "files": {
+    "public/index.html": "535036f0fe4f4de10217f4dc414e6c1722fa7c0551ba691e95040e62fa9cab4b",
+    "public/style.css": "3a2308cb7ca56883c2ecf10be16069a5f98aafde3ffbc392141c2845d7ec9390",
+    "public/app.js": "377d3133d729e99e99ab6e3877012308afcad63d1f64544b9546fbe81c0ce39f",
+    "src/metering.ts": "18deadb72cabe9380f8da95efe67a97b9d56ec3c9d8f20b0d0f4a854ab60a6c5",
+    "src/worker.ts": "fd08a49da6798de7040fb55f1e376fe803bc78b9ee1272cc34232eca47581cc9",
+    "test/frontend.node.test.mjs": "2b9760415fc19d942e7310e42c16e41a72464465738f4de6b314d23d34215fa7",
+    "test/member.test.ts": "285f7a332323fabcf292bc7bc418aa23e1c7ba57a2f1c51337795543e0769309",
+    "test/metering.test.ts": "1dcdf2eb6a46c58789b1c9d8a82c3088902ad6935e6ea2d364253024c362ee1c",
+    "test/fixtures/dialer-preview-server.mjs": "0e7307d93fd877f0e02f5151e3620f7c19f3c15b872f45aa1de1a1cd24169aec"
+  },
+  "raceRegressions": {
+    "oldRecordsCannotCoverNewCall": true,
+    "pendingEndHttpCanCompleteFromPoll": true,
+    "oldUsageReadCannotBlockNewSession": true,
+    "cancelledIssuanceStartsEndMonitoring": true
+  },
+  "independentReview": {
+    "status": "PASS",
+    "reviewer": "fresh spec_evaluator",
+    "dateTaipei": "2026-11-06",
+    "task": "retro_dialer_acceptance"
+  }
+}

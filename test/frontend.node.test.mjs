@@ -5,24 +5,38 @@ import { randomUUID } from "node:crypto";
 import vm from "node:vm";
 
 const source = await readFile(new URL("../public/app.js", import.meta.url), "utf8");
+const html = await readFile(new URL("../public/index.html", import.meta.url), "utf8");
 const flush = () => new Promise(resolve => setImmediate(resolve));
 function deferred() { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; }
-function audio() { let stops = 0; return { getTracks: () => [{ stop() { stops += 1; } }], stops: () => stops }; }
+function audio() { let stops = 0; const tracks = [{ enabled: true, stop() { stops += 1; } }]; return { getTracks: () => tracks, getAudioTracks: () => tracks, stops: () => stops }; }
 async function page(getUserMedia, startResponse, recordsResponse = [], deliveryResponse, authOptions = {}) {
   class Element {
-    listeners = new Map(); textContent = ""; disabled = false; children = []; srcObject = null;
+    listeners = new Map(); textContent = ""; disabled = false; children = []; srcObject = null; hidden = false; dataset = {}; attributes = new Map();
+    style = { setProperty: (key, value) => this.attributes.set(key, value) };
     addEventListener(name, handler) { this.listeners.set(name, handler); }
     append(...children) { this.children.push(...children); }
     replaceChildren(...children) { this.children = children; }
     pause() {} async play() {}
     scrollIntoView() { this.scrolled = true; }
+    focus() { document.activeElement = this; }
+    getClientRects() { return this.hidden ? [] : [{}]; }
+    matches() { return true; }
+    getBoundingClientRect() { return { x: 0, y: 0, width: 228, height: 228 }; }
+    setPointerCapture() {}
+    setAttribute(name, value) { this.attributes.set(name, value); }
+    getAttribute(name) { return this.attributes.get(name); }
+    removeAttribute(name) { this.attributes.delete(name); }
+    querySelectorAll() { return this.children.filter(child => !child.disabled); }
   }
-  const elements = new Map(["start", "stop", "speaker", "membership", "call-status", "notice", "records", "refresh", "login", "logout"].map(id => [id, new Element()]));
+  const elements = new Map([...html.matchAll(/\bid="([^"]+)"/g)].map(([, id]) => [id, new Element()]));
+  for (const match of html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)) elements.get(match[1]).hidden = /\shidden(?:\s|>)/.test(match[0]);
   const findElement = id => {
     const find = element => element.id === id ? element : element.children.map(find).find(Boolean);
     return elements.get(id) ?? [...elements.values()].map(find).find(Boolean);
   };
-  const requests = [], connections = [], intervals = [], logs = [];
+  const requests = [], connections = [], intervals = new Map(), logs = [];
+  let intervalId = 0;
+  const document = { activeElement: undefined, getElementById: findElement, createElement: () => new Element() };
   let authStatus = authOptions.status ?? { authenticated: true };
   class Peer {
     connectionState = "new"; remoteDescriptions = [];
@@ -35,27 +49,28 @@ async function page(getUserMedia, startResponse, recordsResponse = [], deliveryR
   }
   const context = vm.createContext({
     console: { info: (...args) => logs.push(args) },
-    document: { getElementById: findElement, createElement: () => new Element() },
+    document,
     navigator: { mediaDevices: { getUserMedia } }, RTCPeerConnection: Peer, crypto: { randomUUID },
-    window: { addEventListener() {}, location: { hash: authOptions.hash ?? "" } }, URLSearchParams, Date, setInterval: callback => { intervals.push(callback); return intervals.length; }, clearInterval() {},
+    window: { addEventListener() {}, location: { hash: authOptions.hash ?? "" } }, URLSearchParams, Date, setInterval: callback => { intervals.set(++intervalId, callback); return intervalId; }, clearInterval: id => intervals.delete(id),
     fetch: async (path, init) => {
       requests.push({ path, init });
       let data;
       if (path === '/auth/status') data = authStatus;
       else if (path === '/auth/logout') { authStatus = { authenticated: false, mcpAuthorized: false }; data = { loggedOut: true }; }
       else if (path === '/auth/mcp/revoke') { authStatus = { authenticated: true, mcpAuthorized: false }; data = { authorized: false, revocationPending: authOptions.revocationPending === true }; }
-      else if (path === "/api/me") data = { eligible: true, remainingSeconds: 300 };
+      else if (path === "/api/me") data = authOptions.balance ?? { eligible: true, remainingSeconds: 300 };
       else if (path === "/api/calls" && init?.method === "POST") data = startResponse ? await startResponse() : { id: "fixture-call", sdp: "v=0\r\nanswer", deadline: Date.now() + 300000 };
       else if (path.endsWith("/end")) data = authOptions.endResponse ? await authOptions.endResponse() : { status: "ended" };
       else if (path.endsWith("/deliveries")) data = deliveryResponse ?? { job: { state: "pending" } };
       else if (path.endsWith('/email')) data = typeof authOptions.sendEmailResponse === 'function' ? await authOptions.sendEmailResponse() : { state: 'succeeded' };
-      else data = recordsResponse;
+      else if (/^\/api\/calls\/[^/]+$/.test(path)) data = authOptions.callRecord ? await authOptions.callRecord() : { status: "active", usage: { elapsedSeconds: 0, audioStarted: false, waitingForTool: false } };
+      else data = typeof recordsResponse === 'function' ? await recordsResponse() : recordsResponse;
       return { ok: true, status: path === "/api/calls" && init?.method === "POST" ? 201 : 200, headers: new Headers({ "cache-control": "no-store" }), json: async () => data };
     },
   });
   vm.runInContext(source, context);
   await flush();
-  return { elements, findElement, requests, connections, logs, click: id => elements.get(id).listeners.get("click")(), tick: () => { for (const callback of intervals) callback(); } };
+  return { elements, findElement, requests, connections, logs, document, click: id => elements.get(id).listeners.get("click")(), event: (id, name, data) => elements.get(id).listeners.get(name)(data), tick: async () => { for (const callback of [...intervals.values()]) await callback(); } };
 }
 
 test('Email 使用登入信箱，不出現地址輸入；送出回應中斷後沿用原操作識別值', async () => {
@@ -252,4 +267,148 @@ test('登出清理會員畫面', async () => {
   await p.click('logout');
   assert.equal(p.elements.get('login').hidden, false); assert.equal(p.elements.get('logout').hidden, true);
   assert.equal(p.elements.get('records').children.length, 0);
+});
+
+test('復古撥號顯示後端額度，零額度與無資格不索取麥克風', async () => {
+  for (const balance of [{ eligible: true, remainingSeconds: 0 }, { eligible: false, remainingSeconds: 232 }]) {
+    let media = 0;
+    const p = await page(async () => { media++; return audio(); }, undefined, [], undefined, { balance });
+    assert.equal(p.elements.get('quota').textContent, balance.remainingSeconds === 0 ? '00:00' : '03:52');
+    assert.equal(p.elements.get('start').disabled, true);
+    await p.click('start'); assert.equal(media, 0);
+    assert.match(p.elements.get('idle-state').textContent, balance.eligible ? /已用完/ : /資格/);
+  }
+});
+
+test('轉盤順時針手勢與中央點按共用開始入口，逆時針與取消手勢不撥號', async () => {
+  let media = 0;
+  const p = await page(async () => { media++; return audio(); });
+  const down = { isPrimary: true, button: 0, pointerId: 1, clientX: 220, clientY: 114 };
+  p.event('start', 'pointerdown', down);
+  p.event('start', 'pointermove', { pointerId: 1, clientX: 114, clientY: 10 });
+  await p.event('start', 'pointerup', { pointerId: 1 });
+  await p.event('start', 'click', { detail: 1 });
+  assert.equal(media, 0);
+  p.event('start', 'pointerdown', down); p.event('start', 'pointercancel', {});
+  await p.event('start', 'click', { detail: 1 }); assert.equal(media, 0);
+  p.event('start', 'pointerdown', down);
+  p.event('start', 'pointermove', { pointerId: 1, clientX: 114, clientY: 220 });
+  await p.event('start', 'pointerup', { pointerId: 1 });
+  await p.event('start', 'click', { detail: 1 });
+  assert.equal(media, 1);
+  assert.equal(p.requests.filter(x => x.path === '/api/calls' && x.init.method === 'POST').length, 1);
+  await p.click('stop');
+});
+
+test('靜音切換真實音軌與 aria-pressed，重撥還原收音', async () => {
+  const streams = [];
+  const p = await page(async () => { const value = audio(); streams.push(value); return value; });
+  await p.click('start'); assert.equal(p.elements.get('mute').disabled, true);
+  p.connections[0].connectionState = 'connected'; p.connections[0].onconnectionstatechange();
+  await p.click('mute'); assert.equal(streams[0].getAudioTracks()[0].enabled, false);
+  assert.equal(p.elements.get('mute').getAttribute('aria-pressed'), 'true');
+  assert.equal(p.elements.get('mute-label').textContent, '取消靜音');
+  await p.click('stop'); await p.click('end-back'); await p.click('start');
+  assert.equal(streams[1].getAudioTracks()[0].enabled, true);
+  assert.equal(p.elements.get('mute').getAttribute('aria-pressed'), 'false');
+  await p.click('stop');
+});
+
+test('連線與計時依實際 WebRTC 及服務端資料，不按原型延時假接通或累加用量', async () => {
+  const p = await page(async () => audio(), undefined, [], undefined, { callRecord: async () => ({ status: 'active', usage: { elapsedSeconds: 15, audioStarted: true, waitingForTool: true } }) });
+  await p.click('start'); assert.equal(p.elements.get('dialer').dataset.state, 'dialing');
+  p.connections[0].connectionState = 'connected'; p.connections[0].onconnectionstatechange();
+  await flush(); await p.tick();
+  assert.equal(p.elements.get('call-timer').textContent, '00:15');
+  assert.match(p.elements.get('meter-status').textContent, /等待時間不計入/);
+  await p.tick(); assert.equal(p.elements.get('call-timer').textContent, '00:15');
+  await p.click('stop');
+});
+
+test('掛斷待確認維持禁止重撥，服務端確認後才顯示結束頁', async () => {
+  let confirmed = false;
+  const p = await page(async () => audio(), undefined, [], undefined, {
+    endResponse: async () => { throw new Error('fixture hangup pending'); },
+    callRecord: async () => confirmed ? { status: 'ended', settlement: { billedSeconds: 21 }, usage: { elapsedSeconds: 21, audioStarted: true, waitingForTool: false } } : { status: 'ending' },
+  });
+  await p.click('start'); await p.click('stop');
+  assert.equal(p.elements.get('call-status').textContent, '正在確認通話結束狀態');
+  assert.equal(p.elements.get('start').disabled, true); assert.equal(p.elements.get('end-panel').hidden, true);
+  await p.click('start'); assert.equal(p.connections.length, 1);
+  confirmed = true; await p.tick();
+  assert.equal(p.elements.get('end-panel').hidden, false); assert.match(p.elements.get('end-summary').textContent, /00:21/);
+  assert.equal(p.connections[0].connectionState, 'closed');
+});
+
+test('紀錄面板開啟隔離背景，返回與成果深層連結移動到正確面板', async () => {
+  const p = await page(async () => audio());
+  p.elements.get('history').focus(); await p.click('history');
+  assert.equal(p.elements.get('records-panel').hidden, false); assert.equal(p.elements.get('dialer-face').inert, true);
+  assert.equal(p.document.activeElement, p.elements.get('records-back'));
+  await p.click('records-back'); assert.equal(p.elements.get('records-panel').hidden, true);
+  assert.equal(p.elements.get('dialer-face').inert, false); assert.equal(p.document.activeElement, p.elements.get('history'));
+});
+
+test('上一通的紀錄晚回來不會把新通話蓋成結束畫面', async () => {
+  const loaded = deferred(); let reads = 0;
+  const p = await page(async () => audio(), undefined, () => ++reads === 1 ? [] : loaded.promise, undefined, {
+    callRecord: async () => ({ status: 'ended', settlement: { billedSeconds: 21 } }),
+  });
+  await p.click('start'); const update = p.tick(); await flush();
+  await p.click('start'); assert.equal(p.connections.length, 2);
+  loaded.resolve([]); await update;
+  assert.equal(p.elements.get('end-panel').hidden, true);
+  assert.equal(p.elements.get('dialer').dataset.state, 'dialing');
+  await p.click('stop');
+});
+
+test('掛斷 HTTP 尚未回來時可依服務端讀回結束，舊回應不影響重撥', async () => {
+  const response = deferred();
+  const p = await page(async () => audio(), undefined, [], undefined, {
+    endResponse: () => response.promise,
+    callRecord: async () => ({ status: 'ended', settlement: { billedSeconds: 21 } }),
+  });
+  await p.click('start'); const ending = p.click('stop'); await flush();
+  await p.tick();
+  assert.equal(p.connections[0].connectionState, 'closed');
+  assert.equal(p.elements.get('end-panel').hidden, false);
+  await p.click('end-back'); await p.click('start'); assert.equal(p.connections.length, 2);
+  response.resolve({ status: 'ended', settlement: { billedSeconds: 21 } }); await ending;
+  assert.equal(p.elements.get('end-panel').hidden, true);
+  assert.equal(p.elements.get('dialer').dataset.state, 'dialing');
+  await p.click('stop');
+});
+
+test('上一通用時讀取未回不阻擋新通話，舊回應也不解除新通話讀取鎖', async () => {
+  const oldRead = deferred(), newRead = deferred(); let reads = 0;
+  const p = await page(async () => audio(), undefined, [], undefined, {
+    callRecord: () => ++reads === 1 ? oldRead.promise : newRead.promise,
+  });
+  await p.click('start'); const oldUpdate = p.tick(); await flush();
+  await p.click('stop'); await p.click('end-back'); await p.click('start');
+  const newUpdate = p.tick(); await flush(); assert.equal(reads, 2);
+  oldRead.resolve({ status: 'ended', usage: { elapsedSeconds: 99 } }); await oldUpdate;
+  await p.tick(); assert.equal(reads, 2);
+  newRead.resolve({ status: 'active', usage: { elapsedSeconds: 15, audioStarted: true, waitingForTool: false } }); await newUpdate;
+  assert.equal(p.elements.get('call-timer').textContent, '00:15');
+  assert.equal(p.elements.get('end-panel').hidden, true);
+  await p.click('stop');
+});
+
+test('發證尚未回就掛斷仍監看服務端終態，不受掛斷 HTTP 未回阻擋', async () => {
+  const issued = deferred(), ended = deferred(); let reads = 0;
+  const p = await page(async () => audio(), () => issued.promise, [], undefined, {
+    endResponse: () => ended.promise,
+    callRecord: async () => { reads++; return { status: 'failed', settlement: { billedSeconds: 0, remainingSeconds: 300 } }; },
+  });
+  const start = p.click('start'); await flush();
+  const stop = p.click('stop');
+  issued.resolve({ id: 'cancelled-call', sdp: 'v=0\r\nanswer', deadline: Date.now() + 300000 });
+  await start; await flush(); await p.tick();
+  assert.equal(reads, 1); assert.equal(p.connections[0].connectionState, 'closed');
+  assert.equal(p.elements.get('call-status').textContent, '未接通');
+  assert.equal(p.elements.get('start').disabled, false);
+  ended.resolve({ status: 'ending' }); await stop;
+  assert.equal(p.elements.get('call-status').textContent, '未接通');
+  assert.equal(p.elements.get('end-panel').hidden, true);
 });

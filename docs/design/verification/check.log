@@ -1,0 +1,246 @@
+
+> realtime-black@0.1.0 check
+> npm run typecheck && npm test && npm run test:frontend && npm run test:runtime && npm run build
+
+
+> realtime-black@0.1.0 typecheck
+> tsc --noEmit
+
+
+> realtime-black@0.1.0 test
+> vitest run
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./src/default-methods" without a file extension (vitest.config.ts:3:37). Add the file extension
+  - import "./contracts" without a file extension (src/default-methods.ts:1:61). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.1.0 /Volumes/SD/Call-black
+
+
+ Test Files  14 passed (14)
+      Tests  179 passed (179)
+   Start at  18:39:21
+   Duration  15.21s (transform 57%, tests 33%, import 10%)
+
+    Isolate  14 workers spawned · ~913ms startup each (spawn + environment, per file)
+             at least ~913ms faster with isolate: false — reuses workers across files instead of one per file
+
+
+> realtime-black@0.1.0 test:frontend
+> node --test test/frontend.node.test.mjs
+
+TAP version 13
+# Subtest: Email 使用登入信箱，不出現地址輸入；送出回應中斷後沿用原操作識別值
+ok 1 - Email 使用登入信箱，不出現地址輸入；送出回應中斷後沿用原操作識別值
+  ---
+  duration_ms: 29.302042
+  type: 'test'
+  ...
+# Subtest: 三類成果 hash 只開啟目前會員回應內的文件，竄改識別值無法顯示他人內容
+ok 2 - 三類成果 hash 只開啟目前會員回應內的文件，竄改識別值無法顯示他人內容
+  ---
+  duration_ms: 3.975125
+  type: 'test'
+  ...
+# Subtest: 發證回應只記錄欄位統計，識別值、SDP、未知欄位與憑證不進紀錄
+ok 3 - 發證回應只記錄欄位統計，識別值、SDP、未知欄位與憑證不進紀錄
+  ---
+  duration_ms: 3.166
+  type: 'test'
+  ...
+# Subtest: 取消等待中的麥克風後重撥，舊授權不建立通話或關掉新麥克風
+ok 4 - 取消等待中的麥克風後重撥，舊授權不建立通話或關掉新麥克風
+  ---
+  duration_ms: 1.3075
+  type: 'test'
+  ...
+# Subtest: 拒絕麥克風時不發開始請求並正確呈現未接通
+ok 5 - 拒絕麥克風時不發開始請求並正確呈現未接通
+  ---
+  duration_ms: 0.8995
+  type: 'test'
+  ...
+# Subtest: 掛斷立即停止收音播放，等待後端確認後才關閉 WebRTC
+ok 6 - 掛斷立即停止收音播放，等待後端確認後才關閉 WebRTC
+  ---
+  duration_ms: 1.573959
+  type: 'test'
+  ...
+# Subtest: 掛斷先取消生成並清除提供者播放，保留已播放音訊的截斷點
+ok 7 - 掛斷先取消生成並清除提供者播放，保留已播放音訊的截斷點
+  ---
+  duration_ms: 1.175
+  type: 'test'
+  ...
+# Subtest: 播放控制通道正在關閉時仍完成後端掛斷
+ok 8 - 播放控制通道正在關閉時仍完成後端掛斷
+  ---
+  duration_ms: 0.997042
+  type: 'test'
+  ...
+# Subtest: 接通前中斷依後端未接通結果顯示，關閉音訊並重新讀取額度
+ok 9 - 接通前中斷依後端未接通結果顯示，關閉音訊並重新讀取額度
+  ---
+  duration_ms: 1.464208
+  type: 'test'
+  ...
+# Subtest: 發證請求尚未回來就取消，回應抵達後結束伺服器會話且不播放
+ok 10 - 發證請求尚未回來就取消，回應抵達後結束伺服器會話且不播放
+  ---
+  duration_ms: 1.359125
+  type: 'test'
+  ...
+# Subtest: 前端不按舊截止提早掛斷，提供者關閉後清理音訊
+ok 11 - 前端不按舊截止提早掛斷，提供者關閉後清理音訊
+  ---
+  duration_ms: 1.795917
+  type: 'test'
+  ...
+# Subtest: Email 寄送結果不明時保留狀態，不顯示已送出
+ok 12 - Email 寄送結果不明時保留狀態，不顯示已送出
+  ---
+  duration_ms: 0.823333
+  type: 'test'
+  ...
+# Subtest: LINE 領取頁顯示一次性代碼並維持待寄送狀態
+ok 13 - LINE 領取頁顯示一次性代碼並維持待寄送狀態
+  ---
+  duration_ms: 0.676083
+  type: 'test'
+  ...
+# Subtest: 登入會員不需個人MCP授權即可開始通話，未登入仍拒絕
+ok 14 - 登入會員不需個人MCP授權即可開始通話，未登入仍拒絕
+  ---
+  duration_ms: 1.388959
+  type: 'test'
+  ...
+# Subtest: 登出清理會員畫面
+ok 15 - 登出清理會員畫面
+  ---
+  duration_ms: 0.812375
+  type: 'test'
+  ...
+# Subtest: 復古撥號顯示後端額度，零額度與無資格不索取麥克風
+ok 16 - 復古撥號顯示後端額度，零額度與無資格不索取麥克風
+  ---
+  duration_ms: 1.227
+  type: 'test'
+  ...
+# Subtest: 轉盤順時針手勢與中央點按共用開始入口，逆時針與取消手勢不撥號
+ok 17 - 轉盤順時針手勢與中央點按共用開始入口，逆時針與取消手勢不撥號
+  ---
+  duration_ms: 1.07575
+  type: 'test'
+  ...
+# Subtest: 靜音切換真實音軌與 aria-pressed，重撥還原收音
+ok 18 - 靜音切換真實音軌與 aria-pressed，重撥還原收音
+  ---
+  duration_ms: 1.091333
+  type: 'test'
+  ...
+# Subtest: 連線與計時依實際 WebRTC 及服務端資料，不按原型延時假接通或累加用量
+ok 19 - 連線與計時依實際 WebRTC 及服務端資料，不按原型延時假接通或累加用量
+  ---
+  duration_ms: 1.055208
+  type: 'test'
+  ...
+# Subtest: 掛斷待確認維持禁止重撥，服務端確認後才顯示結束頁
+ok 20 - 掛斷待確認維持禁止重撥，服務端確認後才顯示結束頁
+  ---
+  duration_ms: 1.176375
+  type: 'test'
+  ...
+# Subtest: 紀錄面板開啟隔離背景，返回與成果深層連結移動到正確面板
+ok 21 - 紀錄面板開啟隔離背景，返回與成果深層連結移動到正確面板
+  ---
+  duration_ms: 1.420709
+  type: 'test'
+  ...
+# Subtest: 上一通的紀錄晚回來不會把新通話蓋成結束畫面
+ok 22 - 上一通的紀錄晚回來不會把新通話蓋成結束畫面
+  ---
+  duration_ms: 1.264
+  type: 'test'
+  ...
+# Subtest: 掛斷 HTTP 尚未回來時可依服務端讀回結束，舊回應不影響重撥
+ok 23 - 掛斷 HTTP 尚未回來時可依服務端讀回結束，舊回應不影響重撥
+  ---
+  duration_ms: 2.08825
+  type: 'test'
+  ...
+# Subtest: 上一通用時讀取未回不阻擋新通話，舊回應也不解除新通話讀取鎖
+ok 24 - 上一通用時讀取未回不阻擋新通話，舊回應也不解除新通話讀取鎖
+  ---
+  duration_ms: 0.956875
+  type: 'test'
+  ...
+# Subtest: 發證尚未回就掛斷仍監看服務端終態，不受掛斷 HTTP 未回阻擋
+ok 25 - 發證尚未回就掛斷仍監看服務端終態，不受掛斷 HTTP 未回阻擋
+  ---
+  duration_ms: 0.899833
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 115.9485
+
+> realtime-black@0.1.0 test:runtime
+> node --test test/runtime-fetch.node.test.mjs
+
+TAP version 13
+# Subtest: 五個服務 client 的預設 fetch 在原生 Workers runtime 可完成請求
+ok 1 - 五個服務 client 的預設 fetch 在原生 Workers runtime 可完成請求
+  ---
+  duration_ms: 217.255208
+  type: 'test'
+  ...
+# Subtest: 後端控制連線在接通五秒後仍可接收提供者事件
+ok 2 - 後端控制連線在接通五秒後仍可接收提供者事件
+  ---
+  duration_ms: 5434.108875
+  type: 'test'
+  ...
+# Subtest: 片段轉寫使用原生 Workers WebSocket，五秒後仍接收完整結果
+ok 3 - 片段轉寫使用原生 Workers WebSocket，五秒後仍接收完整結果
+  ---
+  duration_ms: 5407.191375
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11499.68125
+
+> realtime-black@0.1.0 build
+> wrangler deploy --dry-run --outdir dist
+
+
+ ⛅️ wrangler 4.157.0 (update available 4.158.0)
+───────────────────────────────────────────────
+✨ Read 3 files from the assets directory /Volumes/SD/Call-black/public
+Total Upload: 813.84 KiB / gzip: 171.07 KiB
+Your Worker has access to the following bindings:
+Binding                                                      Resource                  
+env.MEMBERS (MemberRoom)                                     Durable Object            
+env.CUTOFFS (CallCutoff)                                     Durable Object            
+env.AUTH (AuthVault)                                         Durable Object            
+env.MCP_METHODS (thinkwithblack-mcp#CallMethods)             Worker                    
+env.ASSETS                                                   Assets                    
+env.APP_ORIGIN ("https://call.thinkwithblack.com")           Environment Variable      
+env.ECCAL_ORIGIN ("https://eccal.thinkwithblack.com")        Environment Variable      
+env.REALTIME_MODEL ("gpt-realtime-2.1")                      Environment Variable      
+env.TEXT_MODEL ("gpt-6.1-sol")                               Environment Variable      
+
+--dry-run: exiting now.
